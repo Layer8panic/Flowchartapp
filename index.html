@@ -1,0 +1,1479 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2D6CB5">
+<meta name="description" content="Corso da zero sui diagrammi di flusso con Flowgorithm: lezioni, laboratorio con tutor e simulatore.">
+<title>Flowchart Lab · Diagrammi di flusso da zero</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect x='8' y='4' width='48' height='16' fill='%23FFFFC0' stroke='%23403F20' stroke-width='3'/%3E%3Cpath d='M32 14 58 32 32 50 6 32z' fill='%23FFC0C0' stroke='%23402020' stroke-width='3'/%3E%3Cpath d='M14 46h44l-6 14H8z' fill='%23C0E0FF' stroke='%23183060' stroke-width='3'/%3E%3C/svg%3E">
+<style>
+:root{
+  --bg:#F5F3EE;--card:#FFFFFF;--ink:#1E2933;--muted:#5A6672;--line:#E3DFD6;
+  --pri:#2D6CB5;--pri-ink:#fff;--pri-soft:#E7EFF9;
+  --ok:#2E7D4F;--ok-soft:#E4F3EA;--ko:#B4501B;--ko-soft:#FCEEE4;--warn:#9A6A10;--warn-soft:#FBF3DF;
+  --r:16px;--sh:0 1px 2px rgba(30,41,51,.06),0 4px 14px rgba(30,41,51,.07);
+  --fs:17px;
+  --t-f:#ECDDF8;--t-s:#5B3A82;--in-f:#CFE4FF;--in-s:#1D3E73;--out-f:#CDEFD2;--out-s:#1E5B2A;
+  --as-f:#FFF6BE;--as-s:#5A4E12;--if-f:#FFD0D0;--if-s:#6B2323;--lp-f:#FFE1B5;--lp-s:#6A4210;
+}
+*{box-sizing:border-box}
+html{font-size:var(--fs);-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;line-height:1.55;-webkit-tap-highlight-color:transparent;min-height:100vh}
+body.hc{--bg:#fff;--card:#fff;--ink:#000;--muted:#1a1a1a;--line:#000;--pri:#003C96;--pri-soft:#DCE8FF;--ok:#005A1E;--ko:#8A2500}
+body.hc .card,body.hc .btn{border:2px solid #000}
+button,input,select,textarea{font:inherit;color:inherit}
+a{color:var(--pri)}
+:focus-visible{outline:3px solid #F5A623;outline-offset:2px;border-radius:8px}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.skip{position:absolute;left:-999px;top:0;background:var(--pri);color:#fff;padding:8px 12px;z-index:99}
+.skip:focus{left:8px;top:8px}
+
+/* barra in alto */
+.top{position:sticky;top:0;z-index:20;background:rgba(245,243,238,.92);backdrop-filter:saturate(1.4) blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:10px;padding:10px 14px;padding-top:max(10px,env(safe-area-inset-top))}
+body.hc .top{background:#fff}
+.top .logo{width:30px;height:30px;flex:none}
+.top h1{font-size:1rem;margin:0;font-weight:700;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top .back{border:0;background:none;font-size:1.3rem;padding:4px 8px;border-radius:10px;cursor:pointer}
+.limbtn{border:0;background:none;opacity:.32;cursor:pointer;padding:6px;border-radius:8px;line-height:0;transition:opacity .2s}
+.limbtn:hover,.limbtn:focus-visible{opacity:.9}
+body.lim .limbtn{opacity:.6}
+
+main{max-width:760px;margin:0 auto;padding:16px 14px 110px}
+body.lim main{max-width:1180px;padding-bottom:40px}
+
+/* navigazione in basso */
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:20;background:var(--card);border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:6px 4px;padding-bottom:max(6px,env(safe-area-inset-bottom))}
+.nav a{flex:1;text-align:center;text-decoration:none;color:var(--muted);font-size:.72rem;padding:4px 2px;border-radius:12px;display:flex;flex-direction:column;align-items:center;gap:1px;min-height:48px;justify-content:center}
+.nav a .i{font-size:1.35rem;line-height:1}
+.nav a[aria-current="page"]{color:var(--pri);background:var(--pri-soft);font-weight:700}
+body.lim .nav{position:static;max-width:1180px;margin:0 auto 20px;border:1px solid var(--line);border-radius:16px}
+
+/* elementi base */
+.card{background:var(--card);border-radius:var(--r);box-shadow:var(--sh);padding:16px;margin:0 0 14px}
+.muted{color:var(--muted)}
+.small{font-size:.86rem}
+h2{font-size:1.35rem;line-height:1.25;margin:4px 0 10px}
+h3{font-size:1.08rem;margin:0 0 6px}
+p{margin:0 0 10px}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:46px;padding:10px 16px;border-radius:14px;border:1px solid var(--line);background:var(--card);cursor:pointer;font-weight:600;text-decoration:none;color:var(--ink);transition:transform .12s,background .2s,box-shadow .2s}
+.btn:active{transform:scale(.97)}
+.btn.pri{background:var(--pri);border-color:var(--pri);color:var(--pri-ink)}
+.btn.ok{background:var(--ok);border-color:var(--ok);color:#fff}
+.btn.ghost{background:transparent}
+.btn.sm{min-height:40px;padding:6px 12px;font-size:.9rem;border-radius:12px}
+.btn.icon{width:40px;padding:0}
+.btn[disabled]{opacity:.45;cursor:not-allowed}
+.btn.wide{width:100%}
+.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+.row.end{justify-content:flex-end}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media (max-width:520px){.grid2{grid-template-columns:1fr}}
+.chip{display:inline-block;padding:2px 10px;border-radius:999px;background:var(--pri-soft);color:var(--pri);font-size:.8rem;font-weight:700}
+.chip.ok{background:var(--ok-soft);color:var(--ok)}
+.chip.warn{background:var(--warn-soft);color:var(--warn)}
+.bar{height:10px;border-radius:99px;background:var(--line);overflow:hidden}
+.bar>i{display:block;height:100%;background:linear-gradient(90deg,var(--pri),#4A90D9);border-radius:99px;transition:width .6s ease}
+kbd,code{font-family:ui-monospace,Menlo,Consolas,monospace;background:#F0EDE6;border-radius:6px;padding:1px 6px;font-size:.92em}
+body.hc code{background:#eee}
+mark{background:#FFF0A8;color:inherit;border-radius:4px;padding:0 3px}
+
+/* home */
+.hero{background:linear-gradient(135deg,#2D6CB5,#3F86C9 60%,#5AA0D6);color:#fff;border-radius:22px;padding:20px;margin-bottom:14px;position:relative;overflow:hidden}
+.hero h2{color:#fff;font-size:1.5rem;margin:0 0 6px}
+.hero p{opacity:.95}
+.hero .bar{background:rgba(255,255,255,.3)}
+.hero .bar>i{background:#fff}
+.hero .float{position:absolute;right:-10px;top:-6px;width:120px;opacity:.25;animation:bob 6s ease-in-out infinite}
+@keyframes bob{50%{transform:translateY(8px) rotate(3deg)}}
+.tiles{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.tile{display:flex;flex-direction:column;gap:4px;text-decoration:none;color:var(--ink);background:var(--card);border-radius:18px;padding:14px;box-shadow:var(--sh);min-height:118px;transition:transform .15s}
+.tile:active{transform:scale(.98)}
+.tile .i{font-size:1.8rem}
+.tile b{font-size:1.02rem}
+.tile span{font-size:.84rem;color:var(--muted)}
+
+/* liste */
+.list{display:flex;flex-direction:column;gap:10px}
+.item{display:flex;align-items:center;gap:12px;text-decoration:none;color:var(--ink);background:var(--card);border-radius:16px;padding:12px 14px;box-shadow:var(--sh);min-height:64px;border:0;width:100%;text-align:left;cursor:pointer}
+.item .i{font-size:1.6rem;width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:var(--pri-soft);flex:none}
+.item .tx{flex:1;min-width:0}
+.item .tx b{display:block}
+.item .tx span{font-size:.85rem;color:var(--muted)}
+.item .st{font-size:1.2rem}
+.item.done .i{background:var(--ok-soft)}
+
+/* slide */
+.slidehead{display:flex;align-items:center;gap:10px;margin-bottom:10px}
+.dots{display:flex;gap:5px;flex-wrap:wrap}
+.dots i{width:9px;height:9px;border-radius:50%;background:var(--line)}
+.dots i.d{background:var(--ok)}
+.dots i.c{background:var(--pri);transform:scale(1.3)}
+.slide{animation:slideIn .45s cubic-bezier(.2,.8,.2,1)}
+@keyframes slideIn{from{opacity:0;transform:translateX(24px)}to{opacity:1;transform:none}}
+.slide .lead{font-size:1.08rem}
+.rv>*{animation:rise .55s both;animation-delay:calc(var(--i,0)*120ms)}
+@keyframes rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.act{border:2px dashed #C9D8EC;background:#F8FBFF;border-radius:18px;padding:14px;margin-top:14px}
+body.hc .act{background:#fff;border-color:#000}
+.act>.ah{display:flex;align-items:center;gap:8px;font-weight:800;color:var(--pri);margin-bottom:8px;font-size:.92rem;text-transform:uppercase;letter-spacing:.04em}
+.slidenav{position:sticky;bottom:64px;display:flex;gap:10px;justify-content:space-between;margin-top:14px;padding:10px 0;background:linear-gradient(transparent,var(--bg) 30%);z-index:4}
+body.lim .slidenav{bottom:10px}
+.slidenav .btn{flex:1}
+.callout{border-left:4px solid var(--pri);background:var(--pri-soft);padding:10px 12px;border-radius:0 12px 12px 0;margin:10px 0}
+.callout.ok{border-color:var(--ok);background:var(--ok-soft)}
+.callout.warn{border-color:#D69E2E;background:var(--warn-soft)}
+
+/* attività */
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt{display:flex;align-items:center;gap:10px;text-align:left;width:100%;min-height:50px;padding:10px 14px;border-radius:14px;border:2px solid var(--line);background:var(--card);cursor:pointer;font-weight:500;transition:border-color .2s,background .2s,transform .1s}
+.opt:active{transform:scale(.99)}
+.opt[aria-pressed="true"]{border-color:var(--pri);background:var(--pri-soft)}
+.opt.right{border-color:var(--ok);background:var(--ok-soft)}
+.opt.wrong{border-color:var(--ko);background:var(--ko-soft)}
+.opt .mk{width:26px;height:26px;border-radius:8px;border:2px solid var(--line);flex:none;display:grid;place-items:center;font-size:.9rem}
+.opt[aria-pressed="true"] .mk{border-color:var(--pri);background:var(--pri);color:#fff}
+.fb{margin-top:10px;padding:10px 12px;border-radius:12px;animation:rise .3s both}
+.fb.ok{background:var(--ok-soft);color:#174A2E}
+.fb.ko{background:var(--ko-soft);color:#6B2A07}
+body.hc .fb{border:2px solid #000;color:#000}
+.shake{animation:shake .4s}
+@keyframes shake{20%,60%{transform:translateX(-6px)}40%,80%{transform:translateX(6px)}}
+.pop{animation:pop .4s}
+@keyframes pop{50%{transform:scale(1.06)}}
+.orderans{min-height:56px;border:2px dashed var(--line);border-radius:14px;padding:8px;display:flex;flex-direction:column;gap:6px;margin:8px 0}
+.orderans .opt{min-height:44px}
+.orderans .n{font-weight:800;color:var(--pri);width:22px}
+.cls{display:flex;flex-direction:column;gap:10px}
+.clsrow{background:var(--card);border-radius:14px;padding:10px;border:2px solid var(--line)}
+.clsrow.right{border-color:var(--ok)}.clsrow.wrong{border-color:var(--ko)}
+.seg{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.seg button{flex:1;min-width:84px;min-height:42px;border-radius:12px;border:2px solid var(--line);background:#fff;cursor:pointer;font-weight:600;font-size:.88rem}
+.seg button[aria-pressed="true"]{border-color:var(--pri);background:var(--pri-soft);color:var(--pri)}
+
+/* blocchi e diagrammi */
+.chartwrap{overflow:auto;border-radius:14px;background:#FCFBF8;border:1px solid var(--line);max-height:62vh;-webkit-overflow-scrolling:touch;text-align:center;padding:6px}
+.chartwrap.fit{max-height:none}
+.chartwrap.fit svg{max-width:100%;height:auto}
+body.lim .chartwrap{max-height:72vh}
+svg.chart{display:inline-block;font-family:inherit}
+svg .ln,svg .ar{stroke:#46505A;stroke-width:2;fill:none}
+svg .ah{fill:#46505A}
+svg .blk path,svg .blk rect,svg .blk polygon{stroke-width:2.2}
+svg .k-term>*:first-child{fill:var(--t-f);stroke:var(--t-s)}
+svg .k-in>*:first-child{fill:var(--in-f);stroke:var(--in-s)}
+svg .k-out>*:first-child{fill:var(--out-f);stroke:var(--out-s)}
+svg .k-asg>*:first-child,svg .k-dec>*:first-child{fill:var(--as-f);stroke:var(--as-s)}
+svg .k-if>*:first-child{fill:var(--if-f);stroke:var(--if-s)}
+svg .k-loop>*:first-child{fill:var(--lp-f);stroke:var(--lp-s)}
+svg .k-ghost>*:first-child{fill:#fff;stroke:var(--pri);stroke-dasharray:6 5;animation:ghost 1.2s ease-in-out infinite}
+@keyframes ghost{50%{stroke-dashoffset:11;fill:var(--pri-soft)}}
+svg .bt{font-size:14px;fill:#1E2933;dominant-baseline:central;text-anchor:middle;pointer-events:none}
+svg .io{font-size:10px;font-weight:800;fill:#1D3E73;pointer-events:none}
+svg .lbl{font-size:12px;fill:#5A6672;font-weight:700}
+svg .dl{stroke:#9AA4AE;stroke-width:1.2}
+svg .blk.active>*:first-child{stroke:#F08C00;stroke-width:4;filter:drop-shadow(0 0 6px rgba(240,140,0,.75))}
+svg .blk.err>*:first-child{stroke:#C0392B;stroke-width:4;filter:drop-shadow(0 0 6px rgba(192,57,43,.6))}
+svg .blk.tap{cursor:pointer}
+svg .blk.tap:hover>*:first-child{stroke-width:3.4}
+svg .blk.newb{animation:popin .45s cubic-bezier(.2,1.4,.4,1) both;transform-box:fill-box;transform-origin:center}
+@keyframes popin{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+svg .blk.bugok>*:first-child{stroke:var(--ok);stroke-width:4}
+svg .blk.bugno>*:first-child{stroke:var(--ko);stroke-width:4}
+svg .ins{cursor:pointer}
+svg .ins circle{fill:#fff;stroke:var(--pri);stroke-width:2}
+svg .ins text{fill:var(--pri);font-size:17px;font-weight:800;text-anchor:middle;dominant-baseline:central;pointer-events:none}
+svg .ins:hover circle,svg .ins:focus circle{fill:var(--pri-soft)}
+svg.draw .blk{animation:popin .5s both}
+.mini{display:block;max-width:100%;height:auto}
+
+/* esecutore */
+.runner .rbar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px}
+.runner .speed{display:flex;align-items:center;gap:6px;font-size:.8rem;color:var(--muted)}
+.runner .speed input{width:90px}
+.runner .zoom{margin-left:auto;display:flex;gap:6px}
+.rpanel{display:grid;grid-template-columns:1fr 1.4fr;gap:10px;margin-top:10px}
+@media (max-width:560px){.rpanel{grid-template-columns:1fr}}
+.ph{font-size:.75rem;text-transform:uppercase;letter-spacing:.06em;font-weight:800;color:var(--muted);margin-bottom:6px}
+.vars,.console{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:10px;min-height:84px}
+.vlist{display:flex;flex-wrap:wrap;gap:8px}
+.var{display:flex;flex-direction:column;border:2px solid #D7C97A;background:var(--as-f);border-radius:10px;padding:4px 10px;min-width:64px;transition:transform .2s}
+.var small{font-size:.68rem;color:var(--muted)}
+.var b{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:1.02rem}
+.var.flash{animation:vflash .7s}
+@keyframes vflash{30%{transform:scale(1.15);background:#FFE066}}
+.console{background:#182028;color:#E6EDF3;border-color:#182028}
+.console .ph{color:#9FB0C0}
+.clines{font-family:ui-monospace,Menlo,Consolas,monospace;font-size:.92rem;max-height:220px;overflow:auto;display:flex;flex-direction:column;gap:3px}
+.cl{animation:rise .25s both;word-break:break-word}
+.cl.out{color:#9BE7A9}
+.cl.in{color:#9CCBFF}
+.cl.err{color:#FFB38A;background:rgba(255,120,60,.12);padding:6px 8px;border-radius:8px;font-family:system-ui,sans-serif}
+.cl.inf{color:#C9D3DC;font-family:system-ui,sans-serif;font-size:.82rem;opacity:.85}
+.cl.cond{color:#F7C873;font-size:.82rem}
+.cl.end{color:#fff;font-weight:700}
+.cin{display:flex;gap:6px;margin-top:8px;flex-wrap:wrap}
+.cin label{width:100%;font-size:.85rem;color:#9CCBFF}
+.cin input{flex:1;min-width:110px;min-height:44px;border-radius:10px;border:2px solid #4A90D9;padding:6px 10px;background:#0F151B;color:#fff}
+.cin .cerr{width:100%;color:#FFB38A;font-size:.85rem}
+
+/* tutor */
+.exhead{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin-bottom:10px}
+.exhead span{flex:none;font-size:.75rem;padding:4px 10px;border-radius:99px;background:var(--line);color:var(--muted);font-weight:700}
+.exhead span.c{background:var(--pri);color:#fff}
+.exhead span.d{background:var(--ok-soft);color:var(--ok)}
+.chat{display:flex;flex-direction:column;gap:8px}
+.msg{display:flex;gap:8px;align-items:flex-start;animation:rise .35s both}
+.msg .av{width:34px;height:34px;border-radius:50%;background:var(--pri-soft);display:grid;place-items:center;flex:none;font-size:1.15rem}
+.msg .bub{background:var(--card);border-radius:4px 16px 16px 16px;padding:10px 12px;box-shadow:var(--sh);max-width:100%}
+.msg.me{flex-direction:row-reverse}
+.msg.me .bub{background:var(--pri);color:#fff;border-radius:16px 4px 16px 16px}
+.msg.good .bub{background:var(--ok-soft)}
+.msg.bad .bub{background:var(--ko-soft)}
+body.hc .msg .bub{border:2px solid #000;color:#000;background:#fff}
+.typing span{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--muted);margin:0 2px;animation:typ 1s infinite}
+.typing span:nth-child(2){animation-delay:.15s}.typing span:nth-child(3){animation-delay:.3s}
+@keyframes typ{30%{transform:translateY(-5px);opacity:.5}}
+.choices{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+.bopt{display:flex;align-items:center;justify-content:center;background:#fff;border:2px solid var(--line);border-radius:14px;padding:8px;cursor:pointer;min-height:56px;transition:border-color .2s,transform .1s}
+.bopt:active{transform:scale(.98)}
+.bopt.hint{border-color:#F5A623;animation:pop .9s 2}
+.bopt.no{opacity:.4;border-color:var(--ko)}
+.tutorbox{position:relative}
+.stickychart{position:sticky;top:60px;z-index:5}
+body.lim .exgrid{display:grid;grid-template-columns:1.1fr 1fr;gap:16px;align-items:start}
+
+/* giochi */
+.river{display:grid;grid-template-columns:1fr 1.25fr 1fr;gap:6px;align-items:stretch;background:#EAF3E3;border-radius:16px;padding:8px;min-height:230px}
+.bank{display:flex;flex-direction:column;gap:6px;justify-content:center;background:#CFE6BE;border-radius:12px;padding:6px}
+.bank .lab,.water .lab{font-size:.7rem;text-align:center;color:#3B5A2A;font-weight:700}
+.water{background:linear-gradient(180deg,#9FD0EE,#6BB3E0);border-radius:12px;position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:center;padding:6px}
+.water::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,transparent 0 18px,rgba(255,255,255,.18) 18px 22px);animation:waves 4s linear infinite}
+@keyframes waves{to{background-position:60px 0}}
+.boatlane{position:relative;height:110px}
+.boat{position:absolute;top:0;left:0;width:56%;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;background:#8B5A2B;border-radius:12px 12px 40px 40px;color:#fff;transition:left .9s cubic-bezier(.5,0,.3,1);gap:2px;box-shadow:0 4px 0 #5E3B1B}
+.boat.right{left:44%}
+.ani{font-size:1.9rem;line-height:1;border:0;background:#fff;border-radius:12px;min-height:52px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:4px;box-shadow:0 2px 0 rgba(0,0,0,.12);transition:transform .15s}
+.ani small{font-size:.62rem;font-weight:700;color:#334}
+.ani[disabled]{opacity:.55;cursor:default}
+.boat .ani{background:#F2D7B6;min-height:44px;padding:0 8px}
+.moves{margin:8px 0 0;padding-left:22px}
+.moves li{animation:rise .3s both}
+.jugs{display:flex;align-items:flex-end;justify-content:center;gap:16px;padding:16px 4px 6px;background:#EAF3FA;border-radius:16px}
+.jug{display:flex;flex-direction:column;align-items:center;gap:6px;border:0;background:none;cursor:pointer;padding:4px;border-radius:14px}
+.jug .glass{position:relative;width:78px;border:3px solid #35607F;border-top:0;border-radius:0 0 14px 14px;background:rgba(255,255,255,.7);overflow:hidden}
+.jug .w{position:absolute;left:0;right:0;bottom:0;background:linear-gradient(180deg,#5BB0E8,#2F7FBF);transition:height .8s cubic-bezier(.4,0,.2,1)}
+.jug .w::after{content:"";position:absolute;left:0;right:0;top:-3px;height:6px;background:rgba(255,255,255,.5);border-radius:50%}
+.jug .num{position:relative;z-index:1;font-weight:800;font-size:1.1rem;display:grid;place-items:center;height:100%;color:#0D2C45;text-shadow:0 0 4px #fff}
+.jug.sel{background:#FFF3C4;outline:3px solid #F5A623}
+.jug b{font-size:.85rem}
+.tbl{border-collapse:collapse;width:100%;font-size:.9rem}
+.tbl th,.tbl td{border:1px solid var(--line);padding:4px 6px;text-align:center}
+.tbl th{background:var(--pri-soft)}
+
+/* giocattoli delle lezioni */
+.boxes{display:flex;gap:18px;justify-content:center;padding:18px 0 8px;flex-wrap:wrap}
+.vbox{width:110px;text-align:center;position:relative}
+.vbox .bx{height:80px;border:3px solid var(--as-s);background:var(--as-f);border-radius:4px 4px 12px 12px;display:grid;place-items:center;font-size:1.7rem;font-weight:800;font-family:ui-monospace,Menlo,monospace;position:relative;overflow:visible}
+.vbox .nm{font-weight:800;margin-top:4px}
+.vbox .fly{position:absolute;left:50%;top:-64px;transform:translateX(-50%);background:var(--pri);color:#fff;border-radius:10px;padding:2px 10px;font-size:1.2rem;animation:fly .8s cubic-bezier(.5,0,.5,1) forwards}
+@keyframes fly{to{top:18px;opacity:0}}
+.vbox .old{position:absolute;left:50%;top:18px;transform:translateX(-50%);font-size:1.2rem;color:var(--ko);animation:out .8s forwards}
+@keyframes out{to{top:-40px;opacity:0;transform:translateX(30px) rotate(25deg)}}
+.prog{display:flex;flex-direction:column;gap:6px;margin:10px 0}
+.prog button{font-family:ui-monospace,Menlo,monospace;font-size:1rem}
+.calc{text-align:center;min-height:28px;font-family:ui-monospace,Menlo,monospace;color:var(--pri);font-weight:700}
+.machine{display:flex;align-items:center;justify-content:center;gap:8px;margin:10px 0;font-weight:700;flex-wrap:wrap}
+.machine .mb{background:#4A5866;color:#fff;border-radius:14px;padding:16px 14px;font-size:1.6rem;position:relative}
+.machine .mb span{display:inline-block;animation:spin 3s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.machine .data{background:var(--in-f);border:2px solid var(--in-s);border-radius:10px;padding:6px 10px;animation:slideR 2.4s ease-in-out infinite}
+.machine .data.o{background:var(--out-f);border-color:var(--out-s);animation-delay:1.2s}
+@keyframes slideR{0%{transform:translateX(-10px);opacity:.3}50%{transform:none;opacity:1}100%{transform:translateX(10px);opacity:.3}}
+.phases{display:flex;flex-direction:column;gap:0;align-items:center}
+.phase{background:var(--card);border:2px solid var(--pri);border-radius:14px;padding:8px 14px;width:100%;max-width:440px;animation:rise .5s both;animation-delay:calc(var(--i)*350ms)}
+.phase b{color:var(--pri)}
+.parrow{height:22px;width:2px;background:var(--pri);position:relative;animation:rise .3s both;animation-delay:calc(var(--i)*350ms + 150ms)}
+.parrow::after{content:"";position:absolute;bottom:-2px;left:-5px;border:6px solid transparent;border-top-color:var(--pri)}
+.race{display:flex;flex-direction:column;gap:10px;margin:10px 0}
+.lane{display:flex;align-items:center;gap:8px}
+.lane .tr{flex:1;height:34px;background:#EEE9DF;border-radius:10px;position:relative;overflow:hidden}
+.lane .rn{position:absolute;left:0;top:0;height:100%;width:34px;display:grid;place-items:center;font-size:1.4rem}
+.lane.go .rn{animation:run var(--d) linear forwards}
+@keyframes run{to{left:calc(100% - 34px)}}
+.toy{text-align:center}
+.toy svg{max-width:100%;height:auto}
+.toy .path{stroke:#B8C0C8;stroke-width:4;fill:none;transition:stroke .4s}
+.toy .path.on{stroke:#F08C00;stroke-width:6}
+.toy .nd{transition:filter .3s}
+.toy .nd.on{filter:drop-shadow(0 0 6px rgba(240,140,0,.9))}
+.counter{font-size:2.6rem;font-weight:800;color:var(--pri);font-family:ui-monospace,Menlo,monospace}
+
+/* sheet / modale */
+.scrim{position:fixed;inset:0;background:rgba(15,20,25,.45);z-index:50;display:flex;align-items:flex-end;justify-content:center;animation:fade .2s}
+@keyframes fade{from{opacity:0}}
+.sheet{background:var(--card);width:100%;max-width:620px;max-height:88vh;overflow:auto;border-radius:22px 22px 0 0;padding:16px 16px max(16px,env(safe-area-inset-bottom));animation:up .28s cubic-bezier(.2,.8,.2,1)}
+@media (min-width:700px){.scrim{align-items:center}.sheet{border-radius:22px}}
+@keyframes up{from{transform:translateY(40px);opacity:0}}
+.sheet h3{font-size:1.15rem}
+.fld{display:flex;flex-direction:column;gap:4px;margin:10px 0}
+.fld label{font-weight:700;font-size:.9rem}
+.fld input,.fld select{min-height:46px;border-radius:12px;border:2px solid var(--line);padding:6px 12px;background:#fff;font-family:ui-monospace,Menlo,Consolas,monospace}
+.fld input:focus,.fld select:focus{border-color:var(--pri);outline:none}
+.fld .help{font-size:.8rem;color:var(--muted)}
+.fld .err{color:var(--ko);font-size:.86rem;font-weight:600}
+.keys{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}
+.keys button{min-width:38px;min-height:36px;border-radius:9px;border:1px solid var(--line);background:#F6F4EF;cursor:pointer;font-family:ui-monospace,Menlo,monospace;font-size:.9rem}
+.keys button.v{background:var(--as-f)}
+.bgrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.bgrid button{display:flex;flex-direction:column;align-items:center;gap:4px;padding:10px;border-radius:14px;border:2px solid var(--line);background:#fff;cursor:pointer;min-height:90px;text-align:center}
+.bgrid button small{color:var(--muted);font-size:.75rem}
+.toast{position:fixed;left:50%;bottom:92px;transform:translateX(-50%);background:#1E2933;color:#fff;padding:10px 16px;border-radius:12px;z-index:60;animation:rise .3s both;max-width:90vw;text-align:center}
+
+/* video */
+.yt{position:relative;aspect-ratio:16/9;border-radius:14px;overflow:hidden;background:#000;cursor:pointer;border:0;padding:0;width:100%;display:block}
+.yt img{width:100%;height:100%;object-fit:cover;opacity:.85}
+.yt .pl{position:absolute;inset:0;display:grid;place-items:center;font-size:3rem;color:#fff;text-shadow:0 2px 10px rgba(0,0,0,.6)}
+.yt iframe{width:100%;height:100%;border:0}
+
+/* competenze */
+.sk{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.sk:last-child{border-bottom:0}
+.sk .lv{display:flex;gap:4px}
+.sk .lv i{width:12px;height:12px;border-radius:50%;background:var(--line)}
+.sk .lv i.on{background:var(--ok)}
+.ring{width:110px;height:110px;margin:auto}
+.confetti{position:fixed;top:-20px;width:10px;height:14px;z-index:70;pointer-events:none;animation:fall var(--d) linear forwards;border-radius:2px}
+@keyframes fall{to{transform:translateY(110vh) rotate(720deg)}}
+
+/* LIM */
+body.lim{--fs:23px}
+body.lim .slide h2{font-size:1.8rem}
+body.lim .top h1{font-size:1.1rem}
+
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+body.rm *,body.rm *::before,body.rm *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+body.fs-1{--fs:15px}body.fs-3{--fs:19px}body.fs-4{--fs:21px}
+body.lim.fs-1{--fs:20px}body.lim.fs-3{--fs:26px}body.lim.fs-4{--fs:29px}
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Vai al contenuto</a>
+<header class="top">
+  <button class="back" id="backBtn" aria-label="Indietro" hidden>←</button>
+  <svg class="logo" viewBox="0 0 64 64" aria-hidden="true"><rect x="10" y="4" width="44" height="15" fill="#FFFFC0" stroke="#403F20" stroke-width="3"/><path d="M32 13 58 32 32 51 6 32z" fill="#FFC0C0" stroke="#402020" stroke-width="3"/><path d="M14 46h44l-6 14H8z" fill="#C0E0FF" stroke="#183060" stroke-width="3"/></svg>
+  <h1 id="title">Flowchart Lab</h1>
+  <button class="limbtn" id="limBtn" aria-label="Modalità LIM (lavagna) attiva o disattiva" aria-pressed="false" title="Modalità LIM">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="4" width="20" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+  </button>
+</header>
+<main id="main" tabindex="-1"></main>
+<nav class="nav" aria-label="Sezioni">
+  <a href="#/" data-nav="home"><span class="i" aria-hidden="true">🏠</span>Home</a>
+  <a href="#/lezioni" data-nav="lezioni"><span class="i" aria-hidden="true">📘</span>Lezioni</a>
+  <a href="#/lab" data-nav="lab"><span class="i" aria-hidden="true">🧪</span>Laboratorio</a>
+  <a href="#/sim" data-nav="sim"><span class="i" aria-hidden="true">▶️</span>Simulatore</a>
+  <a href="#/video" data-nav="video"><span class="i" aria-hidden="true">🎬</span>Video</a>
+</nav>
+<div id="live" class="sr" aria-live="polite"></div>
+<script>
+"use strict";
+/* ================= UTILITÀ ================= */
+const $=(s,r=document)=>r.querySelector(s), $$=(s,r=document)=>[...r.querySelectorAll(s)];
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let _uid=0;const uid=()=>'n'+(++_uid)+Math.random().toString(36).slice(2,6);
+const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a};
+const clone=o=>JSON.parse(JSON.stringify(o));
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+const store={get(k,d){try{const v=localStorage.getItem('fcl_'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('fcl_'+k,JSON.stringify(v))}catch(e){}}};
+const SET=Object.assign({notation:'←',fs:2,hc:false,rm:false,lim:false},store.get('set',{}));
+
+/* ================= MOTORE: ESPRESSIONI ================= */
+class FErr extends Error{constructor(m,node){super(m);this.node=node}}
+function tokenize(s){
+  const t=[];let i=0;
+  while(i<s.length){
+    const c=s[i];
+    if(/\s/.test(c)){i++;continue}
+    if(/[0-9]/.test(c)||(c==='.'&&/[0-9]/.test(s[i+1]||''))){
+      let j=i;while(j<s.length&&/[0-9.]/.test(s[j]))j++;
+      const raw=s.slice(i,j);if((raw.match(/\./g)||[]).length>1)throw new FErr(`Il numero "${raw}" ha troppi punti.`);
+      t.push({k:'num',v:parseFloat(raw),raw});i=j;continue}
+    if(c==='"'||c==="'"||c==='“'||c==='”'){const close=c==='“'?'”':c;let j=i+1;while(j<s.length&&s[j]!==close&&!(close==='"'&&s[j]==='”'))j++;
+      if(j>=s.length)throw new FErr('Hai aperto le virgolette ma non le hai chiuse.');t.push({k:'str',v:s.slice(i+1,j)});i=j+1;continue}
+    if(/[A-Za-zÀ-ÿ_]/.test(c)){let j=i;while(j<s.length&&/[A-Za-zÀ-ÿ0-9_]/.test(s[j]))j++;t.push({k:'id',v:s.slice(i,j)});i=j;continue}
+    const two=s.substr(i,2);
+    if(['==','!=','<>','<=','>=','&&','||'].includes(two)){t.push({k:'op',v:two});i+=2;continue}
+    const map={'≤':'<=','≥':'>=','≠':'!=','×':'*','÷':'/','−':'-',':':'/'};
+    if(c==='←')throw new FErr('La freccia ← si usa solo nel blocco di assegnazione, non dentro un calcolo.');
+    if(c in map){t.push({k:'op',v:map[c]});i++;continue}
+    if('+-*/%^&()<>=!,'.includes(c)){t.push({k:'op',v:c});i++;continue}
+    throw new FErr(`Non conosco il simbolo "${c}".`)}
+  return t}
+function parse(src){
+  if(src==null||String(src).trim()==='')throw new FErr('Il campo è vuoto: scrivi qualcosa.');
+  const t=tokenize(String(src));let p=0;
+  const isOp=v=>t[p]&&t[p].k==='op'&&t[p].v===v, isKw=v=>t[p]&&t[p].k==='id'&&t[p].v.toLowerCase()===v;
+  const expr=()=>or();
+  function or(){let a=and();while(isOp('||')||isKw('or')){p++;a={k:'bin',op:'or',a,b:and()}}return a}
+  function and(){let a=not();while(isOp('&&')||isKw('and')){p++;a={k:'bin',op:'and',a,b:not()}}return a}
+  function not(){if(isOp('!')||isKw('not')){p++;return{k:'un',op:'not',a:not()}}return cmp()}
+  function cmp(){let a=add();const ops=['=','==','!=','<>','<','>','<=','>='];
+    while(t[p]&&t[p].k==='op'&&ops.includes(t[p].v)){let op=t[p++].v;if(op==='==')op='=';if(op==='<>')op='!=';a={k:'bin',op,a,b:add()}}return a}
+  function add(){let a=mul();while(isOp('+')||isOp('-')||isOp('&')){const op=t[p++].v;a={k:'bin',op,a,b:mul()}}return a}
+  function mul(){let a=un();while(isOp('*')||isOp('/')||isOp('%')||isKw('mod')){const op=t[p].k==='id'?'%':t[p].v;p++;a={k:'bin',op,a,b:un()}}return a}
+  function un(){if(isOp('-')){p++;return{k:'un',op:'-',a:un()}}if(isOp('+')){p++;return un()}return pw()}
+  function pw(){const a=prim();if(isOp('^')){p++;return{k:'bin',op:'^',a,b:un()}}return a}
+  function prim(){const x=t[p];
+    if(!x)throw new FErr('Il calcolo è incompleto: manca qualcosa alla fine.');
+    if(x.k==='num'){p++;return{k:'num',v:x.v}}
+    if(x.k==='str'){p++;return{k:'str',v:x.v}}
+    if(x.k==='op'&&x.v==='('){p++;const e=expr();if(!isOp(')'))throw new FErr('Manca una parentesi chiusa ")".');p++;return e}
+    if(x.k==='id'){p++;const low=x.v.toLowerCase();
+      if(low==='true'||low==='vero')return{k:'bool',v:true};
+      if(low==='false'||low==='falso')return{k:'bool',v:false};
+      if(['and','or','not','mod'].includes(low))throw new FErr(`"${x.v}" è una parola speciale: qui serve un valore.`);
+      if(isOp('(')){p++;const args=[];if(!isOp(')')){args.push(expr());while(isOp(',')){p++;args.push(expr())}}
+        if(!isOp(')'))throw new FErr(`Manca la parentesi chiusa della funzione ${x.v}.`);p++;return{k:'call',f:low,name:x.v,args}}
+      return{k:'var',n:x.v}}
+    if(x.k==='op'&&x.v===',')throw new FErr('C\'è una virgola nel posto sbagliato. Per i numeri decimali usa il punto: 2.5');
+    if(x.k==='op'&&x.v===')')throw new FErr('C\'è una parentesi chiusa ")" di troppo.');
+    throw new FErr(`Il simbolo "${x.v}" è nel posto sbagliato.`)}
+  const e=expr();
+  if(p<t.length){const x=t[p];
+    if(x.k==='op'&&x.v===',')throw new FErr('Hai usato la virgola: per i numeri decimali usa il punto (es. 2.5).');
+    if(x.k==='op'&&x.v===')')throw new FErr('C\'è una parentesi chiusa ")" di troppo.');
+    if(x.k==='num'||x.k==='id'||x.k==='str')throw new FErr(`Manca un'operazione prima di "${x.raw||x.v}". Forse volevi scrivere un * oppure un + ?`);
+    throw new FErr(`Non capisco cosa c'è a partire da "${x.v}".`)}
+  return e}
+const PC=new Map();function P(src){src=String(src);if(PC.has(src))return PC.get(src);const r=parse(src);PC.set(src,r);return r}
+function fmt(v){if(typeof v==='boolean')return v?'vero':'falso';if(typeof v==='number'){if(!isFinite(v))return 'errore';if(Number.isInteger(v))return String(v);return String(+v.toFixed(4))}return String(v??'')}
+function desc(v){return typeof v==='number'?`un numero (${fmt(v)})`:typeof v==='string'?`il testo "${v}"`:'un valore vero/falso'}
+function needNum(v,op){if(typeof v!=='number')throw new FErr(`Per "${op}" servono numeri, ma qui c'è ${desc(v)}.`)}
+const FUN={
+  sqrt:[1,a=>{needNum(a,'Sqrt');if(a<0)throw new FErr('Non esiste la radice quadrata di un numero negativo.');return Math.sqrt(a)}],
+  abs:[1,a=>{needNum(a,'Abs');return Math.abs(a)}],
+  int:[1,a=>{needNum(a,'Int');return Math.trunc(a)}],
+  round:[1,a=>{needNum(a,'Round');return Math.round(a)}],
+  random:[1,a=>{needNum(a,'Random');return Math.floor(Math.random()*a)}],
+  len:[1,a=>String(a).length],
+  tostring:[1,a=>fmt(a)],
+  tointeger:[1,a=>{const n=Number(String(a).replace(',','.'));if(isNaN(n))throw new FErr(`ToInteger: "${a}" non è un numero.`);return Math.trunc(n)}],
+  toreal:[1,a=>{const n=Number(String(a).replace(',','.'));if(isNaN(n))throw new FErr(`ToReal: "${a}" non è un numero.`);return n}]};
+function ev(n,env){
+  switch(n.k){
+    case 'num':case 'str':case 'bool':return n.v;
+    case 'var':{const r=env.get(n.n.toLowerCase());
+      if(!r)throw new FErr(`La variabile "${n.n}" non esiste. Controlla di averla scritta giusta, oppure dichiarala (o leggila con Input) prima di usarla.`);
+      if(!r.set)throw new FErr(`La variabile "${r.name}" è vuota: non ha ancora un valore. Dagliene uno prima di usarla (con Input o con un'assegnazione).`);
+      return r.val}
+    case 'call':{const f=FUN[n.f];if(!f)throw new FErr(`Non conosco la funzione "${n.name}". Puoi usare: Sqrt, Abs, Int, Round, Random, Len.`);
+      if(n.args.length!==f[0])throw new FErr(`La funzione ${n.name} vuole ${f[0]} valore tra le parentesi.`);return f[1](...n.args.map(a=>ev(a,env)))}
+    case 'un':{const a=ev(n.a,env);if(n.op==='-'){needNum(a,'-');return -a}
+      if(typeof a!=='boolean')throw new FErr('"not" si usa solo davanti a una condizione (vero/falso).');return !a}
+    case 'bin':{
+      if(n.op==='and'||n.op==='or'){const a=ev(n.a,env);
+        if(typeof a!=='boolean')throw new FErr(`Con "${n.op}" servono due condizioni, una a sinistra e una a destra (es. a > 0 ${n.op} b > 0).`);
+        if(n.op==='and'&&!a)return false;if(n.op==='or'&&a)return true;const b=ev(n.b,env);
+        if(typeof b!=='boolean')throw new FErr(`Con "${n.op}" servono due condizioni, una a sinistra e una a destra (es. a > 0 ${n.op} b > 0).`);return b}
+      const a=ev(n.a,env),b=ev(n.b,env);
+      switch(n.op){
+        case '&':return fmt(a)+fmt(b);
+        case '+':if(typeof a==='string'||typeof b==='string')return fmt(a)+fmt(b);needNum(a,'+');needNum(b,'+');return a+b;
+        case '-':needNum(a,'-');needNum(b,'-');return a-b;
+        case '*':needNum(a,'*');needNum(b,'*');return a*b;
+        case '/':needNum(a,'/');needNum(b,'/');if(b===0)throw new FErr('Divisione per zero: non si può dividere per 0. Controlla i dati oppure usa un rombo per evitare questo caso.');return a/b;
+        case '%':needNum(a,'mod');needNum(b,'mod');if(b===0)throw new FErr('Divisione per zero: non si può fare il resto della divisione per 0.');return a%b;
+        case '^':needNum(a,'^');needNum(b,'^');return Math.pow(a,b);
+        default:{
+          if(typeof a!==typeof b)throw new FErr(`Stai confrontando ${desc(a)} con ${desc(b)}: per confrontarli devono essere dello stesso tipo.`);
+          const eq=typeof a==='number'?Math.abs(a-b)<1e-9:a===b;
+          if(n.op==='=')return eq;if(n.op==='!=')return !eq;
+          if(typeof a==='boolean')throw new FErr('Vero e falso non si possono confrontare con < o >.');
+          if(n.op==='<')return a<b&&!eq;if(n.op==='>')return a>b&&!eq;if(n.op==='<=')return a<b||eq;if(n.op==='>=')return a>b||eq}}}}}
+
+/* ================= MOTORE: ESECUZIONE ================= */
+const TYPES=['Intero','Reale','Stringa','Booleano'];
+const RESERVED=['and','or','not','mod','true','false','vero','falso','sqrt','abs','int','round','random','len','tostring','tointeger','toreal'];
+function checkName(s){s=String(s??'').trim();
+  if(!s)throw new FErr('Manca il nome della variabile.');
+  if(/\s/.test(s))throw new FErr(`Il nome "${s}" contiene uno spazio. Usa un nome unico, per esempio prezzo_finale.`);
+  if(/^[0-9]/.test(s))throw new FErr(`Il nome di una variabile non può iniziare con un numero ("${s}").`);
+  if(!/^[A-Za-zÀ-ÿ_][A-Za-zÀ-ÿ0-9_]*$/.test(s))throw new FErr(`Il nome "${s}" contiene simboli non permessi. Usa solo lettere, numeri e _.`);
+  if(RESERVED.includes(s.toLowerCase()))throw new FErr(`"${s}" è una parola speciale: scegli un altro nome.`);
+  return s}
+const splitNames=s=>String(s??'').split(',').map(x=>x.trim()).filter(Boolean);
+function setVar(ctx,name,val){const k=name.toLowerCase();let r=ctx.env.get(k);
+  if(!r){r={name,type:null,set:false};ctx.env.set(k,r);ctx.info(`Ho creato io la variabile ${name}, che non era dichiarata. In Flowgorithm devi prima dichiararla con il blocco Dichiara.`)}
+  if(r.type==='Intero'){if(typeof val!=='number')throw new FErr(`${r.name} è di tipo Intero: posso metterci solo numeri, non ${desc(val)}.`);
+    if(Math.abs(val-Math.round(val))>1e-9)throw new FErr(`Il risultato è ${fmt(val)} (ha la virgola), ma ${r.name} è dichiarata Intero. Dichiarala Reale.`);val=Math.round(val)}
+  else if(r.type==='Reale'){if(typeof val!=='number')throw new FErr(`${r.name} è di tipo Reale (numero): non posso metterci ${desc(val)}.`)}
+  else if(r.type==='Stringa'){if(typeof val!=='string')throw new FErr(`${r.name} è di tipo Stringa (testo): non posso metterci ${desc(val)}. Per i numeri usa Intero o Reale.`)}
+  else if(r.type==='Booleano'){if(typeof val!=='boolean')throw new FErr(`${r.name} è di tipo Booleano: può valere solo vero o falso.`)}
+  r.val=val;r.set=true;ctx.changed=k}
+function cond(ctx,src){const v=ev(P(src),ctx.env);
+  if(typeof v!=='boolean')throw new FErr(`La condizione "${src}" non dà Vero o Falso ma ${desc(v)}. Una condizione è un confronto, per esempio a > b.`);return v}
+function tick(ctx,n){if(++ctx.steps>ctx.max)throw new FErr('Il programma non si ferma più: sembra un ciclo infinito. Controlla che dentro il ciclo qualcosa cambi (per esempio i ← i + 1), così prima o poi la condizione diventa Falsa.',n.id)}
+function* execSeq(seq,ctx){for(const n of seq)yield* execNode(n,ctx)}
+function* execNode(n,ctx){
+  try{
+    tick(ctx,n);yield{at:n.id};
+    switch(n.t){
+      case 'declare':{const names=splitNames(n.names);if(!names.length)throw new FErr('Il blocco Dichiara è vuoto: scrivi almeno un nome.');
+        for(const nm of names){checkName(nm);const k=nm.toLowerCase();if(ctx.env.has(k))throw new FErr(`La variabile ${nm} è dichiarata due volte.`);ctx.env.set(k,{name:nm,type:TYPES.includes(n.type)?n.type:'Reale',set:false})}
+        ctx.changed='*';break}
+      case 'input':{const nm=checkName(n.v);const k=nm.toLowerCase();
+        if(!ctx.env.has(k)){ctx.env.set(k,{name:nm,type:null,set:false});ctx.info(`La variabile ${nm} non era dichiarata: l'ho creata io. In Flowgorithm devi prima dichiararla con il blocco Dichiara.`)}
+        const v=yield{at:n.id,input:true,rec:ctx.env.get(k)};setVar(ctx,nm,v);break}
+      case 'output':ctx.out(fmt(ev(P(n.e),ctx.env)));break;
+      case 'assign':{const nm=checkName(n.v);setVar(ctx,nm,ev(P(n.e),ctx.env));break}
+      case 'if':{const c=cond(ctx,n.c);ctx.branch(n,c);yield* execSeq(c?n.yes:n.no,ctx);break}
+      case 'while':{let first=true;for(;;){if(!first){tick(ctx,n);yield{at:n.id}}first=false;const c=cond(ctx,n.c);ctx.branch(n,c);if(!c)break;yield* execSeq(n.body,ctx)}break}
+      case 'for':{const nm=checkName(n.v),k=nm.toLowerCase();const a=ev(P(n.from),ctx.env),b=ev(P(n.to),ctx.env),s=ev(P(n.step||'1'),ctx.env);
+        needNum(a,'da');needNum(b,'a');needNum(s,'passo');if(s===0)throw new FErr('Il passo del ciclo Per non può essere 0.');
+        setVar(ctx,nm,a);let first=true;
+        for(;;){if(!first){tick(ctx,n);yield{at:n.id}}first=false;const i=ctx.env.get(k).val;const go=s>0?i<=b:i>=b;ctx.branch(n,go);if(!go)break;yield* execSeq(n.body,ctx);setVar(ctx,nm,ctx.env.get(k).val+s)}break}
+    }
+  }catch(e){if(e instanceof FErr){if(!e.node)e.node=n.id}else{const x=new FErr('Errore imprevisto: '+(e&&e.message));x.node=n.id;e=x}throw e}}
+class Exec{
+  constructor(prog,h={}){this.env=new Map();
+    const ctx=this.ctx={env:this.env,steps:0,max:h.max||10000,out:h.out||(()=>{}),info:h.info||(()=>{}),branch:h.branch||(()=>{}),changed:null};
+    this.gen=(function*(){yield{at:'start'};yield* execSeq(prog,ctx);yield{at:'end'}})();this.done=false}
+  step(v){if(this.done)return{done:true};
+    try{const r=this.gen.next(v);if(r.done){this.done=true;return{done:true}}return r.value}
+    catch(e){this.done=true;return{error:e instanceof FErr?e:new FErr(String(e&&e.message||e))}}}}
+function convInput(raw,rec){const s=String(raw??'').trim();const type=rec&&rec.type;
+  if(type==='Stringa')return{ok:true,v:s};
+  if(s==='')return{ok:false,msg:'Non hai scritto niente. Scrivi un valore e premi OK.'};
+  if(type==='Booleano'){if(/^(vero|true|v|si|sì)$/i.test(s))return{ok:true,v:true};if(/^(falso|false|f|no)$/i.test(s))return{ok:true,v:false};return{ok:false,msg:'Scrivi vero oppure falso.'}}
+  const ns=s.replace(',','.');const isNum=/^[-+]?(\d+\.?\d*|\.\d+)$/.test(ns);
+  if(type==='Intero'){if(!isNum)return{ok:false,msg:'Serve un numero intero, per esempio 7.'};const v=Number(ns);if(!Number.isInteger(v))return{ok:false,msg:'Questa variabile è Intero: niente virgola. Scrivi per esempio 7.'};return{ok:true,v}}
+  if(type==='Reale'){if(!isNum)return{ok:false,msg:'Serve un numero, per esempio 3 oppure 2.5'};return{ok:true,v:Number(ns)}}
+  return isNum?{ok:true,v:Number(ns)}:{ok:true,v:s}}
+function runHeadless(prog,inputs){const outs=[],q=[...inputs];const ex=new Exec(prog,{out:s=>outs.push(s),max:20000});let send;
+  for(let g=0;g<200000;g++){const r=ex.step(send);send=undefined;
+    if(r.done)return{outs};if(r.error)return{outs,error:r.error};
+    if(r.input){if(!q.length)return{outs,error:new FErr('Il programma chiede più dati di quelli previsti dal test.')};const c=convInput(q.shift(),r.rec);if(!c.ok)return{outs,error:new FErr(c.msg)};send=c.v}}
+  return{outs}}
+function sameOut(a,b){const na=Number(a),nb=Number(b);if(String(a).trim()!==''&&String(b).trim()!==''&&!isNaN(na)&&!isNaN(nb))return Math.abs(na-nb)<0.01;return String(a).trim().toLowerCase()===String(b).trim().toLowerCase()}
+
+/* ================= COSTRUTTORI DI BLOCCHI ================= */
+const D=(names,type,tip,hint)=>({t:'declare',names,type,tip,hint});
+const I=(v,tip,hint)=>({t:'input',v,tip,hint});
+const O=(e,tip,hint)=>({t:'output',e,tip,hint});
+const A=(v,e,tip,hint)=>({t:'assign',v,e,tip,hint});
+const IF=(c,yes,no,tip,hint)=>({t:'if',c,yes:yes||[],no:no||[],tip,hint});
+const WH=(c,body,tip,hint)=>({t:'while',c,body:body||[],tip,hint});
+const FOR=(v,from,to,step,body,tip)=>({t:'for',v,from,to,step:step||'1',body:body||[],tip});
+const BAD=n=>(n.bad=true,n);
+function walk(seq,f,parent){for(const n of seq){f(n,seq,parent);if(n.t==='if'){walk(n.yes,f,n);walk(n.no,f,n)}else if(n.body)walk(n.body,f,n)}}
+function ensureIds(seq){walk(seq,n=>{if(!n.id)n.id=uid();if(n.t==='if'){n.yes=n.yes||[];n.no=n.no||[]}if((n.t==='while'||n.t==='for')&&!n.body)n.body=[]});return seq}
+function findNode(seq,id){let r=null;walk(seq,(n,s)=>{if(n.id===id)r={n,seq:s,i:s.indexOf(n)}});return r}
+function seqOfLabel(seq){const s=[];walk(seq,n=>s.push(n));return s}
+
+/* ================= DIAGRAMMA (SVG) ================= */
+const BH=44;
+function tw(s){return Math.max(100,Math.min(440,String(s).length*8.1+46))}
+function blockLabel(n){const ar=SET.notation==='='?'=':'←';
+  switch(n.t){case 'declare':return n.type+' '+n.names;case 'input':return 'Input '+n.v;case 'output':return 'Output '+n.e;
+    case 'assign':return n.v+' '+ar+' '+n.e;case 'if':case 'while':return n.c;
+    case 'for':return `${n.v} da ${n.from} a ${n.to}`+(n.step&&String(n.step).trim()!=='1'?` passo ${n.step}`:'');
+    case 'ghost':return '?';case 'term':return n.txt}return ''}
+const KIND={term:'term',declare:'dec',input:'in',output:'out',assign:'asg',if:'if',while:'loop',for:'loop',ghost:'ghost'};
+const KNAME={term:'Inizio/Fine',declare:'Dichiara',input:'Input',output:'Output',assign:'Assegnazione',if:'Scelta (rombo)',while:'Ciclo Mentre',for:'Ciclo Per',ghost:'Blocco da scegliere'};
+function shapePath(kind,cx,y,w,h){const x=cx-w/2;
+  switch(kind){
+    case 'term':return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${h/2}"/>`;
+    case 'in':case 'out':{const k=14;return `<polygon points="${x+k},${y} ${x+w},${y} ${x+w-k},${y+h} ${x},${y+h}"/>`}
+    case 'dec':return `<path d="M${x} ${y}h${w}v${h}h${-w}z M${x+8} ${y}v${h} M${x} ${y+8}h${w}"/>`;
+    case 'if':return `<polygon points="${cx},${y} ${x+w},${y+h/2} ${cx},${y+h} ${x},${y+h/2}"/>`;
+    case 'loop':{const k=16;return `<polygon points="${x+k},${y} ${x+w-k},${y} ${x+w},${y+h/2} ${x+w-k},${y+h} ${x+k},${y+h} ${x},${y+h/2}"/>`}
+    default:return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6"/>`}}
+function blockSVG(n,cx,y,w,h,o){const kind=KIND[n.t];const lab=blockLabel(n);
+  const cls=['blk','k-'+kind];if(o.active===n.id)cls.push('active');if(o.newId===n.id)cls.push('newb');if(o.tap&&n.t!=='term')cls.push('tap');if(o.mark&&o.mark[n.id])cls.push(o.mark[n.id]);
+  const aria=`${KNAME[n.t]}: ${lab}`;
+  let s=`<g class="${cls.join(' ')}" data-id="${esc(n.id)}"${o.tap&&n.t!=='term'?` role="button" tabindex="0" aria-label="${esc(aria)}"`:''}>${shapePath(kind,cx,y,w,h)}<text class="bt" x="${cx+(kind==='dec'?4:0)}" y="${y+h/2}">${esc(lab)}</text>`;
+  if(kind==='in'||kind==='out')s+=`<text class="io" x="${cx+w/2-24}" y="${y+12}">${kind==='in'?'I':'O'}</text>`;
+  return s+'</g>'}
+function layoutNode(n,o){
+  if(n.t==='if')return layoutIf(n,o);
+  if(n.t==='while'||n.t==='for')return layoutLoop(n,o);
+  const w=n.t==='ghost'?110:tw(blockLabel(n));
+  return{L:w/2,R:w/2,h:BH,draw(cx,y,S){S.push(blockSVG(n,cx,y,w,BH,o))}}}
+function layoutSeq(seq,o,headLast){const G=o.G;const si=o.seqs.length;o.seqs.push(seq);
+  const kids=seq.map(n=>layoutNode(n,o));let L=o.editable?14:6,R=L,h=G*(kids.length+1);
+  kids.forEach(k=>{L=Math.max(L,k.L);R=Math.max(R,k.R);h+=k.h});
+  return{L,R,h,draw(cx,y,S){let yy=y;
+    for(let i=0;i<=kids.length;i++){
+      const head=i<kids.length||headLast;
+      S.push(`<line class="ar" x1="${cx}" y1="${yy}" x2="${cx}" y2="${yy+G-(head?1:0)}"${head?` marker-end="url(#${o.mid})"`:''}/>`);
+      if(o.editable)S.push(`<g class="ins" data-seq="${si}" data-idx="${i}" role="button" tabindex="0" aria-label="Aggiungi un blocco qui"><circle cx="${cx}" cy="${yy+G/2-2}" r="11"/><text x="${cx}" y="${yy+G/2-1}">+</text></g>`);
+      yy+=G;if(i<kids.length){kids[i].draw(cx,yy,S);yy+=kids[i].h}}}}}
+function layoutIf(n,o){const lab=blockLabel(n);const dw=Math.max(130,tw(lab)+44),dh=62;
+  const no=layoutSeq(n.no,o,false),yes=layoutSeq(n.yes,o,false);
+  const dl=Math.max(dw/2+20,no.R+24),dr=Math.max(dw/2+20,yes.L+24);const bh=Math.max(no.h,yes.h);
+  return{L:Math.max(dw/2,dl+no.L),R:Math.max(dw/2,dr+yes.R),h:dh/2+bh,draw(cx,y,S){
+    S.push(blockSVG(n,cx,y,dw,dh,o));const my=y+dh/2,lx=cx-dl,rx=cx+dr,by=my+bh;
+    S.push(`<path class="ln" d="M${cx-dw/2} ${my}H${lx}M${cx+dw/2} ${my}H${rx}"/>`);
+    S.push(`<text class="lbl" x="${cx-dw/2-6}" y="${my-7}" text-anchor="end">Falso</text><text class="lbl" x="${cx+dw/2+6}" y="${my-7}">Vero</text>`);
+    no.draw(lx,my,S);yes.draw(rx,my,S);
+    S.push(`<path class="ln" d="M${lx} ${my+no.h}V${by}H${rx}V${my+yes.h}"/><circle cx="${cx}" cy="${by}" r="4" fill="#46505A"/>`)}}}
+function layoutLoop(n,o){const lab=blockLabel(n);const hw=Math.max(130,tw(lab)+30),hh=50;const body=layoutSeq(n.body,o,false);
+  const left=Math.max(hw/2,body.L)+26,right=Math.max(hw/2,body.R)+26;
+  return{L:left+4,R:right+4,h:hh+body.h+22,draw(cx,y,S){
+    S.push(blockSVG(n,cx,y,hw,hh,o));body.draw(cx,y+hh,S);const by=y+hh+body.h;
+    S.push(`<text class="lbl" x="${cx+8}" y="${y+hh+14}">Vero</text>`);
+    S.push(`<path class="ln" d="M${cx} ${by}V${by+8}H${cx-left}V${y+hh/2}H${cx-hw/2-1}" marker-end="url(#${o.mid})"/>`);
+    S.push(`<path class="ln" d="M${cx+hw/2} ${y+hh/2}H${cx+right}V${by+22}H${cx}"/><text class="lbl" x="${cx+hw/2+6}" y="${y+hh/2-7}">Falso</text>`)}}}
+function renderChart(prog,o={}){o.G=o.editable?42:28;o.seqs=[];o.mid=o.mid||('m'+Math.random().toString(36).slice(2,8));
+  const main=layoutSeq(prog,o,true);const L=Math.max(main.L,60)+18,R=Math.max(main.R,60)+18;const W=Math.round(L+R),H=Math.round(BH*2+main.h+24);
+  const S=[],cx=L,y0=12;
+  S.push(blockSVG({t:'term',id:'start',txt:'Inizio'},cx,y0,110,BH,o));main.draw(cx,y0+BH,S);S.push(blockSVG({t:'term',id:'end',txt:'Fine'},cx,y0+BH+main.h,110,BH,o));
+  const z=o.zoom||1;
+  return{html:`<svg class="chart${o.draw?' draw':''}" viewBox="0 0 ${W} ${H}" width="${Math.round(W*z)}" height="${Math.round(H*z)}" role="img" aria-label="${esc(o.aria||'Diagramma di flusso. '+pseudo(prog).replace(/\n/g,'. '))}"><defs><marker id="${o.mid}" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path d="M0,0L10,5L0,10z" class="ah"/></marker></defs>${S.join('')}</svg>`,seqs:o.seqs,W,H}}
+function miniBlock(n){const lab=blockLabel(n);const kind=KIND[n.t];const w=n.t==='if'?Math.max(130,tw(lab)+44):tw(lab)+(kind==='loop'?30:0),h=n.t==='if'?58:BH;
+  return `<svg class="mini" viewBox="-3 -3 ${w+6} ${h+6}" width="${w+6}" height="${h+6}" aria-hidden="true">${blockSVG(n,w/2,0,w,h,{})}</svg>`}
+function pseudo(seq,ind=0){let s='';const p='   '.repeat(ind);
+  for(const n of seq){
+    if(n.t==='if')s+=`${p}Se ${n.c} allora\n${pseudo(n.yes,ind+1)}${n.no.length?p+'Altrimenti\n'+pseudo(n.no,ind+1):''}${p}Fine se\n`;
+    else if(n.t==='while')s+=`${p}Mentre ${n.c} ripeti\n${pseudo(n.body,ind+1)}${p}Fine ciclo\n`;
+    else if(n.t==='for')s+=`${p}Per ${blockLabel(n)} ripeti\n${pseudo(n.body,ind+1)}${p}Fine ciclo\n`;
+    else s+=p+blockLabel(n)+'\n'}
+  return s}
+/* ================= CONTENUTI ================= */
+const SKILLS=[
+  ['fasi','Conosco le fasi: dal problema al programma'],
+  ['analisi','So trovare i dati di input e di output'],
+  ['blocchi','Riconosco i blocchi e so a cosa servono'],
+  ['variabili','So usare variabili e assegnazioni'],
+  ['sequenza','So costruire un algoritmo in sequenza'],
+  ['selezione','So usare il rombo per fare una scelta'],
+  ['ciclo','So usare un ciclo per ripetere'],
+  ['simulatore','So eseguire e provare un algoritmo'],
+  ['debug','So trovare e correggere un errore']];
+
+const VIDEOS=[
+  {id:'0gcYnyn7X2I',start:26,title:'Video 1 · Algoritmi in sequenza',mod:2,
+   ex:['Dati tre numeri, visualizzali dall’ultimo al primo inserito.','Dati due numeri, visualizza il loro prodotto e la loro differenza.','Dati tre numeri, fai il loro prodotto e aggiungi 10 al totale.']},
+  {id:'xwYQyJPv03w',start:0,title:'Video 2 · Il rombo: fare una scelta',mod:3,
+   ex:['Dati due numeri in input, mostra in output la differenza tra il maggiore e il minore.','Dati i lati di un triangolo, stabilisci se è equilatero e in tal caso calcola perimetro e area.','Leggi tre numeri e scopri se tra loro ci sono numeri uguali.','Leggi due numeri e visualizzali in ordine crescente.']},
+  {id:'Gce8zbxXEOc',start:0,title:'Video 3 · Allenamento: sequenza e scelta',mod:3,
+   ex:['Dati tre numeri reali X, Y e Z, calcola il quadrato della loro somma.','Stabilisci se una persona può votare alle elezioni.','Calcola il prodotto di due numeri, ma solo se sono uguali a un valore k stabilito prima.','Un signore ha 1,75 $ (dollari) e 2,80 £ (sterline). Quanto ha in tutto in euro, se 1 $ = 1,514 € e 1 £ = 2,52 €?']},
+  {id:'6ofMNsT79BY',start:24,title:'Video 4 · Il ciclo (iterazione indefinita)',mod:4,ex:[]}];
+
+/* programmi di esempio usati nelle lezioni */
+const DEMO={
+  ciao:[D('nome','Stringa'),O('"Come ti chiami?"'),I('nome'),O('"Ciao " & nome & "!"')],
+  media:[D('media','Reale'),I('media'),IF('media >= 6',[O('"Ammesso"')],[O('"Non ammesso"')])],
+  conta:[D('i','Intero'),A('i','1'),WH('i <= 20',[O('i'),A('i','i + 1')])],
+  primo:[O('"Ciao!"')],
+  tre:[D('a, b, somma','Intero'),I('a'),I('b'),A('somma','a + b'),O('somma')]};
+
+/* ---------- LEZIONI ---------- */
+const MODULES=[
+{id:1,icon:'🧩',title:'Dal problema al programma',sub:'Problema, analisi, algoritmo',ex:['e1','e2'],slides:[
+ {t:'Benvenuto!',h:`<p class="lead">Qui impari a <b>far ragionare un computer</b>. Non serve sapere niente di informatica: partiamo proprio da zero.</p>
+  <p>Funziona così: leggi una cosa nuova, poi la provi subito. Ogni pagina ha un’attività da fare. Se sbagli non succede niente: ti spiego dove e perché, e riprovi.</p>
+  <div class="callout">Alla fine saprai disegnare un <b>diagramma di flusso</b> come questo, e farlo funzionare.</div>
+  <div class="chartwrap fit" data-chart="primo"></div>`,
+  act:{type:'tf',q:'Vero o falso?',items:[['Per seguire questo corso devo già saper programmare.',false,'Falso: partiamo da zero, davvero.'],['Se sbaglio un’attività posso riprovare.',true,'Vero: sbagliare fa parte del gioco. È così che si impara.']]}},
+ {t:'Che cos’è un problema',h:`<p class="lead">Un <b>problema</b> è una situazione da risolvere.</p>
+  <p>Hai sete e vuoi un tè caldo? Quello è un problema. Per risolverlo fai delle azioni, <b>una dopo l’altra</b>, nell’ordine giusto.</p>
+  <div class="callout warn">Se sbagli l’ordine il risultato non viene. Prova a versare l’acqua prima di scaldarla…</div>`,
+  act:{type:'order',q:'Metti in ordine i passi per preparare un tè. Tocca i passi nell’ordine giusto.',items:['Riempi il pentolino d’acqua','Metti il pentolino sul fuoco','Aspetta che l’acqua bolla','Versa l’acqua nella tazza con la bustina','Aspetta 3 minuti e togli la bustina'],ok:'Perfetto! Hai appena scritto il tuo primo algoritmo: una lista di passi in ordine che risolve un problema.'}},
+ {t:'Il computer esegue, non pensa',h:`<p class="lead">Il computer è velocissimo, ma <b>non pensa da solo</b>.</p>
+  <p>Fa solo quello che gli dici, esattamente come lo dici. Non indovina cosa intendi.</p>
+  <p>Per questo le istruzioni devono essere:</p>
+  <ul class="rv"><li style="--i:1"><b>chiare</b>: si capiscono in un solo modo</li><li style="--i:2"><b>in ordine</b>: una dopo l’altra</li><li style="--i:3"><b>finite</b>: prima o poi si arriva alla fine</li></ul>`,
+  act:{type:'quiz',q:'Quale istruzione va bene per un computer?',opts:[['Fai un po’ di conti',0,'“Un po’ di conti” quali? Il computer non può indovinare.'],['Somma 5 e 3',1,'Esatto: è chiara, si capisce in un solo modo.'],['Fai quello che serve',0,'Il computer non sa cosa “serve”. Bisogna dirglielo con precisione.']]}},
+ {t:'Le fasi: dal problema al programma',h:`<p>Un programmatore ha un problema e deve creare un programma che lo risolve. Ci arriva passando per queste fasi:</p>
+  <div class="phases">
+   <div class="phase" style="--i:0"><b>1. Problema</b>: cosa devo risolvere?</div><div class="parrow" style="--i:0"></div>
+   <div class="phase" style="--i:1"><b>2. Analisi</b>: quali dati ho, quali risultati voglio?</div><div class="parrow" style="--i:1"></div>
+   <div class="phase" style="--i:2"><b>3. Algoritmo</b>: i passi per risolverlo</div><div class="parrow" style="--i:2"></div>
+   <div class="phase" style="--i:3"><b>4. Simulazione</b>: provo se funziona</div><div class="parrow" style="--i:3"></div>
+   <div class="phase" style="--i:4"><b>5. Codifica</b>: lo scrivo al computer</div><div class="parrow" style="--i:4"></div>
+   <div class="phase" style="--i:5"><b>6. Programma</b>: funziona!</div></div>`,
+  act:{type:'order',q:'Rimetti le fasi nell’ordine giusto.',items:['Problema','Analisi','Algoritmo','Simulazione','Codifica','Programma'],ok:'Giusto. Prima si capisce, poi si progetta, poi si prova, e solo alla fine si scrive al computer.',skill:'fasi'}},
+ {t:'L’algoritmo',h:`<p class="lead">Un <b>algoritmo</b> è una <b>sequenza di operazioni che risolve un problema</b>.</p>
+  <p>Ne usi tanti ogni giorno senza saperlo: una ricetta, le istruzioni per montare un mobile, la strada per andare a scuola.</p>
+  <div class="callout">Un algoritmo ha un inizio, una fine, e in mezzo dei passi chiari e in ordine.</div>`,
+  act:{type:'tf',q:'Vero o falso?',items:[['Una ricetta di cucina è un algoritmo.',true,'Vero: è una sequenza di passi che porta a un risultato.'],['Un algoritmo può andare avanti per sempre senza finire.',false,'Falso: un algoritmo deve finire, prima o poi.'],['In un algoritmo l’ordine dei passi non conta.',false,'Falso: come per il tè, se cambi l’ordine il risultato cambia.']]}},
+ {t:'L’analisi: input e output',h:`<p>Prima di scrivere l’algoritmo si fa l’<b>analisi</b>. Serve a capire tre cose:</p>
+  <div class="machine" aria-hidden="true"><span class="data">dati</span><span>→</span><span class="mb"><span>⚙️</span></span><span>→</span><span class="data o">risultati</span></div>
+  <ul><li><b>Input</b> (ingresso): i dati che <b>conosco</b> o che mi vengono dati</li><li><b>Output</b> (uscita): i <b>risultati</b> che devo trovare</li><li><b>Relazione</b>: come passo dagli input agli output (di solito una formula)</li></ul>`,
+  act:{type:'classify',q:'Problema: “calcolare l’area di un rettangolo”. Dove va ogni cosa?',bins:['Input','Output','Non serve'],items:[['La base',0,'La base la conosciamo: è un dato in ingresso.'],['L’altezza',0,'Anche l’altezza è un dato che ci viene dato.'],['L’area',1,'L’area è il risultato da trovare: è l’output.'],['Il colore del rettangolo',2,'Il colore non serve a calcolare l’area.']],skill:'analisi'}},
+ {t:'Efficace o efficiente?',h:`<p>Due algoritmi possono risolvere lo stesso problema in modi diversi.</p>
+  <div class="grid2"><div class="callout ok"><b>Efficace</b> = funziona.<br>Arriva al risultato giusto.</div><div class="callout"><b>Efficiente</b> = funziona <b>bene</b>.<br>Ci mette meno tempo e usa meno risorse.</div></div>
+  <p>Premi <b>Via!</b> e guarda: tutti e due mettono in ordine gli stessi numeri.</p>
+  <div class="race" data-race><div class="lane" style="--d:4s"><span>🐢 A</span><div class="tr"><span class="rn">📦</span></div></div><div class="lane" style="--d:1s"><span>🐇 B</span><div class="tr"><span class="rn">📦</span></div></div></div>
+  <button class="btn sm" data-race-go>🏁 Via!</button>`,
+  act:{type:'quiz',q:'A ci mette 4 secondi, B ci mette 1 secondo. Il risultato è giusto per tutti e due. Quale frase è vera?',opts:[['Sono efficaci tutti e due, ma B è più efficiente',1,'Esatto: funzionano entrambi (efficaci), B lo fa meglio (efficiente).'],['Solo B è efficace',0,'Anche A arriva al risultato giusto, quindi anche A è efficace.'],['A è più efficiente perché è più lento',0,'Più efficiente vuol dire più veloce o più leggero, non più lento.']]}},
+ {t:'Laboratorio: il lupo, la capra e i cavoli',h:`<p>Un contadino deve portare sull’altra riva un <b>lupo</b>, una <b>capra</b> e dei <b>cavoli</b>. La barca porta lui e <b>una sola cosa</b> alla volta.</p>
+  <p>Se li lascia soli: il lupo mangia la capra 🐺🐐, la capra mangia i cavoli 🐐🥬. Il lupo i cavoli non li mangia.</p>
+  <p class="small muted">Tocca un animale per caricarlo sulla barca, poi premi Attraversa. Le tue mosse diventano i passi dell’algoritmo.</p>`,
+  act:{type:'river',skill:'fasi'}},
+ {t:'Laboratorio: i travasi',h:`<p>Il contadino deve innaffiare i cavolfiori. Ha tre recipienti:</p>
+  <ul><li>25 litri, con dentro 16 litri d’acqua</li><li>5 litri, pieno</li><li>3 litri, pieno</li></ul>
+  <p>Deve ottenere <b>esattamente 20 litri</b> nel recipiente grande. Può solo versare l’acqua da un recipiente all’altro.</p>
+  <p class="small muted">Tocca il recipiente da cui versare, poi quello in cui versare.</p>`,
+  act:{type:'jugs',skill:'analisi'}}
+]},
+{id:2,icon:'🔷',title:'I blocchi e le variabili',sub:'Ovale, parallelogramma, rettangolo',ex:['e3','e4','e5'],video:[0],slides:[
+ {t:'Il diagramma di flusso',h:`<p class="lead">Un algoritmo si può <b>disegnare</b>. Il disegno si chiama <b>diagramma di flusso</b> (o diagramma a blocchi, o flow chart: è la stessa cosa).</p>
+  <p>È fatto di <b>blocchi</b> collegati da <b>frecce</b>. Ogni forma ha un compito diverso.</p>
+  <div class="chartwrap fit" data-chart="tre"></div>
+  <p class="small muted">Questo diagramma legge due numeri, li somma e mostra il risultato.</p>`,
+  act:{type:'quiz',q:'Come si legge un diagramma di flusso?',opts:[['Dall’alto verso il basso, seguendo le frecce',1,'Giusto: si parte da Inizio e si seguono le frecce fino a Fine.'],['Dal basso verso l’alto',0,'No: si parte sempre da Inizio, che sta in alto.'],['In qualsiasi ordine',0,'No: l’ordine conta. Si seguono le frecce.']]}},
+ {t:'L’ovale: Inizio e Fine',h:`<div class="toy">${'__SHAPE_term__'}</div>
+  <p>L’<b>ovale</b> si usa solo per due cose: segnare l’<b>Inizio</b> e la <b>Fine</b> dell’algoritmo (in inglese Start ed End).</p>
+  <div class="callout">In ogni diagramma c’è <b>un solo</b> Inizio e <b>una sola</b> Fine.</div>`,
+  act:{type:'quiz',q:'Quanti blocchi Inizio ci sono in un diagramma?',opts:[['Uno',1,'Esatto: uno solo, all’inizio.'],['Due',0,'No: Inizio è uno solo. Si parte da un unico punto.'],['Dipende da quanti calcoli ci sono',0,'No: anche con mille calcoli, l’Inizio resta uno.']]}},
+ {t:'Il parallelogramma: Input e Output',h:`<div class="toy">${'__SHAPE_io__'}</div>
+  <p>Il <b>parallelogramma</b> è il blocco di <b>comunicazione</b>: serve a parlare con chi usa il programma.</p>
+  <ul><li><b>Input</b> (dentro c’è una <b>I</b>): <b>legge</b> un dato, cioè chiede di scriverlo con la tastiera</li><li><b>Output</b> (dentro c’è una <b>O</b>): <b>scrive</b> un dato sullo schermo</li></ul>
+  <p class="small muted">In Flowgorithm l’Input è azzurro e l’Output è verde.</p>`,
+  act:{type:'classify',q:'Input o Output?',bins:['Input','Output'],items:[['Chiedere l’età all’utente',0,'Chiedere un dato = leggere = Input.'],['Mostrare il risultato',1,'Mostrare sullo schermo = scrivere = Output.'],['Leggere il prezzo',0,'Leggere = Input.'],['Scrivere “Ciao!” sullo schermo',1,'Scrivere sullo schermo = Output.']],skill:'blocchi'}},
+ {t:'Le variabili: scatole con un nome',h:`<p class="lead">Una <b>variabile</b> è come una <b>scatola con un nome</b>. Dentro ci metti un valore.</p>
+  <div class="boxes" aria-hidden="true"><div class="vbox"><div class="bx">7</div><div class="nm">età</div></div><div class="vbox"><div class="bx">2.5</div><div class="nm">prezzo</div></div></div>
+  <p>Si chiama variabile perché il contenuto <b>può cambiare</b> mentre l’algoritmo va avanti.</p>
+  <p>Una <b>costante</b> invece non cambia mai (per esempio pi greco, 3,14).</p>`,
+  act:{type:'quiz',q:'Quale di questi è una costante?',opts:[['Il numero di giorni in una settimana',1,'Giusto: sono sempre 7, non cambia mai.'],['La temperatura di oggi',0,'La temperatura cambia di continuo: è una variabile.'],['Il tuo punteggio in un gioco',0,'Il punteggio cambia mentre giochi: è una variabile.']]}},
+ {t:'Il rettangolo: l’assegnazione',h:`<div class="toy">${'__SHAPE_asg__'}</div>
+  <p>Il <b>rettangolo</b> è il blocco di <b>azione</b> (o di <b>assegnazione</b>): mette un valore dentro una variabile.</p>
+  <p>Si scrive <code>a ← 2</code> e si legge “<b>a prende 2</b>”.</p>
+  <div class="callout warn">La freccia va da destra a sinistra: <b>prima</b> si calcola quello che c’è a destra, <b>poi</b> il risultato va nella scatola a sinistra. Il vecchio valore viene buttato via.</div>
+  <p class="small muted">In Flowgorithm vedrai scritto <code>a = 2</code>: vuol dire la stessa cosa.</p>`,
+  act:{type:'varbox',skill:'variabili'}},
+ {t:'Allenati con le scatole',h:`<p>Ora prova tu, a mente. Il computer esegue questi blocchi uno dopo l’altro:</p>
+  <div class="callout"><code>a ← 5</code><br><code>a ← a + 3</code></div>`,
+  act:{type:'quiz',q:'Alla fine, cosa c’è nella scatola a?',opts:[['8',1,'Esatto: a valeva 5, si calcola 5 + 3 = 8 e il risultato torna in a.'],['5',0,'Il secondo blocco cambia a: prima calcola a + 3, poi mette il risultato in a.'],['a + 3',0,'Nella scatola finisce il risultato del calcolo, non la scritta “a + 3”.'],['3',0,'Si aggiunge 3 al valore che c’era già (5).']]}},
+ {t:'La trappola dello scambio',h:`<p>Vogliamo <b>scambiare</b> il contenuto di due scatole. Un compagno scrive:</p>
+  <div class="callout"><code>x ← 4</code><br><code>y ← 7</code><br><code>x ← y</code><br><code>y ← x</code></div>`,
+  act:{type:'quiz',q:'Alla fine quanto valgono x e y?',opts:[['x = 7 e y = 7',1,'Proprio così! Quando fai x ← y, il 4 viene buttato via. Poi y ← x rimette 7 in y. Per scambiare serve una terza scatola di appoggio: tmp ← x, x ← y, y ← tmp.'],['x = 7 e y = 4',0,'Sembra giusto, ma è una trappola: dopo x ← y il vecchio 4 non c’è più!'],['x = 4 e y = 7',0,'I blocchi cambiano i valori: almeno x diventa 7.']],skill:'variabili'}},
+ {t:'Le operazioni',h:`<p>Nei blocchi puoi fare calcoli. In Flowgorithm si scrivono così:</p>
+  <table class="tbl"><tr><th>Operazione</th><th>Si scrive</th><th>Esempio</th></tr><tr><td>somma</td><td><code>+</code></td><td><code>a + b</code></td></tr><tr><td>sottrazione</td><td><code>-</code></td><td><code>a - b</code></td></tr><tr><td>moltiplicazione</td><td><code>*</code></td><td><code>a * b</code></td></tr><tr><td>divisione</td><td><code>/</code></td><td><code>a / b</code></td></tr><tr><td>potenza</td><td><code>^</code></td><td><code>a ^ 2</code></td></tr><tr><td>radice quadrata</td><td><code>Sqrt( )</code></td><td><code>Sqrt(a)</code></td></tr></table>
+  <div class="callout">Come in matematica: <b>prima</b> moltiplicazioni e divisioni, <b>poi</b> somme e sottrazioni. Se vuoi cambiare l’ordine usa le parentesi.</div>
+  <p class="small muted">Per i numeri con la virgola si usa il punto: 2.5</p>`,
+  act:{type:'quiz',q:'Quanto fa 2 + 3 * 4 ?',opts:[['14',1,'Giusto: prima 3 × 4 = 12, poi 2 + 12 = 14.'],['20',0,'20 verrebbe con le parentesi: (2 + 3) * 4. Senza parentesi si fa prima la moltiplicazione.'],['24',0,'Ricontrolla: prima la moltiplicazione 3 × 4.']]}},
+ {t:'In Flowgorithm: dichiarare le variabili',h:`<p>In Flowgorithm, prima di usare una scatola, devi <b>dichiararla</b>: dire il suo nome e che <b>tipo</b> di cose contiene.</p>
+  <table class="tbl"><tr><th>Tipo</th><th>Contiene</th><th>Esempio</th></tr><tr><td><b>Intero</b></td><td>numeri senza virgola</td><td>7, -3, 100</td></tr><tr><td><b>Reale</b></td><td>numeri anche con la virgola</td><td>2.5, 9.99</td></tr><tr><td><b>Stringa</b></td><td>testo, tra virgolette</td><td>"Ciao"</td></tr><tr><td><b>Booleano</b></td><td>vero o falso</td><td>vero</td></tr></table>
+  <div class="callout">Il blocco <b>Dichiara</b> è giallo come l’assegnazione, con due righe nell’angolo.</div>`,
+  act:{type:'classify',q:'Che tipo usi per ogni valore?',bins:['Intero','Reale','Stringa'],items:[['Il numero di alunni in classe',0,'Gli alunni si contano: niente virgola, Intero.'],['Il prezzo di una pizza (6.50 €)',1,'Un prezzo può avere i centesimi: Reale.'],['Il nome di una città',2,'Un nome è testo: Stringa.'],['L’altezza in metri (1.62)',1,'Ha la virgola: Reale.']],skill:'variabili'}},
+ {t:'Il tuo primo programma',h:`<p>Ecco un programma vero. Chiede il tuo nome e ti saluta.</p>
+  <p>Premi <b>▶ Esegui</b>: guarda il blocco che si illumina, le scatole delle variabili e lo schermo nero (la <b>console</b>), dove compaiono input e output.</p>`,
+  act:{type:'run',prog:'ciao',skill:'simulatore'}},
+ {t:'Ripasso dei blocchi',h:`<p>Prima di passare agli esercizi, un ultimo controllo.</p>`,
+  act:{type:'classify',q:'Quale blocco usi per ogni azione?',bins:['Ovale','Parallelogramma','Rettangolo'],items:[['Calcolare l’area',2,'Calcolare e mettere il risultato in una variabile = rettangolo.'],['Leggere la base',1,'Leggere un dato = Input = parallelogramma.'],['Terminare l’algoritmo',0,'La Fine si scrive nell’ovale.'],['Mostrare il perimetro',1,'Mostrare = Output = parallelogramma.'],['Mettere 0 nella variabile somma',2,'È un’assegnazione: rettangolo.']],skill:'blocchi'}}
+]},
+{id:3,icon:'🔶',title:'Il rombo: fare una scelta',sub:'Condizioni, Vero e Falso',ex:['e6','e7','e8','e9','e10'],video:[1,2],slides:[
+ {t:'Fare una scelta',h:`<p class="lead">Nella vita scegli in continuazione: <b>se</b> piove prendo l’ombrello, <b>altrimenti</b> no.</p>
+  <p>Anche un algoritmo a volte deve scegliere quale strada prendere. Per farlo c’è un blocco speciale: il <b>rombo</b>.</p>
+  <p>Prova: scegli se piove o no e guarda che strada prende l’algoritmo.</p>`,
+  act:{type:'branch',skill:'selezione'}},
+ {t:'Il rombo: un ingresso, due uscite',h:`<div class="toy">${'__SHAPE_if__'}</div>
+  <p>Il <b>rombo</b> è il <b>blocco di controllo</b>. Dentro si scrive una <b>condizione</b>.</p>
+  <p>Gli altri blocchi hanno un ingresso e un’uscita. Il rombo ha <b>un ingresso e due uscite</b>:</p>
+  <ul><li>se la condizione è <b>vera</b> si va da una parte</li><li>se è <b>falsa</b> si va dall’altra</li></ul>
+  <p>Poi le due strade si riuniscono. Nel foglio di calcolo questa cosa si chiama funzione <b>SE</b>.</p>`,
+  act:{type:'quiz',q:'Quante uscite ha il rombo?',opts:[['Due: Vero e Falso',1,'Esatto.'],['Una',0,'Una sola uscita ce l’hanno gli altri blocchi. Il rombo ne ha due.'],['Tre',0,'No, solo due: Vero e Falso. Per tre casi servono due rombi.']]}},
+ {t:'Le condizioni',h:`<p>Una condizione è un <b>confronto</b>. Il risultato può essere solo <b>Vero</b> o <b>Falso</b>.</p>
+  <table class="tbl"><tr><th>Simbolo</th><th>Significa</th></tr><tr><td><code>&gt;</code></td><td>maggiore</td></tr><tr><td><code>&lt;</code></td><td>minore</td></tr><tr><td><code>&gt;=</code></td><td>maggiore o uguale</td></tr><tr><td><code>&lt;=</code></td><td>minore o uguale</td></tr><tr><td><code>=</code> oppure <code>==</code></td><td>uguale</td></tr><tr><td><code>!=</code></td><td>diverso</td></tr></table>`,
+  act:{type:'tf',q:'Se a vale 5 e b vale 3, queste condizioni sono vere o false?',items:[['a > b',true,'5 è maggiore di 3: Vero.'],['a = b',false,'5 non è uguale a 3: Falso.'],['a != b',true,'5 è diverso da 3: Vero.'],['a <= 3',false,'5 non è minore né uguale a 3: Falso.'],['b >= 3',true,'3 è uguale a 3, quindi “maggiore o uguale” è Vero.']]}},
+ {t:'Unire due condizioni: and e or',h:`<ul><li><code>and</code> (e): è vera solo se sono vere <b>tutte e due</b></li><li><code>or</code> (o): è vera se ne è vera <b>almeno una</b></li></ul>
+  <div class="callout">Esempio: posso entrare al cinema <b>se</b> ho il biglietto <code>and</code> il film è iniziato da meno di 10 minuti.</div>`,
+  act:{type:'quiz',q:'a vale 4 e b vale -2. Quanto vale la condizione  a > 0 and b > 0 ?',opts:[['Falso',1,'Giusto: a > 0 è vero, ma b > 0 è falso. Con and servono tutte e due vere.'],['Vero',0,'Con and devono essere vere tutte e due. b > 0 è falsa.']],skill:'selezione'}},
+ {t:'Esempio: ammesso o non ammesso',h:`<p>Esempio della prof: un alunno è <b>ammesso</b> se la sua media è maggiore o uguale a 6.</p>
+  <p>Esegui il programma <b>due volte</b>: una volta con una media sufficiente (per esempio 7) e una con una insufficiente (per esempio 5). Guarda quale strada si illumina.</p>`,
+  act:{type:'run',prog:'media',times:2,skill:'simulatore'}},
+ {t:'Rombi dentro rombi',h:`<p>A volte i casi sono <b>più di due</b>. Per esempio una partita: vince la prima squadra, vince la seconda, oppure pareggio.</p>
+  <p>Un rombo ha solo due uscite, quindi si mette un <b>secondo rombo dentro</b> una delle strade del primo. Si dice che i rombi sono <b>annidati</b>.</p>`,
+  act:{type:'quiz',q:'Con 3 casi possibili, quanti rombi servono almeno?',opts:[['2',1,'Giusto: il primo divide in due, il secondo divide di nuovo una delle due strade.'],['3',0,'Ne bastano 2: se non è il primo caso e non è il secondo, per forza è il terzo.'],['1',0,'Un rombo ha solo due uscite: per tre casi non basta.']]}},
+ {t:'Errori tipici con il rombo',h:`<p>Leggi bene il testo del problema: le parole contano.</p>
+  <ul><li>“<b>supera</b> 100” vuol dire <code>&gt; 100</code></li><li>“<b>almeno</b> 18” vuol dire <code>&gt;= 18</code></li><li>“<b>tutti e due</b>” vuol dire <code>and</code></li><li>“<b>uno dei due</b>” vuol dire <code>or</code></li></ul>`,
+  act:{type:'quiz',q:'“Si può votare se si hanno almeno 18 anni.” Quale condizione scrivi?',opts:[['eta >= 18',1,'Esatto: “almeno 18” comprende anche 18.'],['eta > 18',0,'Così chi ha esattamente 18 anni non potrebbe votare. “Almeno” vuol dire >=.'],['eta = 18',0,'Così potrebbe votare solo chi ha esattamente 18 anni!']],skill:'selezione'}}
+]},
+{id:4,icon:'🔁',title:'Il ciclo: ripetere',sub:'Contatore, accumulatore, Mentre',ex:['e11','e12','e13'],video:[3],slides:[
+ {t:'Ripetere: il ciclo',h:`<p class="lead">L’<b>iterazione</b> (o <b>ciclo</b>, in inglese <b>loop</b>) serve a <b>ripetere</b> gli stessi blocchi più volte.</p>
+  <p>Si ripete finché una condizione resta vera. Quando diventa falsa, si esce dal ciclo.</p>
+  <p>Prova: il programma deve fare 5 flessioni. Premi il pulsante per fare un giro alla volta.</p>`,
+  act:{type:'loop',skill:'ciclo'}},
+ {t:'Il contatore',h:`<p>Per sapere quante volte hai ripetuto, usi una variabile che fa da <b>contatore</b>:</p>
+  <div class="callout"><code>i ← i + 1</code><br>“i prende il valore di i più uno”: il contatore va avanti di uno.</div>
+  <p>Il contatore si prepara <b>prima</b> del ciclo, per esempio <code>i ← 1</code>.</p>`,
+  act:{type:'quiz',q:'i vale 4. Il computer esegue  i ← i + 1. Quanto vale ora i?',opts:[['5',1,'Giusto: 4 + 1 = 5.'],['4',0,'Il blocco cambia i: calcola 4 + 1 e mette il risultato in i.'],['1',0,'Non si mette 1: si aggiunge 1 al valore che c’era.']]}},
+ {t:'L’accumulatore',h:`<p>Per <b>sommare</b> tanti numeri uno alla volta si usa un <b>accumulatore</b>: una variabile che funziona come un <b>salvadanaio</b>.</p>
+  <div class="callout"><code>somma ← 0</code> prima del ciclo (salvadanaio vuoto)<br><code>somma ← somma + n</code> dentro il ciclo (ci aggiungo n)</div>`,
+  act:{type:'quiz',q:'Perché scrivo somma ← 0 prima del ciclo?',opts:[['Per partire da un salvadanaio vuoto',1,'Esatto: se non la azzeri, la variabile è vuota e il computer non può calcolare somma + n.'],['Non serve, è una cosa in più',0,'Serve: senza un valore di partenza, somma + n non si può calcolare.'],['Per far finire il ciclo',0,'A far finire il ciclo ci pensa il contatore. somma ← 0 prepara il salvadanaio.']]}},
+ {t:'Esempio: contare fino a 20',h:`<p>Esempio della prof: si parte da 1. <b>Finché</b> il numero è minore o uguale a 20, lo si scrive e si aggiunge 1.</p>
+  <p>Premi <b>▶ Esegui</b> e guarda il ciclo che gira. Puoi aumentare la velocità.</p>`,
+  act:{type:'run',prog:'conta',skill:'simulatore'}},
+ {t:'Attenzione al ciclo infinito',h:`<p>Se nel ciclo dimentichi <code>i ← i + 1</code>, il contatore resta sempre uguale. La condizione resta sempre vera e il ciclo <b>non finisce mai</b>.</p>
+  <div class="callout warn">Questo errore si chiama <b>ciclo infinito</b>. Ricorda: un algoritmo deve sempre finire.</div>`,
+  act:{type:'quiz',q:'Cosa succede in questo ciclo?  i ← 1 · Mentre i <= 10: Output i',opts:[['Scrive 1 all’infinito',1,'Esatto: i resta sempre 1, quindi i <= 10 è sempre vera. Manca i ← i + 1.'],['Scrive i numeri da 1 a 10',0,'Lo farebbe se ci fosse i ← i + 1 dentro il ciclo. Qui manca.'],['Non scrive niente',0,'La condizione all’inizio è vera (1 <= 10), quindi entra nel ciclo e scrive.']],skill:'debug'}},
+ {t:'Simula a mente',h:`<div class="callout"><code>i ← 1</code><br>Mentre <code>i &lt;= 3</code>:<br>&nbsp;&nbsp;&nbsp;<code>Output i * 2</code><br>&nbsp;&nbsp;&nbsp;<code>i ← i + 1</code></div>`,
+  act:{type:'quiz',q:'Cosa compare sullo schermo?',opts:[['2  4  6',1,'Giusto: i vale 1, 2, 3 e ogni volta si scrive il doppio. Quando i diventa 4 si esce.'],['1  2  3',0,'Si scrive i * 2, non i.'],['2  4  6  8',0,'Quando i vale 4 la condizione i <= 3 è falsa: si esce prima di scrivere 8.']],skill:'ciclo'}},
+ {t:'Mentre e Per in Flowgorithm',h:`<p>Flowgorithm ha due cicli principali. Hanno la forma di un esagono arancione.</p>
+  <ul><li><b>Mentre</b> (While): ripete finché la condizione è vera. Il contatore lo gestisci tu.</li><li><b>Per</b> (For): conta da solo, per esempio “i da 1 a 10”.</li></ul>
+  <div class="callout">In questo corso usiamo soprattutto <b>Mentre</b>, come negli esempi della prof: così vedi bene come funziona il contatore.</div>`,
+  act:{type:'quiz',q:'Devi chiedere numeri all’utente finché non scrive 0. Non sai quante volte. Quale ciclo usi?',opts:[['Mentre',1,'Giusto: non sai quante volte ripetere, quindi ripeti finché la condizione è vera.'],['Per',0,'Il ciclo Per va bene quando sai già quante volte ripetere.']]}}
+]},
+{id:5,icon:'🏅',title:'Ripasso finale',sub:'Controlla di sapere tutto',ex:['e14','e15'],slides:[
+ {t:'Domanda 1',h:`<p>Un ultimo giro di domande su tutto il corso. Rispondi con calma.</p>`,act:{type:'quiz',q:'Che cos’è un algoritmo?',opts:[['Una sequenza di operazioni che risolve un problema',1,'Esatto.'],['Un programma per computer',0,'Il programma viene dopo: è l’algoritmo scritto al computer (codifica).'],['Un disegno con le frecce',0,'Quello è il diagramma di flusso: un modo per rappresentare l’algoritmo.']],skill:'fasi'}},
+ {t:'Domanda 2',h:'',act:{type:'classify',q:'Problema: “dato il prezzo di un prodotto, calcola il prezzo con l’IVA al 22%”.',bins:['Input','Output','Costante'],items:[['Il prezzo',0,'Il prezzo ce lo dà l’utente: input.'],['Il prezzo con IVA',1,'È il risultato: output.'],['22%',2,'L’IVA è fissa nel problema: è una costante.']],skill:'analisi'}},
+ {t:'Domanda 3',h:'',act:{type:'classify',q:'Che forma ha ogni blocco?',bins:['Ovale','Parallelogramma','Rettangolo','Rombo'],items:[['Input',1,'Input e Output: parallelogramma.'],['Assegnazione',2,'Assegnazione: rettangolo.'],['Scelta (condizione)',3,'Condizione: rombo.'],['Fine',0,'Inizio e Fine: ovale.']],skill:'blocchi'}},
+ {t:'Domanda 4',h:`<div class="callout"><code>a ← 10</code><br><code>b ← a - 4</code><br><code>a ← b * 2</code></div>`,act:{type:'quiz',q:'Quanto valgono a e b alla fine?',opts:[['a = 12, b = 6',1,'Giusto: b = 10 - 4 = 6, poi a = 6 × 2 = 12.'],['a = 10, b = 6',0,'L’ultimo blocco cambia a.'],['a = 20, b = 6',0,'a prende b * 2, cioè 6 × 2.']],skill:'variabili'}},
+ {t:'Domanda 5',h:'',act:{type:'quiz',q:'Problema: “se il voto è almeno 6 scrivi Promosso, altrimenti Bocciato”. Cosa va nel rombo?',opts:[['voto >= 6',1,'Esatto.'],['voto > 6',0,'Con > il 6 sarebbe bocciato. “Almeno 6” vuol dire >= 6.'],['voto = 6',0,'Così sarebbe promosso solo chi prende esattamente 6.']],skill:'selezione'}},
+ {t:'Domanda 6',h:'',act:{type:'order',q:'Metti in ordine i blocchi per sommare 5 numeri.',items:['somma ← 0','i ← 1','Mentre i <= 5','Input n','somma ← somma + n','i ← i + 1','Output somma'],ok:'Perfetto: prima si preparano le variabili, poi il ciclo, e alla fine si mostra il risultato.',skill:'ciclo'}},
+ {t:'Domanda 7',h:`<p>Un programma deve calcolare la media di due voti. Qualcuno ha scritto:</p><div class="callout"><code>media ← a + b / 2</code></div>`,act:{type:'quiz',q:'Con a = 6 e b = 8 cosa succede?',opts:[['Esce 10 invece di 7: mancano le parentesi',1,'Esatto: si fa prima b / 2 = 4, poi 6 + 4 = 10. Serve (a + b) / 2.'],['Esce 7, è giusto',0,'Ricorda: prima la divisione. b / 2 = 4, poi a + 4.'],['Il programma si blocca',0,'Non si blocca: dà un risultato, ma sbagliato.']],skill:'debug'}},
+ {t:'Domanda 8',h:'',act:{type:'quiz',q:'Hai costruito un algoritmo. Come fai a essere sicuro che funziona?',opts:[['Lo provo con dei dati di cui conosco già il risultato',1,'Esatto: è la fase di simulazione. Prova anche i casi limite (per esempio 0, numeri uguali, numeri negativi).'],['Se mi sembra giusto va bene',0,'Sembrare giusto non basta: bisogna provarlo con dei dati.'],['Lo provo una volta sola con un numero a caso',0,'Una prova sola può non bastare: prova più casi diversi.']],skill:'simulatore'}}
+]}];
+
+/* ---------- ESERCIZI DEL LABORATORIO ---------- */
+const TYPEHINT={declare:'Si comincia sempre dichiarando le variabili.',input:'Ci serve un dato dall’utente: un parallelogramma di Input.',output:'È il momento di mostrare un risultato: un Output.',assign:'Bisogna calcolare o preparare un valore: un rettangolo di assegnazione.',if:'Qui c’è una decisione da prendere: un rombo.',while:'Qui bisogna ripetere qualcosa: un ciclo.',for:'Qui bisogna ripetere qualcosa: un ciclo.'};
+const EXS=[
+{id:'e1',n:1,mod:1,game:'river',title:'Il lupo, la capra e i cavoli',lvl:1,skills:['fasi'],text:'Un contadino deve portare sull’altra riva del fiume un lupo, una capra e un cesto di cavoli. La barca porta lui e una sola cosa alla volta. Se restano soli, il lupo mangia la capra e la capra mangia i cavoli. Come fa a portarli tutti dall’altra parte? Scrivi le fasi dell’algoritmo.'},
+{id:'e2',n:2,mod:1,game:'jugs',title:'I travasi del contadino',lvl:1,skills:['analisi'],text:'Il contadino ha un recipiente da 25 litri (con 16 litri d’acqua), uno da 5 litri pieno e uno da 3 litri pieno. Deve ottenere esattamente 20 litri in un recipiente. Come fa? Scrivi le fasi dell’algoritmo.'},
+{id:'e3',n:3,mod:2,title:'Area e perimetro del rettangolo',lvl:1,skills:['analisi','sequenza'],
+ text:'Scrivere l’algoritmo che, dato un rettangolo, <mark>legge in ingresso</mark> il valore dei suoi <mark>lati</mark> e fornisce <mark>in uscita</mark> l’<mark>area</mark> ed il <mark>perimetro</mark>.',
+ analysis:[
+  {q:'Partiamo dall’analisi. Quali dati ci servono in <b>ingresso</b> (input)? Scegli tutti quelli giusti.',multi:1,opts:[['La base',1],['L’altezza',1],['L’area',0,'L’area non la conosciamo: è proprio quello che dobbiamo calcolare. È un dato di uscita.'],['Il colore del rettangolo',0,'Il colore non serve per fare i calcoli.']],ok:'Giusto: base e altezza sono i dati che conosciamo e che l’utente scrive.'},
+  {q:'E in <b>uscita</b> (output), cosa dobbiamo mostrare?',multi:1,opts:[['L’area',1],['Il perimetro',1],['La base',0,'La base la conosciamo già: è un input.']],ok:'Esatto: area e perimetro sono i risultati.'},
+  {q:'Ora la relazione. Come si calcola il <b>perimetro</b>? Chiamiamo b la base e h l’altezza.',opts:[['(b + h) * 2',1],['b * h',0,'Questa è l’area, non il perimetro.'],['b + h',0,'Così sommi solo due lati. Il rettangolo ne ha quattro!']],ok:'Perfetto: il perimetro è la somma di tutti i lati, cioè (b + h) × 2.'},
+  {q:'E l’<b>area</b>?',opts:[['b * h',1],['(b + h) * 2',0,'Questo è il perimetro.'],['b * h / 2',0,'Diviso 2 si usa per il triangolo, non per il rettangolo.']],ok:'Sì: base per altezza.'},
+  {q:'Brainstorming: per questo problema serve una scelta (rombo) o una ripetizione (ciclo)?',opts:[['No, basta una sequenza di blocchi uno dopo l’altro',1],['Serve un rombo',0,'Non c’è niente da decidere: i calcoli sono sempre gli stessi, qualunque sia il rettangolo.'],['Serve un ciclo',0,'Non dobbiamo ripetere niente: si calcola una volta sola.']],ok:'Esatto. Quando i passi sono sempre gli stessi si usa una <b>sequenza</b>.'}],
+ sol:[D('b, h, perimetro, area','Reale','In Flowgorithm prima si dichiarano le variabili. Reale perché i lati possono avere la virgola.'),I('b','Leggiamo la base.'),I('h','Leggiamo l’altezza.'),A('perimetro','(b + h) * 2','Calcoliamo il perimetro e lo mettiamo nella scatola perimetro.'),O('perimetro','Mostriamo il perimetro.'),A('area','b * h','Ora l’area: base per altezza.'),O('area','E la mostriamo. Abbiamo finito i calcoli.')],
+ wrong:[[D('b, h, perimetro, area','Stringa'),'Stringa vuol dire testo: con il testo non si fanno calcoli. Servono numeri, quindi Reale.'],[I('area'),'L’area non si chiede all’utente: la calcola il programma.'],[A('perimetro','b + h'),'Mancano due lati: il perimetro è (b + h) * 2.'],[A('area','(b + h) * 2'),'Questo è il perimetro, non l’area.'],[O('"area"'),'Con le virgolette il computer scrive la parola “area”, non il suo valore. Le virgolette vanno tolte.']],
+ tests:[[[5,3],['16','15'],'base 5 e altezza 3'],[[2.5,4],['13','10'],'base 2.5 e altezza 4']],
+ bug:{prog:[D('b, h, perimetro, area','Reale'),I('b'),I('h'),BAD(A('perimetro','b + h * 2')),O('perimetro'),A('area','b * h'),O('area')],q:'Un compagno ha scritto questo programma. Con base 5 e altezza 3 il perimetro gli viene 11 invece di 16. <b>Tocca il blocco sbagliato.</b>',why:'b + h * 2 fa prima h * 2 (la moltiplicazione ha la precedenza) e poi aggiunge b: 5 + 6 = 11. Servono le parentesi: (b + h) * 2.',hint:'Guarda i calcoli: ricordi chi si fa prima tra + e * ?'}},
+{id:'e4',n:4,mod:2,title:'Il triangolo nel quadrato',lvl:2,skills:['analisi','sequenza'],
+ text:'Scrivere l’algoritmo che, dato in input il <mark>lato di un quadrato</mark>, calcoli l’<mark>area del triangolo</mark> che ha per <mark>base la diagonale</mark> del quadrato e per <mark>altezza il lato</mark> del quadrato.',
+ analysis:[
+  {q:'Quali dati servono in <b>input</b>?',multi:1,opts:[['Il lato del quadrato',1],['La diagonale',0,'La diagonale non ce la danno: la calcoliamo noi partendo dal lato.'],['L’area del triangolo',0,'È il risultato da trovare: output.']],ok:'Giusto: basta il lato. Tutto il resto si calcola.'},
+  {q:'Cosa dobbiamo dare in <b>output</b>?',opts:[['L’area del triangolo',1],['L’area del quadrato',0,'Il problema chiede l’area del triangolo, non quella del quadrato.'],['La diagonale',0,'La diagonale ci serve per il calcolo, ma il risultato richiesto è l’area del triangolo.']],ok:'Esatto.'},
+  {q:'Come si calcola la <b>diagonale d</b> di un quadrato di lato l?',opts:[['l * Sqrt(2)',1],['l * 2',0,'La diagonale è più corta di due lati messi in fila. Per il teorema di Pitagora è l × √2.'],['l * l',0,'Questa è l’area del quadrato.']],ok:'Giusto: d = l × √2. In Flowgorithm la radice quadrata si scrive Sqrt( ).'},
+  {q:'E l’<b>area del triangolo</b>? Base = d, altezza = l.',opts:[['d * l / 2',1],['d * l',0,'Hai dimenticato di dividere per 2: l’area del triangolo è base × altezza / 2.'],['l * l / 2',0,'La base del triangolo è la diagonale, non il lato.']],ok:'Perfetto: base per altezza diviso 2.'}],
+ sol:[D('l, d, area','Reale','Tre scatole: lato, diagonale e area. Tutte Reale, perché la radice di 2 ha la virgola.'),I('l','Leggiamo il lato.'),A('d','l * Sqrt(2)','Calcoliamo la diagonale. Sqrt è la radice quadrata.'),A('area','d * l / 2','Area del triangolo: base (d) per altezza (l) diviso 2.'),O('area','Mostriamo il risultato.')],
+ wrong:[[A('d','l * 2'),'La diagonale non è il doppio del lato: è l × √2.'],[A('area','d * l'),'Manca la divisione per 2.'],[A('area','l * l'),'Questa è l’area del quadrato, non del triangolo.'],[I('d'),'La diagonale non la chiediamo all’utente: la calcoliamo.'],[D('l, d, area','Intero'),'Con Intero non puoi tenere la virgola, ma l × √2 ce l’ha. Serve Reale.']],
+ tests:[[[4],['11.31'],'lato 4 (risultato circa 11.31)'],[[10],['70.71'],'lato 10 (circa 70.71)']],
+ bug:{prog:[D('l, d, area','Reale'),I('l'),A('d','l * Sqrt(2)'),BAD(A('area','d * l')),O('area')],q:'Con lato 4 questo programma dà 22.63, cioè il doppio del giusto. <b>Tocca il blocco sbagliato.</b>',why:'Manca “/ 2”: l’area del triangolo è base per altezza <b>diviso 2</b>.',hint:'Il risultato è esattamente il doppio. Quale formula ha un “diviso 2”?'}},
+{id:'e5',n:5,mod:2,title:'Ore, minuti e secondi',lvl:1,skills:['analisi','sequenza'],
+ text:'Scrivere l’algoritmo che, ricevuto in input un <mark>orario</mark> attraverso le sue tre componenti (<mark>ore, minuti e secondi</mark>), ne calcoli il <mark>valore totale in secondi</mark>.',
+ analysis:[
+  {q:'Quali sono gli <b>input</b>?',multi:1,opts:[['Le ore',1],['I minuti',1],['I secondi',1],['Il totale in secondi',0,'Il totale è il risultato: output.']],ok:'Giusto: tre dati in ingresso.'},
+  {q:'Quanti secondi ci sono in <b>un’ora</b>?',opts:[['3600',1],['60',0,'60 secondi fanno un minuto. Un’ora ha 60 minuti, cioè 60 × 60 secondi.'],['100',0,'Il tempo non si conta a centinaia: un’ora ha 60 minuti da 60 secondi.']],ok:'Esatto: 60 × 60 = 3600.'},
+  {q:'Qual è la formula del totale?',opts:[['ore * 3600 + minuti * 60 + secondi',1],['ore * 60 + minuti * 60 + secondi',0,'Le ore vanno moltiplicate per 3600, non per 60.'],['ore + minuti + secondi',0,'Così sommi cose diverse (ore, minuti e secondi) come se fossero uguali. Prima vanno trasformate tutte in secondi.']],ok:'Perfetto: trasformo tutto in secondi e sommo.'}],
+ sol:[D('ore, minuti, secondi, tot','Intero','Qui bastano numeri interi.'),I('ore','Leggiamo le ore.'),I('minuti','Poi i minuti.'),I('secondi','Poi i secondi.'),A('tot','ore * 3600 + minuti * 60 + secondi','Trasformiamo tutto in secondi e sommiamo.'),O('tot','Mostriamo il totale.')],
+ wrong:[[A('tot','ore * 60 + minuti * 60 + secondi'),'Le ore vanno moltiplicate per 3600.'],[A('tot','ore + minuti + secondi'),'Prima bisogna trasformare ore e minuti in secondi.'],[I('tot'),'Il totale non si chiede: si calcola.'],[O('"tot"'),'Con le virgolette scrivi la parola “tot”, non il valore. Togli le virgolette.']],
+ tests:[[[1,30,15],['5415'],'1 ora, 30 minuti e 15 secondi'],[[0,2,5],['125'],'0 ore, 2 minuti e 5 secondi']],
+ bug:{prog:[D('ore, minuti, secondi, tot','Intero'),I('ore'),I('minuti'),I('secondi'),BAD(A('tot','ore * 60 + minuti * 60 + secondi')),O('tot')],q:'Con 1 ora, 0 minuti e 0 secondi questo programma dà 60 invece di 3600. <b>Tocca il blocco sbagliato.</b>',why:'Le ore vanno moltiplicate per 3600, non per 60.',hint:'Il problema è nelle ore. Dove si usano?'}},
+{id:'e6',n:6,mod:3,title:'Lo sconto del 20%',lvl:1,skills:['analisi','selezione'],
+ text:'Calcolare ed applicare lo <mark>sconto del 20%</mark> ad un <mark>prezzo</mark> fornito in ingresso <mark>solo se il prezzo supera 100 €</mark>. (Siete un negoziante e fate lo sconto solo a chi spende più di 100 €.)',
+ analysis:[
+  {q:'Qual è l’<b>input</b>?',opts:[['Il prezzo',1],['Lo sconto',0,'Lo sconto lo calcoliamo noi: non lo chiediamo.'],['Il prezzo finale',0,'È il risultato: output.']],ok:'Giusto: l’utente scrive solo il prezzo.'},
+  {q:'Brainstorming: serve un rombo?',opts:[['Sì: lo sconto si fa solo se il prezzo supera 100 €',1],['No, basta una sequenza',0,'Il testo dice “solo se”: c’è una decisione da prendere, quindi serve un rombo.']],ok:'Esatto. Quando leggi “solo se”, “se… altrimenti”, pensa al rombo.'},
+  {q:'Quale <b>condizione</b> scriviamo nel rombo?',opts:[['prezzo > 100',1],['prezzo < 100',0,'Così lo sconto andrebbe a chi spende poco!'],['prezzo >= 100',0,'Con >= anche chi spende esattamente 100 € avrebbe lo sconto. Il testo dice “supera”, quindi >.']],ok:'Perfetto.'},
+  {q:'Come si calcola lo <b>sconto</b> del 20%?',opts:[['prezzo * 20 / 100',1],['prezzo - 20',0,'Così togli 20 euro, non il 20%.'],['prezzo * 20',0,'Il 20% è 20 su 100: bisogna anche dividere per 100.']],ok:'Giusto. E il prezzo finale sarà prezzo - sconto.'},
+  {q:'Se il prezzo <b>non</b> supera 100 €, il prezzo finale è…',opts:[['Uguale al prezzo',1],['Zero',0,'Il cliente paga comunque! Solo senza sconto.'],['prezzo - sconto',0,'Lo sconto in questo caso non c’è.']],ok:'Esatto: nel ramo Falso il prezzo resta uguale.'}],
+ sol:[D('prezzo, sconto, finale','Reale','I prezzi hanno i centesimi: Reale.'),I('prezzo','Leggiamo il prezzo.'),IF('prezzo > 100',[A('sconto','prezzo * 20 / 100','Siamo nel caso Vero: calcoliamo lo sconto.'),A('finale','prezzo - sconto','E lo togliamo dal prezzo.')],[A('finale','prezzo','Caso Falso: niente sconto, il prezzo resta uguale.')],'Ecco il rombo con la condizione.'),O('finale','Le due strade si riuniscono. Mostriamo il prezzo finale.')],
+ wrong:[[IF('prezzo < 100',[],[]),'Così lo sconto andrebbe a chi spende meno di 100 €.'],[IF('prezzo >= 100',[],[]),'Il testo dice “supera”: 100 € esatti non hanno lo sconto. Serve >.'],[A('sconto','prezzo - 20'),'Così togli 20 euro, non il 20%.'],[A('finale','prezzo + sconto'),'Lo sconto si toglie, non si aggiunge!'],[A('finale','0'),'Il cliente deve pagare qualcosa!']],
+ tests:[[[150],['120'],'prezzo 150 (si aspetta 120)'],[[80],['80'],'prezzo 80 (niente sconto)'],[[100],['100'],'prezzo 100 esatti (niente sconto)']],
+ bug:{prog:[D('prezzo, sconto, finale','Reale'),I('prezzo'),BAD(IF('prezzo < 100',[A('sconto','prezzo * 20 / 100'),A('finale','prezzo - sconto')],[A('finale','prezzo')])),O('finale')],q:'Con questo programma chi spende 50 € ha lo sconto e chi spende 200 € no. <b>Tocca il blocco sbagliato.</b>',why:'La condizione è al contrario: dev’essere prezzo > 100.',hint:'Chi decide se fare lo sconto?'}},
+{id:'e7',n:7,mod:3,title:'1, X, 2: chi ha vinto?',lvl:2,skills:['selezione'],
+ text:'Scrivere l’algoritmo che, dato il <mark>risultato di una partita</mark> di calcio, stampa <mark>“1”</mark> se vince la prima squadra, <mark>“2”</mark> se vince la seconda, <mark>“X”</mark> in caso di pareggio.',
+ analysis:[
+  {q:'Quali sono gli <b>input</b>?',multi:1,opts:[['I gol della prima squadra',1],['I gol della seconda squadra',1],['Il vincitore',0,'Il vincitore lo scopre il programma: è l’output.']],ok:'Esatto: due numeri, per esempio 3 e 2.'},
+  {q:'Quanti casi diversi ci sono?',opts:[['3',1],['2',0,'Ci sono anche i pareggi: 1, X e 2 sono tre casi.']],ok:'Tre casi: vince la prima, pareggio, vince la seconda.'},
+  {q:'Quanti rombi servono allora?',opts:[['2',1],['1',0,'Un rombo ha solo due uscite, ma i casi sono tre.'],['3',0,'Ne bastano due: se non vince la prima e non è pareggio, per forza vince la seconda.']],ok:'Giusto: due rombi, uno dentro l’altro.'}],
+ sol:[D('g1, g2','Intero','I gol sono numeri interi.'),I('g1','Gol della prima squadra.'),I('g2','Gol della seconda squadra.'),IF('g1 > g2',[O('"1"','Vince la prima: scriviamo 1.')],[IF('g1 = g2',[O('"X"','Pareggio: X.')],[O('"2"','Non ha vinto la prima e non è pareggio: per forza vince la seconda.')],'Secondo rombo, nel ramo Falso del primo.')],'Primo rombo: la prima squadra ha fatto più gol?')],
+ wrong:[[IF('g1 < g2',[],[]),'Partiamo dal caso “1”: vince la prima squadra se ha fatto più gol.'],[O('1'),'Si può fare, ma 1 qui è un simbolo da scrivere, come X: mettiamolo tra virgolette, “1”.'],[O('X'),'Senza virgolette il computer cerca una variabile che si chiama X! Il testo va tra virgolette: "X".'],[I('risultato'),'Il risultato lo calcoliamo noi: chiediamo i gol.']],
+ tests:[[[3,2],['1'],'3 a 2'],[[1,1],['X'],'1 a 1'],[[0,2],['2'],'0 a 2']],
+ bug:{prog:[D('g1, g2','Intero'),I('g1'),I('g2'),BAD(IF('g1 < g2',[O('"1"')],[IF('g1 = g2',[O('"X"')],[O('"2"')])])),],q:'Con 3 a 2 questo programma scrive “2”. <b>Tocca il blocco sbagliato.</b>',why:'Il primo rombo ha la condizione al contrario: la prima squadra vince se g1 > g2.',hint:'Chi decide quando scrivere “1”?'}},
+{id:'e8',n:8,mod:3,title:'Somma o prodotto?',lvl:2,skills:['selezione'],
+ text:'Scrivere l’algoritmo che, dati <mark>due numeri</mark>, calcoli la <mark>somma se sono entrambi positivi</mark>, <mark>altrimenti il prodotto</mark>.',
+ analysis:[
+  {q:'Cosa vuol dire “entrambi positivi”?',opts:[['Il primo è positivo e anche il secondo',1],['Almeno uno dei due è positivo',0,'“Entrambi” vuol dire tutti e due.'],['La loro somma è positiva',0,'Con -1 e 5 la somma è positiva, ma -1 non è positivo.']],ok:'Esatto: tutti e due.'},
+  {q:'Quale <b>condizione</b> scriviamo?',opts:[['a > 0 and b > 0',1],['a > 0 or b > 0',0,'Con or basta che UNO dei due sia positivo. Il testo dice entrambi.'],['a + b > 0',0,'Con -1 e 5 sarebbe vera, ma -1 non è positivo.']],ok:'Perfetto: and = tutte e due vere. (Si poteva fare anche con due rombi uno dentro l’altro.)'},
+  {q:'Lo zero è positivo?',opts:[['No',1],['Sì',0,'Lo zero non è né positivo né negativo. Quindi a > 0, non a >= 0.']],ok:'Giusto: per questo usiamo > 0.'}],
+ sol:[D('a, b, r','Reale','Due numeri e il risultato r.'),I('a','Primo numero.'),I('b','Secondo numero.'),IF('a > 0 and b > 0',[A('r','a + b','Tutti e due positivi: somma.')],[A('r','a * b','Altrimenti: prodotto.')],'Il rombo con le due condizioni unite da and.'),O('r','Mostriamo il risultato.')],
+ wrong:[[IF('a > 0 or b > 0',[],[]),'Con or basta un numero positivo. Il testo dice entrambi: and.'],[IF('a + b > 0',[],[]),'La somma positiva non vuol dire che lo sono tutti e due.'],[A('r','a * b'),'Questo è il prodotto: va nel caso Falso.'],[A('r','a - b'),'Il testo non chiede la differenza.']],
+ tests:[[[3,4],['7'],'3 e 4'],[[-2,5],['-10'],'-2 e 5'],[[0,4],['0'],'0 e 4']],
+ bug:{prog:[D('a, b, r','Reale'),I('a'),I('b'),BAD(IF('a > 0 or b > 0',[A('r','a + b')],[A('r','a * b')])),O('r')],q:'Con -2 e 5 questo programma dà 3 invece di -10. <b>Tocca il blocco sbagliato.</b>',why:'Con or basta che uno solo sia positivo. Il testo dice “entrambi”: serve and.',hint:'Guarda la parola che unisce le due condizioni.'}},
+{id:'e9',n:9,mod:3,title:'Sottrazione, somma o uguali',lvl:2,skills:['selezione'],
+ text:'Ricevuti in ingresso <mark>due valori</mark>: fanne la <mark>sottrazione se il primo è maggiore</mark> del secondo e la <mark>somma se il primo è minore</mark>. <mark>Se sono uguali</mark> segnalalo a video.',
+ analysis:[
+  {q:'Quanti casi ci sono?',opts:[['3: maggiore, minore, uguali',1],['2',0,'Rileggi: c’è anche il caso “uguali”.']],ok:'Tre casi, quindi due rombi.'},
+  {q:'Se i numeri sono uguali, cosa facciamo?',opts:[['Scriviamo un messaggio, per esempio “I numeri sono uguali”',1],['Facciamo la somma',0,'Il testo dice di segnalarlo a video: un Output con un messaggio.'],['Niente',0,'Il testo chiede di segnalarlo.']],ok:'Giusto: un Output con un testo tra virgolette.'}],
+ sol:[D('a, b, r','Reale','Due valori e il risultato.'),I('a','Primo valore.'),I('b','Secondo valore.'),IF('a = b',[O('"I numeri sono uguali"','Caso uguali: lo segnaliamo.')],[IF('a > b',[A('r','a - b','Il primo è maggiore: sottrazione.'),O('r','Mostriamo il risultato.')],[A('r','a + b','Il primo è minore: somma.'),O('r','Mostriamo il risultato.')],'Non sono uguali: il primo è maggiore?')],'Primo controllo, come nel disegno della prof: sono uguali?')],
+ wrong:[[IF('a < b',[],[]),'Partiamo come la prof: prima controlliamo se sono uguali.'],[O('I numeri sono uguali'),'Il testo va tra virgolette, altrimenti il computer pensa che siano nomi di variabili.'],[A('r','b - a'),'Il testo dice di sottrarre il secondo dal primo: a - b.'],[A('r','a * b'),'Il testo chiede somma o sottrazione, non prodotto.']],
+ tests:[[[7,3],['4'],'7 e 3'],[[2,6],['8'],'2 e 6'],[[5,5],['I numeri sono uguali'],'5 e 5']],
+ bug:{prog:[D('a, b, r','Reale'),I('a'),I('b'),IF('a = b',[O('"I numeri sono uguali"')],[IF('a > b',[BAD(A('r','b - a')),O('r')],[A('r','a + b'),O('r')])])],q:'Con 7 e 3 il programma scrive -4 invece di 4. <b>Tocca il blocco sbagliato.</b>',why:'La sottrazione è al contrario: dev’essere a - b (il primo meno il secondo).',hint:'Il risultato ha il segno sbagliato. Dove si sottrae?'}},
+{id:'e10',n:10,mod:3,title:'Il maggiore di tre',lvl:3,skills:['selezione'],
+ text:'Ricevi in ingresso <mark>tre valori</mark> e <mark>visualizza il maggiore</mark>.',
+ analysis:[
+  {q:'Come facciamo a trovare il maggiore tra a, b e c?',opts:[['Confronto a con b, poi il vincitore con c',1],['Li sommo e divido per 3',0,'Così trovi la media, non il maggiore.'],['Confronto solo a con b',0,'E c? Potrebbe essere lui il più grande.']],ok:'Esatto: come in un torneo. Prima a contro b, poi chi vince sfida c.'},
+  {q:'Se a > b è vero, con chi confronto c?',opts:[['Con a',1],['Con b',0,'b ha già perso contro a: ora la sfida è tra a e c.']],ok:'Giusto. E se a > b è falso, confronto b con c.'},
+  {q:'Quanti rombi servono in tutto?',opts:[['3: uno per a e b, poi uno per ogni strada',1],['2',0,'Serve un rombo in ogni strada del primo: 1 + 2 = 3.'],['1',0,'Con un rombo confronti solo due numeri.']],ok:'Tre rombi, due dei quali annidati.'}],
+ sol:[D('a, b, c','Reale','Tre valori.'),I('a'),I('b'),I('c','Letti tutti e tre.'),IF('a > b',[IF('a > c',[O('a','a ha battuto b e c.')],[O('c','a ha battuto b, ma c è più grande.')],'a ha battuto b: ora sfida c.')],[IF('b > c',[O('b','b ha battuto a e c.')],[O('c','c è il più grande.')],'b ha battuto a: ora sfida c.')],'Primo confronto: a contro b.')],
+ wrong:[[IF('a > b and b > c',[],[]),'Così controlli un caso solo. Cominciamo semplice: a contro b.'],[O('(a + b + c) / 3'),'Questa è la media, non il maggiore.'],[O('"a"'),'Con le virgolette scrivi la lettera a, non il suo valore.']],
+ tests:[[[3,9,4],['9'],'3, 9 e 4'],[[8,2,5],['8'],'8, 2 e 5'],[[1,2,7],['7'],'1, 2 e 7']],
+ bug:{prog:[D('a, b, c','Reale'),I('a'),I('b'),I('c'),IF('a > b',[IF('a > c',[O('a')],[O('c')])],[IF('b > c',[BAD(O('a'))],[O('c')])])],q:'Con 1, 9 e 4 il programma scrive 1. <b>Tocca il blocco sbagliato.</b>',why:'In quel ramo b ha battuto sia a che c: bisogna scrivere b, non a.',hint:'Segui la strada con 1, 9 e 4: a > b è falso, b > c è vero…'}},
+{id:'e11',n:11,mod:4,title:'La somma di 10 numeri',lvl:2,skills:['ciclo'],
+ text:'Scrivere un algoritmo che calcoli la <mark>somma di 10 numeri</mark> forniti in ingresso.',
+ analysis:[
+  {q:'Brainstorming: come leggiamo 10 numeri?',opts:[['Con un ciclo che ripete 10 volte: leggi e somma',1],['Con 10 blocchi di Input e 10 variabili',0,'Funzionerebbe (è efficace), ma è lungo e scomodo. Con un ciclo bastano poche variabili, riusate ogni volta: è più efficiente.']],ok:'Esatto: un ciclo.'},
+  {q:'Quali variabili servono?',multi:1,opts:[['Un contatore i',1],['Il numero letto n',1],['La somma',1],['Dieci variabili n1, n2… n10',0,'Non servono: n viene riusata a ogni giro.']],ok:'Bastano tre scatole: i, n e somma.'},
+  {q:'Prima del ciclo, quanto deve valere somma?',opts:[['0',1],['1',0,'Partendo da 1 il risultato sarebbe sbagliato di 1. Il salvadanaio parte vuoto: 0.'],['Non importa',0,'Importa: se è vuota, somma + n non si può calcolare.']],ok:'Giusto: salvadanaio vuoto.'},
+  {q:'Con i che parte da 1, quale condizione fa fare 10 giri?',opts:[['i <= 10',1],['i < 10',0,'Con i < 10 si fanno 9 giri: quando i vale 10 si esce.'],['i = 10',0,'All’inizio i vale 1, quindi i = 10 è falso e non entra mai nel ciclo.']],ok:'Esatto: i vale 1, 2, … 10. Quando diventa 11 si esce.'}],
+ sol:[D('i','Intero','Il contatore è un numero intero.'),D('n, somma','Reale','Il numero letto e la somma.'),A('somma','0','La somma parte da zero, come un salvadanaio vuoto.'),A('i','1','Il contatore parte da 1: il primo numero.'),WH('i <= 10',[I('n','Dentro il ciclo leggiamo un numero.'),A('somma','somma + n','Lo aggiungiamo al salvadanaio.'),A('i','i + 1','Il contatore va avanti di uno. Senza questo il ciclo non finirebbe mai!')],'Il ciclo: si ripete finché i <= 10.'),O('somma','Il ciclo è finito: mostriamo la somma.')],
+ wrong:[[WH('i < 10',[]),'Con i < 10 fai solo 9 giri.'],[A('somma','n'),'Così butti via quello che avevi: somma prende solo l’ultimo numero. Serve somma + n.'],[A('i','1'),'Rimettere i a 1 nel ciclo lo fa ripartire sempre: ciclo infinito!'],[A('somma','1'),'La somma deve partire da 0.']],
+ tests:[[[1,2,3,4,5,6,7,8,9,10],['55'],'i numeri da 1 a 10 (somma 55). Usa il dado 🎲 per fare prima!']],
+ bug:{prog:[D('i','Intero'),D('n, somma','Reale'),A('somma','0'),A('i','1'),WH('i <= 10',[I('n'),BAD(A('somma','n')),A('i','i + 1')]),O('somma')],q:'Questo programma scrive sempre l’ultimo numero inserito, non la somma. <b>Tocca il blocco sbagliato.</b>',why:'somma ← n butta via il totale e ci mette solo n. Serve somma ← somma + n.',hint:'Quale blocco dovrebbe “accumulare”?'}},
+{id:'e12',n:12,mod:4,title:'I primi 50 numeri pari',lvl:2,skills:['ciclo'],
+ text:'Scrivere un algoritmo che <mark>visualizza 50 numeri pari</mark> che partono <mark>da 2</mark>.',
+ analysis:[
+  {q:'Quali dati servono in <b>input</b>?',opts:[['Nessuno: i numeri li genera il programma',1],['50 numeri',0,'Non li chiediamo: li calcola il programma, 2, 4, 6…'],['Il numero 2',0,'Il 2 è scritto nel testo: lo mettiamo noi in una variabile, non serve chiederlo.']],ok:'Giusto: niente Input.'},
+  {q:'Se p è un numero pari, il pari dopo è…',opts:[['p + 2',1],['p + 1',0,'Da un pari, +1 dà un dispari.'],['p * 2',0,'Da 2 faresti 4, 8, 16… raddoppia ogni volta.']],ok:'Esatto.'},
+  {q:'Quante variabili usiamo, come nella soluzione della prof?',opts:[['Due: p (il numero pari) e i (il contatore)',1],['Una sola',0,'Si può fare anche con una (finché p <= 100), ma la prof usa il contatore i. Facciamo così.']],ok:'Bene: p per il numero, i per contare fino a 50.'}],
+ sol:[D('p, i','Intero','Due interi: il numero pari e il contatore.'),A('p','2','Il primo numero pari è 2.'),A('i','1','Il contatore parte da 1.'),WH('i <= 50',[O('p','Scriviamo il numero pari.'),A('p','p + 2','Passiamo al pari successivo.'),A('i','i + 1','Il contatore va avanti.')],'Ripetiamo 50 volte.')],
+ wrong:[[A('p','p + 1'),'Da un pari, +1 dà un dispari.'],[I('p'),'Il numero non lo chiediamo: lo genera il programma.'],[WH('i <= 100',[]),'Il contatore conta i numeri scritti: ne servono 50, non 100.'],[A('p','p * 2'),'Così raddoppi: 2, 4, 8, 16…']],
+ tests:[[[],Array.from({length:50},(_,k)=>String(2*k+2)),'nessun input (si aspetta 2, 4, 6 … 100)']],
+ bug:{prog:[D('p, i','Intero'),A('p','2'),A('i','1'),WH('i <= 50',[O('p'),BAD(A('p','p + 1')),A('i','i + 1')])],q:'Questo programma scrive 2, 3, 4, 5… <b>Tocca il blocco sbagliato.</b>',why:'Per passare da un pari al successivo si aggiunge 2, non 1.',hint:'Dove cambia il numero da scrivere?'}},
+{id:'e13',n:13,mod:4,title:'Quanti numeri negativi?',lvl:3,skills:['ciclo','selezione'],
+ text:'Scrivere un algoritmo che, presi in input <mark>20 numeri interi</mark>, diversi da zero, dica <mark>quanti valori negativi</mark> sono stati inseriti.',
+ analysis:[
+  {q:'Brainstorming: cosa serve?',multi:1,opts:[['Un ciclo per leggere 20 numeri',1],['Un rombo per capire se il numero è negativo',1],['20 variabili diverse',0,'No: un numero alla volta nella stessa variabile n.']],ok:'Esatto: un rombo dentro un ciclo!'},
+  {q:'Quando un numero è negativo?',opts:[['n < 0',1],['n > 0',0,'Maggiore di 0 vuol dire positivo.'],['n = 0',0,'Lo zero non è negativo (e il testo dice che non ci sarà).']],ok:'Giusto.'},
+  {q:'Se il numero è negativo cosa facciamo?',opts:[['Aumentiamo di 1 il contatore dei negativi',1],['Lo scriviamo',0,'Il testo chiede QUANTI sono, non quali.'],['Finiamo il programma',0,'Dobbiamo leggerli tutti e 20.']],ok:'Sì: neg ← neg + 1. E se è positivo? Niente: il ramo Falso resta vuoto.'}],
+ sol:[D('i, n, neg','Intero','Contatore, numero letto e contatore dei negativi.'),A('neg','0','All’inizio i negativi trovati sono zero.'),A('i','1','Il contatore dei giri parte da 1.'),WH('i <= 20',[I('n','Leggiamo un numero.'),IF('n < 0',[A('neg','neg + 1','È negativo: lo contiamo.')],[],'È negativo?'),A('i','i + 1','Fuori dal rombo ma dentro il ciclo: il contatore va avanti sempre.')],'Ripetiamo 20 volte.'),O('neg','Mostriamo quanti negativi ci sono.')],
+ wrong:[[IF('n > 0',[],[]),'n > 0 vuol dire positivo.'],[O('n'),'Il testo chiede quanti sono, non di scriverli.'],[A('neg','n'),'neg deve contare: neg + 1, non prendere il valore del numero.'],[WH('i < 20',[]),'Con i < 20 leggi solo 19 numeri.']],
+ tests:[[[3,-1,4,-5,9,2,-6,5,3,5,-8,9,7,9,3,2,-3,8,4,6],['5'],'20 numeri, di cui 5 negativi (inseriti in automatico dal test)']],
+ bug:{prog:[D('i, n, neg','Intero'),A('neg','0'),A('i','1'),WH('i <= 20',[I('n'),BAD(IF('n > 0',[A('neg','neg + 1')],[])),A('i','i + 1')]),O('neg')],q:'Questo programma conta i numeri positivi invece dei negativi. <b>Tocca il blocco sbagliato.</b>',why:'La condizione dev’essere n < 0.',hint:'Chi decide cosa contare?'}},
+{id:'e14',n:14,mod:5,title:'Verifica: massimo e minimo',lvl:3,verifica:1,skills:['ciclo','selezione'],
+ text:'Scrivere un algoritmo che, dati in input dei numeri, <mark>visualizzi il massimo e il minimo</mark>.',
+ analysis:[
+  {q:'Non sappiamo quanti numeri arriveranno. Come facciamo?',opts:[['Chiediamo prima quanti numeri vuole inserire (n)',1],['Ne leggiamo sempre 10',0,'Il testo non dice quanti: meglio chiederlo all’utente.']],ok:'Esatto, come nella soluzione della prof.'},
+  {q:'Da quale valore partono max e min?',opts:[['Dal primo numero letto',1],['Da 0',0,'Se tutti i numeri sono negativi, il massimo resterebbe 0, che non è tra i numeri! Meglio partire dal primo numero.'],['Da 100',0,'E se i numeri sono più grandi di 100?']],ok:'Giusto: il primo numero è, per ora, sia il più grande sia il più piccolo.'},
+  {q:'Dentro il ciclo, quando cambiamo max?',opts:[['Quando il numero letto è più grande di max',1],['Sempre',0,'Se lo cambi sempre, max diventa l’ultimo numero, non il più grande.']],ok:'Esatto. Stessa cosa per min, ma con <.'}],
+ sol:[D('n, i','Intero','Quanti numeri, e il contatore.'),D('v, max, min','Reale','Il numero letto, il massimo e il minimo.'),I('n','Prima chiediamo quanti numeri vuole inserire.'),I('v','Leggiamo il primo numero.'),A('max','v','Il primo numero è, per ora, il più grande…'),A('min','v','…e anche il più piccolo.'),A('i','1','Ne abbiamo letto 1.'),WH('i < n',[I('v','Leggiamo il numero successivo.'),IF('v > max',[A('max','v','Nuovo massimo!')],[],'È più grande del massimo?'),IF('v < min',[A('min','v','Nuovo minimo!')],[],'È più piccolo del minimo?'),A('i','i + 1','Il contatore va avanti.')],'Finché ne mancano da leggere. i < n perché il primo l’abbiamo già letto.'),O('max','Mostriamo il massimo.'),O('min','E il minimo.')],
+ wrong:[[A('max','0'),'Se i numeri sono tutti negativi, il massimo resterebbe 0.'],[IF('v < max',[],[]),'Il massimo cambia quando arriva un numero più grande: v > max.'],[A('max','max + v'),'Così fai una somma, non trovi il massimo.'],[WH('i <= n',[]),'Il primo numero l’abbiamo già letto prima del ciclo: con i <= n ne leggeresti uno in più.']],
+ tests:[[[4,7,2,9,5],['9','2'],'n = 4, poi 7, 2, 9, 5'],[[3,-5,-2,-9],['-2','-9'],'n = 3, poi -5, -2, -9']],
+ bug:{prog:[D('n, i','Intero'),D('v, max, min','Reale'),I('n'),I('v'),BAD(A('max','0')),A('min','v'),A('i','1'),WH('i < n',[I('v'),IF('v > max',[A('max','v')],[]),IF('v < min',[A('min','v')],[]),A('i','i + 1')]),O('max'),O('min')],q:'Con i numeri -5, -2, -9 il massimo esce 0! <b>Tocca il blocco sbagliato.</b>',why:'max non deve partire da 0 ma dal primo numero letto: max ← v.',hint:'Da dove parte il massimo?'}},
+{id:'e15',n:15,mod:5,title:'Verifica: voti sufficienti',lvl:3,verifica:1,skills:['ciclo','selezione'],
+ text:'Scrivere un algoritmo che, dati in input <mark>5 voti</mark>, dica <mark>quanti sono sufficienti</mark>, <mark>quanti insufficienti</mark> e <mark>quali sono in numero maggiore</mark>.',
+ analysis:[
+  {q:'Quando un voto è sufficiente?',opts:[['voto >= 6',1],['voto > 6',0,'Il 6 è sufficiente! Serve >=.'],['voto = 6',0,'Anche 7, 8, 9 e 10 sono sufficienti.']],ok:'Giusto.'},
+  {q:'Se conto i sufficienti (s), come trovo gli insufficienti?',opts:[['5 - s',1],['Li conto con un altro rombo',0,'Si può fare, ma è più semplice: i voti sono 5, quindi gli insufficienti sono 5 - s. Più efficiente!'],['s - 5',0,'Verrebbe un numero negativo.']],ok:'Esatto: come nella soluzione della prof.'},
+  {q:'Brainstorming: cosa serve?',multi:1,opts:[['Un ciclo per i 5 voti',1],['Un rombo per contare i sufficienti',1],['Un rombo finale per dire chi sono di più',1]],ok:'Perfetto: due rombi e un ciclo.'}],
+ sol:[D('i, s, ins','Intero','Contatore, sufficienti, insufficienti.'),D('v','Reale','Il voto può essere 6.5.'),A('s','0','Sufficienti trovati: zero.'),A('i','1','Il contatore parte da 1.'),WH('i <= 5',[I('v','Leggiamo un voto.'),IF('v >= 6',[A('s','s + 1','Sufficiente: lo contiamo.')],[],'È sufficiente?'),A('i','i + 1','Avanti il prossimo.')],'Cinque voti.'),A('ins','5 - s','Gli insufficienti sono quelli che restano.'),O('"Sufficienti: " & s','Con & attacchiamo un testo e un numero.'),O('"Insufficienti: " & ins','Lo stesso per gli insufficienti.'),IF('s > ins',[O('"Sono di più i sufficienti"')],[O('"Sono di più gli insufficienti"')],'Chi sono di più? (Con 5 voti non può esserci pareggio.)')],
+ wrong:[[IF('v > 6',[],[]),'Il 6 è sufficiente: serve >=.'],[A('ins','s - 5'),'Verrebbe negativo. Gli insufficienti sono 5 - s.'],[O('s'),'Va bene, ma scriviamo anche cosa vuol dire quel numero: "Sufficienti: " & s.'],[WH('i < 5',[]),'Con i < 5 leggi solo 4 voti.']],
+ tests:[[[6,4,7,8,5],['Sufficienti: 3','Insufficienti: 2','Sono di più i sufficienti'],'6, 4, 7, 8, 5']],
+ bug:{prog:[D('i, s, ins','Intero'),D('v','Reale'),A('s','0'),A('i','1'),WH('i <= 5',[I('v'),BAD(IF('v > 6',[A('s','s + 1')],[])),A('i','i + 1')]),A('ins','5 - s'),O('"Sufficienti: " & s'),O('"Insufficienti: " & ins'),IF('s > ins',[O('"Sono di più i sufficienti"')],[O('"Sono di più gli insufficienti"')])],q:'Con i voti 6, 6, 6, 4, 5 questo programma dice che i sufficienti sono 0. <b>Tocca il blocco sbagliato.</b>',why:'Con v > 6 il 6 non viene contato. Serve v >= 6.',hint:'Il 6 è sufficiente o no?'}}
+];
+/* ================= APP ================= */
+if(typeof document!=='undefined'){(function(){
+const main=$('#main');
+const PROG=Object.assign({done:{},ex:{},skills:{},videos:{},last:''},store.get('prog',{}));
+const save=()=>store.set('prog',PROG);
+const STOP={stop:1};
+const R={cleanup:[],token:{}};
+const SPEEDS=[1500,950,550,240,50];
+
+function addSkill(s,src){if(!s)return;const a=PROG.skills[s]=PROG.skills[s]||[];if(!a.includes(src)){a.push(src);save()}}
+const skillLv=s=>Math.min(3,(PROG.skills[s]||[]).length);
+function announce(t){const l=$('#live');l.textContent='';setTimeout(()=>l.textContent=t,30)}
+function toast(t,ms=2200){const d=document.createElement('div');d.className='toast';d.setAttribute('role','status');d.textContent=t;document.body.appendChild(d);setTimeout(()=>d.remove(),ms)}
+function confetti(){if(SET.rm||matchMedia('(prefers-reduced-motion: reduce)').matches)return;const cs=['#2D6CB5','#F5A623','#2E7D4F','#E05A5A','#8E5BD0','#FFD43B'];
+  for(let i=0;i<40;i++){const c=document.createElement('i');c.className='confetti';c.style.left=Math.random()*100+'vw';c.style.background=cs[i%cs.length];c.style.setProperty('--d',(1.6+Math.random()*1.6)+'s');c.style.animationDelay=Math.random()*.4+'s';document.body.appendChild(c);setTimeout(()=>c.remove(),3800)}}
+function applySettings(){const b=document.body;b.classList.toggle('lim',!!SET.lim);b.classList.toggle('hc',!!SET.hc);b.classList.toggle('rm',!!SET.rm);
+  b.classList.remove('fs-1','fs-3','fs-4');if(SET.fs!==2)b.classList.add('fs-'+SET.fs);$('#limBtn').setAttribute('aria-pressed',SET.lim?'true':'false');store.set('set',SET)}
+
+/* ---------- sheet ---------- */
+let CUR=null;
+function sheet(html){closeSheet();const s=document.createElement('div');s.className='scrim';s.innerHTML=`<div class="sheet" role="dialog" aria-modal="true">${html}</div>`;
+  s._prev=document.activeElement;document.body.appendChild(s);s.addEventListener('click',e=>{if(e.target===s)closeSheet()});CUR=s;
+  setTimeout(()=>{const f=s.querySelector('input,select,button:not(.x)');f&&f.focus()},60);return s.firstElementChild}
+function closeSheet(){if(CUR){const p=CUR._prev;CUR.remove();CUR=null;if(p&&p.focus)try{p.focus()}catch(e){}}}
+document.addEventListener('keydown',e=>{
+  if(e.key==='Escape'&&CUR){closeSheet();return}
+  if(SET.lim&&!CUR&&!/INPUT|SELECT|TEXTAREA/.test((document.activeElement||{}).tagName||'')){
+    if(e.key==='ArrowRight'){const b=$('[data-next]');b&&!b.disabled&&b.click()}
+    if(e.key==='ArrowLeft'){const b=$('[data-prev]');b&&b.click()}}
+  if((e.key==='Enter'||e.key===' ')&&e.target.matches&&e.target.matches('svg [role="button"]')){e.preventDefault();e.target.dispatchEvent(new MouseEvent('click',{bubbles:true}))}});
+
+/* ---------- forme per le lezioni ---------- */
+function shapeDemo(k){const mk=(nodes)=>`<div class="row" style="justify-content:center;gap:14px">${nodes.map(miniBlock).join('')}</div>`;
+  if(k==='term')return mk([{t:'term',txt:'Inizio'},{t:'term',txt:'Fine'}]);
+  if(k==='io')return mk([{t:'input',v:'base'},{t:'output',e:'area'}]);
+  if(k==='asg')return mk([{t:'assign',v:'a',e:'2'},{t:'assign',v:'area',e:'b * h'}]);
+  if(k==='if')return mk([{t:'if',c:'media >= 6'}]);return ''}
+function fillSlide(html){return html.replace(/__SHAPE_(\w+)__/g,(_,k)=>shapeDemo(k))}
+function drawCharts(root){$$('[data-chart]',root).forEach(el=>{const p=ensureIds(clone(DEMO[el.dataset.chart]));el.innerHTML=renderChart(p,{draw:true}).html})}
+
+/* ================= ESECUTORE ================= */
+function mountRunner(el,opt){
+  const st={prog:opt.prog,zoom:opt.zoom||(innerWidth<420?.9:1),ex:null,playing:false,timer:null,outs:[],ins:[],speed:store.get('speed',2),active:null,seqs:[],newId:null,infos:new Set()};
+  el.innerHTML=`<div class="runner">
+    <div class="rbar">
+      <button class="btn sm pri" data-r="play">▶ Esegui</button>
+      <button class="btn sm" data-r="step" title="Esegui un blocco alla volta">⏭ Un passo</button>
+      <button class="btn sm" data-r="stop" disabled>⏹ Stop</button>
+      <label class="speed">🐢<input type="range" min="0" max="4" step="1" value="${st.speed}" data-r="speed" aria-label="Velocità di esecuzione">🐇</label>
+      <span class="zoom"><button class="btn icon sm" data-r="zout" aria-label="Rimpicciolisci il diagramma">−</button><button class="btn icon sm" data-r="zin" aria-label="Ingrandisci il diagramma">+</button></span>
+    </div>
+    <div class="chartwrap" data-r="box"></div>
+    <div class="rpanel">
+      <div class="vars"><div class="ph">📦 Variabili</div><div class="vlist" data-r="vars"><span class="muted small">Ancora nessuna</span></div></div>
+      <div class="console"><div class="ph">🖥️ Schermo (console)</div><div class="clines" data-r="lines" aria-live="polite"><div class="cl inf">Premi ▶ Esegui per far partire il programma.</div></div>
+        <form class="cin" data-r="form" hidden><label data-r="lab" for="${(st.fid='f'+uid())}"></label><input id="${st.fid}" data-r="inp" autocomplete="off" autocapitalize="off" spellcheck="false" enterkeyhint="done"><button class="btn sm pri" type="submit">OK</button><button class="btn sm" type="button" data-r="dice" title="Numero a caso" aria-label="Inserisci un valore a caso">🎲</button><div class="cerr" data-r="cerr" aria-live="assertive"></div></form></div>
+    </div></div>`;
+  const q=k=>el.querySelector(`[data-r="${k}"]`);
+  const box=q('box'),lines=q('lines'),vars=q('vars'),form=q('form'),inp=q('inp');
+  function draw(){const r=renderChart(st.prog,{editable:opt.editable,tap:opt.editable||!!opt.onTap,zoom:st.zoom,active:st.active,newId:st.newId,mark:opt.mark});box.innerHTML=r.html;st.seqs=r.seqs;st.newId=null}
+  function line(t,c){const d=document.createElement('div');d.className='cl '+c;d.textContent=t;lines.appendChild(d);while(lines.children.length>400)lines.firstChild.remove();lines.scrollTop=lines.scrollHeight}
+  function btns(){q('play').disabled=st.playing;q('play').textContent=st.ex&&!st.playing?'▶ Continua':'▶ Esegui';q('stop').disabled=!st.ex}
+  function setActive(id){$$('.blk.active,.blk.err',box).forEach(g=>g.classList.remove('active','err'));st.active=id;const g=box.querySelector(`.blk[data-id="${CSS.escape(id)}"]`);
+    if(g){g.classList.add('active');try{const bb=g.getBoundingClientRect(),cb=box.getBoundingClientRect();if(bb.top<cb.top||bb.bottom>cb.bottom||bb.left<cb.left||bb.right>cb.right)g.scrollIntoView({block:'center',inline:'center',behavior:SET.rm?'auto':'smooth'})}catch(e){}}}
+  function renderVars(){if(!st.ex)return;const env=st.ex.env;const ch=st.ex.ctx.changed;st.ex.ctx.changed=null;
+    if(!env.size){vars.innerHTML='<span class="muted small">Ancora nessuna</span>';return}
+    vars.innerHTML=[...env.entries()].map(([k,r])=>`<div class="var${ch===k?' flash':''}"><small>${esc(r.name)}${r.type?' · '+r.type:''}</small><b>${r.set?esc(typeof r.val==='string'?'"'+r.val+'"':fmt(r.val)):'·'}</b></div>`).join('')}
+  function start(){st.ex=new Exec(st.prog,{out:s=>{st.outs.push(s);line(s,'out')},info:m=>{if(!st.infos.has(m)){st.infos.add(m);line('ℹ️ '+m,'inf')}},branch:(n,c)=>line(`◆ ${n.t==='for'?blockLabel(n):n.c}  →  ${c?'Vero':'Falso'}`,'cond')});
+    st.outs=[];st.ins=[];lines.innerHTML='';vars.innerHTML='<span class="muted small">Ancora nessuna</span>';line('● Inizio','inf')}
+  function finish(ok){clearTimeout(st.timer);st.playing=false;st.ex=null;form.hidden=true;btns();if(ok){line('■ Fine del programma','end');announce('Programma terminato');opt.onFinish&&opt.onFinish({outs:[...st.outs],ins:[...st.ins]})}}
+  function advance(send){if(!st.ex)start();const r=st.ex.step(send);
+    if(r.error){line('⚠️ '+r.error.message,'err');announce('Errore: '+r.error.message);const g=r.error.node&&box.querySelector(`.blk[data-id="${CSS.escape(r.error.node)}"]`);$$('.blk.active',box).forEach(x=>x.classList.remove('active'));g&&g.classList.add('err');opt.onError&&opt.onError(r.error);finish(false);return false}
+    if(r.done){finish(true);return false}
+    setActive(r.at);renderVars();btns();
+    if(r.at==='end'){finish(true);return false}
+    if(r.input){ask(r.rec);return false}
+    return true}
+  function loop(){if(!st.playing)return;if(advance())st.timer=setTimeout(loop,SPEEDS[st.speed])}
+  function ask(rec){form.hidden=false;q('cerr').textContent='';inp.value='';st.rec=rec;
+    q('lab').textContent=`⌨️ Input: scrivi il valore di ${rec.name}${rec.type?' ('+rec.type+')':''}`;
+    inp.setAttribute('inputmode',rec.type==='Stringa'||rec.type==='Booleano'?'text':'decimal');setTimeout(()=>{try{inp.focus({preventScroll:true});form.scrollIntoView({block:'nearest'})}catch(e){}},60)}
+  form.addEventListener('submit',e=>{e.preventDefault();if(form.hidden||!st.ex)return;const c=convInput(inp.value,st.rec);if(!c.ok){q('cerr').textContent=c.msg;inp.classList.add('shake');setTimeout(()=>inp.classList.remove('shake'),400);return}
+    line('› '+inp.value.trim(),'in');st.ins.push(inp.value.trim());form.hidden=true;if(advance(c.v)&&st.playing)st.timer=setTimeout(loop,SPEEDS[st.speed])});
+  q('dice').addEventListener('click',()=>{const t=st.rec&&st.rec.type;inp.value=t==='Stringa'?['Anna','Luca','Sara','Marco'][Math.floor(Math.random()*4)]:t==='Booleano'?(Math.random()<.5?'vero':'falso'):String(Math.floor(Math.random()*21)-(Math.random()<.2?10:0));inp.focus()});
+  function reset(){clearTimeout(st.timer);st.playing=false;st.ex=null;form.hidden=true;st.active=null;btns();$$('.blk.active,.blk.err',box).forEach(g=>g.classList.remove('active','err'))}
+  el.addEventListener('click',e=>{const b=e.target.closest('[data-r]');if(!b||b.tagName==='DIV'||b.tagName==='FORM')return;const k=b.dataset.r;
+    if(k==='play'){if(!form.hidden){inp.focus();return}st.playing=true;btns();loop()}
+    else if(k==='step'){st.playing=false;clearTimeout(st.timer);if(!form.hidden){inp.focus();return}advance();btns()}
+    else if(k==='stop'){reset();line('⏹ Fermato','inf')}
+    else if(k==='zin'){st.zoom=Math.min(2,st.zoom+.15);draw();st.active&&setActive(st.active)}
+    else if(k==='zout'){st.zoom=Math.max(.45,st.zoom-.15);draw();st.active&&setActive(st.active)}});
+  q('speed').addEventListener('input',e=>{st.speed=+e.target.value;store.set('speed',st.speed)});
+  box.addEventListener('click',e=>{const ins=e.target.closest('.ins');if(ins&&opt.editable){reset();insertMenu(st.seqs[+ins.dataset.seq],+ins.dataset.idx);return}
+    const g=e.target.closest('.blk');if(!g)return;const id=g.dataset.id;if(id==='start'||id==='end')return;
+    if(opt.onTap)opt.onTap(id,g);else if(opt.editable){reset();blockMenu(id)}});
+  function changed(newId){ensureIds(st.prog);st.newId=newId;draw();opt.onChange&&opt.onChange(st.prog)}
+  /* ----- editor ----- */
+  function insertMenu(seq,idx){const T=[['declare','Dichiara','crea le variabili'],['input','Input','legge un dato'],['output','Output','scrive sullo schermo'],['assign','Assegna','calcola e mette in una variabile'],['if','Se (rombo)','fa una scelta'],['while','Mentre','ripete finché è vero'],['for','Per','ripete contando']];
+    const s=sheet(`<h3>Che blocco vuoi aggiungere?</h3><div class="bgrid">${T.map(([t,n,d])=>`<button data-t="${t}">${miniBlock(proto(t,true))}<b>${n}</b><small>${d}</small></button>`).join('')}</div><div class="row end" style="margin-top:12px"><button class="btn x" data-x>Annulla</button></div>`);
+    s.addEventListener('click',e=>{if(e.target.closest('[data-x]'))return closeSheet();const b=e.target.closest('[data-t]');if(!b)return;const n=proto(b.dataset.t);editForm(n,true,()=>{seq.splice(idx,0,n);changed(n.id)})})}
+  function proto(t,demo){const n={id:uid(),t};
+    if(t==='declare'){n.names=demo?'a, b':'';n.type='Intero'}if(t==='input')n.v=demo?'a':'';if(t==='output')n.e=demo?'a':'';
+    if(t==='assign'){n.v=demo?'a':'';n.e=demo?'b + 1':''}if(t==='if'){n.c=demo?'a > b':'';n.yes=[];n.no=[]}if(t==='while'){n.c=demo?'i <= 10':'';n.body=[]}
+    if(t==='for'){n.v=demo?'i':'i';n.from='1';n.to='10';n.step='1';n.body=[]}return n}
+  function varNames(){const s=new Set();walk(st.prog,n=>{if(n.t==='declare')splitNames(n.names).forEach(x=>s.add(x));if(n.v&&(n.t==='input'||n.t==='assign'||n.t==='for'))s.add(n.v.trim())});return[...s].filter(Boolean)}
+  function editForm(n,isNew,onSave){
+    const vs=varNames();const vchips=vs.length?`<div class="keys">${vs.map(v=>`<button type="button" class="v" data-ins="${esc(v)}">${esc(v)}</button>`).join('')}</div>`:'';
+    const keys=`<div class="keys">${['+','-','*','/','(',')','>','<','>=','<=','=','!=','and','or','""','&','Sqrt('].map(k=>`<button type="button" data-ins="${esc(k)}" aria-label="Inserisci ${esc(k)}">${esc(k)}</button>`).join('')}</div>`;
+    const F=(id,lab,val,help,extra='')=>`<div class="fld"><label for="fe_${id}">${lab}</label><input id="fe_${id}" data-f="${id}" value="${esc(val)}" autocomplete="off" autocapitalize="off" spellcheck="false">${help?`<span class="help">${help}</span>`:''}${extra}<span class="err" data-err="${id}" aria-live="assertive"></span></div>`;
+    let body='',title=KNAME[n.t];
+    if(n.t==='declare')body=F('names','Nomi delle variabili',n.names,'Separati da virgola, per esempio: base, altezza, area')+`<div class="fld"><label for="fe_type">Tipo</label><select id="fe_type" data-f="type">${TYPES.map(t=>`<option${t===n.type?' selected':''}>${t}</option>`).join('')}</select><span class="help">Intero: 7 · Reale: 2.5 · Stringa: "testo" · Booleano: vero/falso</span></div>`;
+    if(n.t==='input')body=F('v','Variabile da leggere',n.v,'Il valore scritto dall’utente finisce in questa variabile.',vchips);
+    if(n.t==='output')body=F('e','Cosa scrivere sullo schermo',n.e,'Un testo va tra virgolette: "Ciao". Per unire testo e valori usa &: "Area: " & area',vchips+keys);
+    if(n.t==='assign')body=F('v','Variabile (a sinistra della freccia)',n.v,'',vchips)+F('e','Valore o calcolo (a destra)',n.e,'Per i decimali usa il punto: 2.5',vchips+keys);
+    if(n.t==='if'||n.t==='while')body=F('c','Condizione',n.c,'Un confronto che dà Vero o Falso, per esempio: a > b',vchips+keys);
+    if(n.t==='for')body=F('v','Variabile contatore',n.v,'',vchips)+F('from','Da',n.from)+F('to','A',n.to)+F('step','Passo',n.step||'1','Di quanto aumenta a ogni giro');
+    const s=sheet(`<h3>${isNew?'Nuovo blocco: ':''}${title}</h3><form data-form>${body}<div class="row end" style="margin-top:10px"><button type="button" class="btn x" data-x>Annulla</button><button class="btn pri" type="submit">Salva</button></div></form>`);
+    let last=s.querySelector('input');s.addEventListener('focusin',e=>{if(e.target.tagName==='INPUT')last=e.target});
+    s.addEventListener('click',e=>{if(e.target.closest('[data-x]'))return closeSheet();const k=e.target.closest('[data-ins]');if(!k||!last)return;e.preventDefault();
+      let t=k.dataset.ins;const a=last.selectionStart??last.value.length,b=last.selectionEnd??a;let caret;
+      if(/^[a-z]+$/i.test(t)&&!['and','or'].includes(t)&&!vs.includes(t)){}
+      if(['and','or','>','<','>=','<=','=','!=','&','+','-','*','/'].includes(t))t=' '+t+' ';
+      if(t==='""'){caret=a+1}
+      last.value=last.value.slice(0,a)+t+last.value.slice(b);caret=caret??a+t.length;last.focus();try{last.setSelectionRange(caret,caret)}catch(x){}});
+    $('[data-form]',s).addEventListener('submit',e=>{e.preventDefault();const val=k=>{const f=s.querySelector(`[data-f="${k}"]`);return f?f.value.trim():''};
+      $$('[data-err]',s).forEach(x=>x.textContent='');const err=(k,m)=>{const x=s.querySelector(`[data-err="${k}"]`);if(x)x.textContent='⚠️ '+m;const f=s.querySelector(`[data-f="${k}"]`);f&&f.focus();return false};
+      const tryE=(k,fn)=>{try{fn();return true}catch(x){return err(k,x.message)}};
+      if(n.t==='declare'){const v=val('names');if(!splitNames(v).length)return err('names','Scrivi almeno un nome.');if(!tryE('names',()=>splitNames(v).forEach(checkName)))return;
+        const low=splitNames(v).map(x=>x.toLowerCase());if(new Set(low).size!==low.length)return err('names','Hai scritto due volte lo stesso nome.');n.names=splitNames(v).join(', ');n.type=val('type')}
+      if(n.t==='input'||n.t==='assign'||n.t==='for'){const v=val('v');if(!tryE('v',()=>checkName(v)))return;n.v=v}
+      if(n.t==='output'||n.t==='assign'){const v=val('e');if(!tryE('e',()=>parse(v)))return;n.e=v}
+      if(n.t==='if'||n.t==='while'){const v=val('c');if(!tryE('c',()=>parse(v)))return;n.c=v}
+      if(n.t==='for'){for(const k of['from','to','step']){const v=val(k)||(k==='step'?'1':'');if(!tryE(k,()=>parse(v)))return;n[k]=v}}
+      closeSheet();if(isNew)onSave();else changed(n.id)})}
+  function blockMenu(id){const f=findNode(st.prog,id);if(!f)return;const n=f.n;const kids=n.t==='if'?n.yes.length+n.no.length:n.body?n.body.length:0;
+    const s=sheet(`<h3>${esc(KNAME[n.t])}</h3><div style="text-align:center;margin:8px 0">${miniBlock(n)}</div><div class="list">
+      <button class="item" data-a="edit"><span class="i">✏️</span><span class="tx"><b>Modifica</b></span></button>
+      <button class="item" data-a="up"${f.i===0?' disabled':''}><span class="i">⬆️</span><span class="tx"><b>Sposta su</b></span></button>
+      <button class="item" data-a="down"${f.i===f.seq.length-1?' disabled':''}><span class="i">⬇️</span><span class="tx"><b>Sposta giù</b></span></button>
+      <button class="item" data-a="del"><span class="i">🗑️</span><span class="tx"><b>Elimina</b>${kids?`<span>Attenzione: elimina anche i ${kids} blocchi che ha dentro</span>`:''}</span></button></div>
+      <div class="row end" style="margin-top:12px"><button class="btn x" data-x>Chiudi</button></div>`);
+    s.addEventListener('click',e=>{if(e.target.closest('[data-x]'))return closeSheet();const b=e.target.closest('[data-a]');if(!b||b.disabled)return;const a=b.dataset.a;
+      if(a==='edit')return editForm(n,false);
+      if(a==='del'){if(kids&&!confirm('Eliminare il blocco e tutto quello che contiene?'))return;f.seq.splice(f.i,1);closeSheet();changed()}
+      if(a==='up'&&f.i>0){f.seq.splice(f.i,1);f.seq.splice(f.i-1,0,n);closeSheet();changed(n.id)}
+      if(a==='down'&&f.i<f.seq.length-1){f.seq.splice(f.i,1);f.seq.splice(f.i+1,0,n);closeSheet();changed(n.id)}})}
+  draw();btns();
+  R.cleanup.push(()=>clearTimeout(st.timer));
+  return{set(p){reset();st.prog=p;draw();lines.innerHTML='<div class="cl inf">Premi ▶ Esegui per far partire il programma.</div>';vars.innerHTML='<span class="muted small">Ancora nessuna</span>'},get:()=>st.prog,mark(m){opt.mark=m;draw()},reset}}
+
+/* ================= ATTIVITÀ ================= */
+function mountAct(el,a,done){
+  let fired=false;const ok=()=>{if(!fired){fired=true;done()}};
+  const head=t=>`<div class="ah"><span aria-hidden="true">✋</span>${t||'Tocca a te'}</div>`;
+  const fb=(box,html,good)=>{box.innerHTML=`<div class="fb ${good?'ok':'ko'}" role="status">${good?'✅ ':'💡 '}${html}</div>`};
+  if(a.type==='quiz'){const order=shuffle(a.opts.map((_,i)=>i));
+    el.innerHTML=head()+`<p><b>${esc(a.q)}</b></p><div class="opts">${order.map(i=>`<button class="opt" data-i="${i}"><span class="mk" aria-hidden="true"></span><span>${esc(a.opts[i][0])}</span></button>`).join('')}</div><div data-fb></div>`;
+    el.addEventListener('click',e=>{const b=e.target.closest('.opt');if(!b||b.disabled)return;const o=a.opts[+b.dataset.i];
+      if(o[1]){b.classList.add('right');b.querySelector('.mk').textContent='✓';$$('.opt',el).forEach(x=>x.disabled=true);fb($('[data-fb]',el),esc(o[2]||'Giusto!'),true);ok()}
+      else{b.classList.add('wrong','shake');b.disabled=true;b.querySelector('.mk').textContent='✗';fb($('[data-fb]',el),esc(o[2]||'Non è questa.')+' Riprova.',false)}})}
+  else if(a.type==='tf'){let right=0;
+    el.innerHTML=head()+`<p><b>${esc(a.q)}</b></p><div class="cls">${a.items.map((it,i)=>`<div class="clsrow" data-i="${i}"><div>${esc(it[0])}</div><div class="seg"><button data-v="1">Vero</button><button data-v="0">Falso</button></div><div data-fb></div></div>`).join('')}</div>`;
+    el.addEventListener('click',e=>{const b=e.target.closest('.seg button');if(!b||b.disabled)return;const row=b.closest('.clsrow');const it=a.items[+row.dataset.i];const v=b.dataset.v==='1';
+      $$('button',row).forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));
+      if(v===it[1]){row.classList.remove('wrong');row.classList.add('right');$$('button',row).forEach(x=>x.disabled=true);fb($('[data-fb]',row),esc(it[2]),true);if(++right===a.items.length)ok()}
+      else{row.classList.add('wrong','shake');setTimeout(()=>row.classList.remove('shake'),400);fb($('[data-fb]',row),'Non proprio. Ripensaci e riprova.',false)}})}
+  else if(a.type==='classify'){let right=0;
+    el.innerHTML=head()+`<p><b>${esc(a.q)}</b></p><div class="cls">${a.items.map((it,i)=>`<div class="clsrow" data-i="${i}"><div><b>${esc(it[0])}</b></div><div class="seg">${a.bins.map((bn,j)=>`<button data-j="${j}">${esc(bn)}</button>`).join('')}</div><div data-fb></div></div>`).join('')}</div>`;
+    el.addEventListener('click',e=>{const b=e.target.closest('.seg button');if(!b||b.disabled)return;const row=b.closest('.clsrow');const it=a.items[+row.dataset.i];
+      $$('button',row).forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));
+      if(+b.dataset.j===it[1]){row.classList.remove('wrong');row.classList.add('right');$$('button',row).forEach(x=>x.disabled=true);fb($('[data-fb]',row),esc(it[2]),true);if(++right===a.items.length)ok()}
+      else{row.classList.add('wrong','shake');setTimeout(()=>row.classList.remove('shake'),400);fb($('[data-fb]',row),'Non qui. Pensa a cosa fa questa cosa e riprova.',false)}})}
+  else if(a.type==='order'){let pool,ans=[];do{pool=shuffle(a.items)}while(pool.join()===a.items.join()&&a.items.length>1);
+    const render=()=>{el.innerHTML=head()+`<p><b>${esc(a.q)}</b></p><div class="ph">La tua sequenza</div><div class="orderans">${ans.length?ans.map((t,i)=>`<button class="opt" data-a="${i}" aria-label="Passo ${i+1}: ${esc(t)}. Tocca per toglierlo"><span class="n">${i+1}</span><span>${esc(t)}</span></button>`).join(''):'<span class="muted small" style="padding:8px">Tocca i passi qui sotto nell’ordine giusto</span>'}</div><div class="opts">${pool.map((t,i)=>`<button class="opt" data-p="${i}"><span class="mk" aria-hidden="true">+</span><span>${esc(t)}</span></button>`).join('')}</div><div data-fb></div>`};
+    render();
+    el.addEventListener('click',e=>{if(fired)return;const p=e.target.closest('[data-p]'),q=e.target.closest('[data-a]');
+      if(p){ans.push(pool.splice(+p.dataset.p,1)[0]);render()}else if(q){pool.push(ans.splice(+q.dataset.a,1)[0]);render()}else return;
+      if(!pool.length){let k=0;while(k<ans.length&&ans[k]===a.items[k])k++;
+        if(k===ans.length){render();$$('.orderans .opt',el).forEach(x=>{x.classList.add('right');x.disabled=true});fb($('[data-fb]',el),esc(a.ok||'Ordine perfetto!'),true);ok()}
+        else{const back=ans.splice(k);pool=shuffle(back);render();$('.orderans',el).classList.add('shake');fb($('[data-fb]',el),k?`I primi ${k} passi sono giusti, li ho lasciati. Il passo numero ${k+1} non va bene: riprova da lì.`:'Il primo passo non è giusto. Da dove si comincia?',false)}}})}
+  else if(a.type==='run'){const need=a.times||1;let c=0;el.innerHTML=head('Prova tu')+`<div data-run></div><p class="small muted" data-cnt>${need>1?`Esecuzioni completate: 0 su ${need}`:''}</p>`;
+    mountRunner($('[data-run]',el),{prog:ensureIds(clone(DEMO[a.prog])),onFinish:()=>{c++;if(need>1)$('[data-cnt]',el).textContent=`Esecuzioni completate: ${Math.min(c,need)} su ${need}`;if(c>=need){ok();toast('Ottimo! Attività completata ✅')}}})}
+  else if(a.type==='varbox'){const ar=SET.notation==='='?'=':'←';
+    const P=[['2',()=>2,'2'],['a + 3',x=>x+3,'a + 3'],['a * 2',x=>x*2,'a * 2'],['1',()=>1,'1']];let pc=0,val=null;
+    el.innerHTML=head('Prova la scatola')+`<p>Tocca le istruzioni <b>una alla volta</b>, dall’alto in basso, e guarda cosa succede alla scatola <b>a</b>.</p>
+      <div class="boxes"><div class="vbox"><div class="bx" data-bx aria-live="polite">?</div><div class="nm">a</div></div></div><div class="calc" data-calc aria-live="polite"></div>
+      <div class="prog">${P.map((p,i)=>`<button class="btn" data-k="${i}"${i?' disabled':''}>a ${ar} ${p[2]}</button>`).join('')}</div><div data-fb></div>`;
+    el.addEventListener('click',e=>{const b=e.target.closest('[data-k]');if(!b||b.disabled||+b.dataset.k!==pc)return;const p=P[pc];const old=val;val=p[1](old);
+      const bx=$('[data-bx]',el);$('[data-calc]',el).textContent=p[2].includes('a')?`${p[2]} = ${p[2].replace('a',fmt(old))} = ${fmt(val)}`:`metto ${fmt(val)} nella scatola`;
+      bx.innerHTML=(old!=null?`<span class="old" aria-hidden="true">${fmt(old)}</span>`:'')+`<span class="fly" aria-hidden="true">${fmt(val)}</span>`;
+      setTimeout(()=>{bx.textContent=fmt(val)},SET.rm?0:780);
+      b.disabled=true;b.classList.add('ok');pc++;const nb=$(`[data-k="${pc}"]`,el);if(nb){nb.disabled=false}
+      else{fb($('[data-fb]',el),'Visto? Ogni volta il vecchio valore sparisce e al suo posto entra quello nuovo. E quando a destra c’è <b>a</b>, si usa il valore che a aveva <b>prima</b>.',true);ok()}})}
+  else if(a.type==='branch'){const prog=ensureIds([IF('piove',[O('"Ombrello ☂️"')],[O('"Niente ombrello"')])]);const seen=new Set();
+    el.innerHTML=head('Prova la scelta')+`<div class="chartwrap fit" data-ch>${renderChart(prog,{}).html}</div><div class="row" style="justify-content:center;margin-top:10px"><button class="btn" data-w="1">🌧️ Piove</button><button class="btn" data-w="0">☀️ Non piove</button></div><div data-fb></div>`;
+    let busy=false;el.addEventListener('click',async e=>{const b=e.target.closest('[data-w]');if(!b||busy)return;busy=true;const v=b.dataset.w==='1';
+      const path=['start',prog[0].id,(v?prog[0].yes:prog[0].no)[0].id,'end'];
+      for(const id of path){$$('.blk',el).forEach(g=>g.classList.toggle('active',g.dataset.id===id));await sleep(SET.rm?150:650)}
+      seen.add(v);busy=false;fb($('[data-fb]',el),v?'La condizione “piove” è <b>Vero</b>: si va a destra e prendo l’ombrello.':'La condizione è <b>Falso</b>: si va a sinistra e lascio l’ombrello a casa.',true);
+      if(seen.size===2){ok();$('[data-fb]',el).insertAdjacentHTML('beforeend','<div class="fb ok">✅ Hai provato tutte e due le strade. Ogni volta se ne percorre <b>una sola</b>.</div>')}})}
+  else if(a.type==='loop'){const prog=ensureIds([A('i','1'),WH('i <= 5',[O('"Flessione " & i'),A('i','i + 1')])]);let i=null,fin=false;const W=prog[1];
+    el.innerHTML=head('Prova il ciclo')+`<div class="grid2"><div class="toy"><div class="small muted">contatore i</div><div class="counter" data-c aria-live="polite">?</div><div data-man style="font-size:2rem;min-height:48px"></div><div class="calc" data-calc aria-live="polite"></div><button class="btn pri" data-go>Fai un giro ▶</button></div><div class="chartwrap fit" data-ch>${renderChart(prog,{}).html}</div></div><div data-fb></div>`;
+    const act=id=>$$('.blk',el).forEach(g=>g.classList.toggle('active',g.dataset.id===id));
+    $('[data-go]',el).addEventListener('click',()=>{if(fin)return;
+      if(i===null){i=1;act(prog[0].id);$('[data-c]',el).textContent=1;$('[data-calc]',el).textContent='Preparo il contatore: i ← 1';$('[data-go]',el).textContent='Controlla la condizione ▶';return}
+      if(i<=5){act(W.id);$('[data-calc]',el).textContent=`${i} <= 5 ? Vero → entro nel ciclo`;setTimeout(()=>{act(W.body[0].id);$('[data-man]',el).textContent='💪'.repeat(i);i++;setTimeout(()=>{act(W.body[1].id);$('[data-c]',el).textContent=i;$('[data-c]',el).classList.add('pop');setTimeout(()=>$('[data-c]',el).classList.remove('pop'),400)},SET.rm?0:500)},SET.rm?0:500);$('[data-go]',el).textContent='Fai un altro giro ▶'}
+      else{act(W.id);$('[data-calc]',el).textContent=`${i} <= 5 ? Falso → esco dal ciclo`;setTimeout(()=>act('end'),SET.rm?0:600);fin=true;$('[data-go]',el).disabled=true;fb($('[data-fb]',el),'Fatto! Il ciclo ha ripetuto 5 volte. Quando i è diventato 6 la condizione è diventata falsa e il programma è uscito dal ciclo.',true);ok()}})}
+  else if(a.type==='river')mountRiver(el,()=>{ok()});
+  else if(a.type==='jugs')mountJugs(el,()=>{ok()});
+}
+
+/* ---------- gioco: fiume ---------- */
+function mountRiver(el,onWin){const NM={W:['🐺','lupo'],G:['🐐','capra'],C:['🥬','cavoli']};let pos,cargo,log,over;
+  const reset=()=>{pos={F:0,W:0,G:0,C:0};cargo=null;log=[];over=false;render()};
+  function render(){const side=pos.F;const bank=s=>Object.keys(NM).filter(k=>pos[k]===s&&cargo!==k).map(k=>`<button class="ani" data-k="${k}" ${pos.F!==s||over?'disabled':''} aria-label="${NM[k][1]}${pos.F===s?', tocca per caricarlo sulla barca':''}">${NM[k][0]}</button>`).join('');
+    el.innerHTML=`<div class="ah"><span aria-hidden="true">✋</span>Gioca e scrivi l’algoritmo</div>
+      <div class="river"><div class="bank"><div class="lab">Riva di partenza</div>${bank(0)}</div>
+      <div class="water"><div class="lab" style="color:#fff">Fiume</div><div class="boatlane"><div class="boat${side?' right':''}" data-boat><span style="font-size:1.6rem" aria-label="contadino">🧑‍🌾</span>${cargo?`<button class="ani" data-un="1" aria-label="${NM[cargo][1]} sulla barca, tocca per scaricarlo">${NM[cargo][0]}</button>`:'<small>barca</small>'}</div></div></div>
+      <div class="bank"><div class="lab">Altra riva</div>${bank(1)}</div></div>
+      <div class="row" style="margin-top:10px"><button class="btn pri" data-cross ${over?'disabled':''}>⛵ Attraversa${cargo?' con '+NM[cargo][1]:' da solo'}</button><button class="btn" data-reset>↺ Ricomincia</button></div>
+      <div data-msg aria-live="polite"></div>
+      ${log.length?`<div class="ph" style="margin-top:12px">Il tuo algoritmo</div><ol class="moves">${log.map(m=>`<li>${esc(m)}</li>`).join('')}</ol>`:''}`}
+  el.addEventListener('click',e=>{if(e.target.closest('[data-reset]'))return reset();if(over)return;
+    const k=e.target.closest('[data-k]');if(k&&!k.disabled){cargo=k.dataset.k;return render()}
+    if(e.target.closest('[data-un]')){cargo=null;return render()}
+    if(e.target.closest('[data-cross]')){const b=$('[data-boat]',el);b.classList.toggle('right');$$('button',el).forEach(x=>{if(!x.matches('[data-reset]'))x.disabled=true});
+      setTimeout(()=>{const to=1-pos.F;pos.F=to;if(cargo)pos[cargo]=to;log.push(cargo?`Porto ${NM[cargo][1]==='cavoli'?'i cavoli':(NM[cargo][1]==='lupo'?'il lupo':'la capra')} ${to?'sull’altra riva':'indietro sulla riva di partenza'}`:`Torno ${to?'sull’altra riva':'indietro'} da solo`);cargo=null;
+        const alone=1-pos.F;let bad='';if(pos.W===alone&&pos.G===alone)bad='Oh no! Il lupo ha mangiato la capra 🐺🐐. Erano soli sulla stessa riva.';else if(pos.G===alone&&pos.C===alone)bad='Oh no! La capra ha mangiato i cavoli 🐐🥬. Erano soli sulla stessa riva.';
+        render();const m=$('[data-msg]',el);
+        if(bad){over=true;render();$('[data-msg]',el).innerHTML=`<div class="fb ko">${bad} Premi Ricomincia e prova un’altra strategia. Suggerimento: chi è l’animale “pericoloso” con tutti e due?</div>`}
+        else if(pos.W&&pos.G&&pos.C&&pos.F){over=true;render();$('[data-msg]',el).innerHTML=`<div class="fb ok">🎉 Ce l’hai fatta in ${log.length} viaggi! Le tue mosse qui sotto sono un <b>algoritmo</b>: passi in ordine che risolvono il problema.${log.length===7?' Ed è la soluzione più corta possibile!':' La soluzione più corta ha 7 viaggi: riesci a trovarla?'}</div>`;confetti();onWin()}},SET.rm?0:900)}});
+  reset()}
+
+/* ---------- gioco: travasi ---------- */
+function mountJugs(el,onWin){const CAP=[25,5,3],H=[180,80,56];let v,sel,log,won;
+  const reset=()=>{v=[16,5,3];sel=null;log=[[16,5,3]];won=false;render()};
+  function render(){el.innerHTML=`<div class="ah"><span aria-hidden="true">✋</span>Fai i travasi</div>
+    <div class="jugs">${CAP.map((c,i)=>`<button class="jug${sel===i?' sel':''}" data-j="${i}" aria-label="Recipiente da ${c} litri, contiene ${v[i]} litri${sel===i?', selezionato':''}"><div class="glass" style="height:${H[i]}px"><div class="w" style="height:${v[i]/c*100}%"></div><div class="num">${v[i]}</div></div><b>${c} L</b></button>`).join('')}</div>
+    <p class="small muted" style="margin:8px 0" data-hint aria-live="polite">${won?'':sel===null?'Tocca il recipiente da cui versare.':`Versi dal ${CAP[sel]} L. Ora tocca dove versare (o di nuovo lo stesso per annullare).`}</p>
+    <div class="row"><button class="btn" data-reset>↺ Ricomincia</button>${log.length>8&&!won?'<button class="btn" data-help>💡 Aiuto</button>':''}</div><div data-msg aria-live="polite"></div>
+    <div class="ph" style="margin-top:12px">Il tuo algoritmo (come nella tabella della prof)</div>
+    <table class="tbl"><tr><th>#</th><th>25 L</th><th>5 L</th><th>3 L</th></tr>${log.map((r,i)=>`<tr><td>${i+1}</td><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('')}</table>`}
+  el.addEventListener('click',e=>{if(e.target.closest('[data-reset]'))return reset();
+    if(e.target.closest('[data-help]')){$('[data-msg]',el).innerHTML='<div class="fb ko">💡 Idea: alla fine nel 25 L ci vogliono 20 litri, quindi negli altri due devono restare 4 litri in tutto (per esempio 1 + 3). Prova a usare il 3 L come “misurino” per lasciare 1 litro nel 5 L.</div>';return}
+    const j=e.target.closest('[data-j]');if(!j||won)return;const i=+j.dataset.j;
+    if(sel===null){if(!v[i]){$('[data-msg]',el).innerHTML='<div class="fb ko">Questo recipiente è vuoto: non c’è niente da versare.</div>';return}sel=i;return render()}
+    if(sel===i){sel=null;return render()}
+    const amt=Math.min(v[sel],CAP[i]-v[i]);if(!amt){sel=null;render();$('[data-msg]',el).innerHTML='<div class="fb ko">Il recipiente di arrivo è già pieno.</div>';return}
+    v[sel]-=amt;v[i]+=amt;sel=null;log.push([...v]);render();
+    if(v[0]===20){won=true;render();$('[data-msg]',el).innerHTML=`<div class="fb ok">🎉 20 litri esatti in ${log.length-1} travasi! La tabella qui sotto è il tuo algoritmo. Ci sono tanti modi per risolverlo: la prof ne ha trovato uno in 9 travasi.</div>`;confetti();onWin()}});
+  reset()}
+
+/* ================= TUTOR ================= */
+function Tutor(chat,choices,token){
+  const alive=()=>R.token===token;
+  const scroll=()=>{try{choices.scrollIntoView({block:'end',behavior:SET.rm?'auto':'smooth'})}catch(e){}};
+  async function say(html,cls=''){if(!alive())throw STOP;const m=document.createElement('div');m.className='msg';m.innerHTML=`<div class="av" aria-hidden="true">🦉</div><div class="bub"><span class="typing" aria-label="Il tutor sta scrivendo"><span></span><span></span><span></span></span></div>`;chat.appendChild(m);scroll();
+    await sleep(SET.rm?60:Math.min(1100,280+html.replace(/<[^>]+>/g,'').length*9));if(!alive())throw STOP;m.className='msg '+cls;m.querySelector('.bub').innerHTML=html;scroll()}
+  function me(html){const m=document.createElement('div');m.className='msg me';m.innerHTML=`<div class="bub">${html}</div>`;chat.appendChild(m)}
+  function pick(build){return new Promise(res=>{choices.innerHTML=build;scroll();const h=e=>{const b=e.target.closest('[data-c]');if(!b||b.disabled)return;choices.removeEventListener('click',h);res(b)};choices.addEventListener('click',h);
+    R.cleanup.push(()=>choices.removeEventListener('click',h))})}
+  return{say,me,pick,alive,clear(){chat.innerHTML='';choices.innerHTML=''},choices}}
+
+function varsRead(n){const out=new Set();const add=src=>{try{const w=a=>{if(!a)return;if(a.k==='var')out.add(a.n.toLowerCase());if(a.a)w(a.a);if(a.b)w(a.b);if(a.args)a.args.forEach(w)};w(parse(src))}catch(e){}};
+  if(n.t==='output')add(n.e);if(n.t==='assign')add(n.e);if(n.t==='if'||n.t==='while')add(n.c);return out}
+function flattenSteps(seq,ctx,out){for(const n of seq){out.push({n,ctx});
+  if(n.t==='if'){const cy={k:'yes',p:n},cn={k:'no',p:n};if(n.yes.length)flattenSteps(n.yes,cy,out);else out.push({empty:'Vero',p:n,ctx:cy});if(n.no.length)flattenSteps(n.no,cn,out);else out.push({empty:'Falso',p:n,ctx:cn})}
+  else if(n.body)flattenSteps(n.body,{k:'body',p:n},out)}return out}
+function partial(seq,placed,ghost){const o=[];for(const n of seq){if(n.id===ghost){o.push({t:'ghost',id:'ghost'});continue}if(!placed.has(n.id))continue;const c={...n};
+  if(n.t==='if'){c.yes=partial(n.yes,placed,ghost);c.no=partial(n.no,placed,ghost)}else if(n.body)c.body=partial(n.body,placed,ghost);o.push(c)}return o}
+
+async function tutorRun(ex){
+  const token=R.token;const T=Tutor($('#chat'),$('#choices'),token);const chartCard=$('#exChart');
+  const stages=$$('#exSteps span');const stage=i=>stages.forEach((s,j)=>{s.className=j<i?'d':j===i?'c':''});
+  const sol=ensureIds(clone(ex.sol));
+  try{
+    stage(0);
+    await T.say(`Ciao! Sono il tuo tutor 🦉. Risolviamo insieme l’<b>esercizio ${ex.n}</b>, un passo alla volta.`);
+    await T.say('Per prima cosa <b>leggi bene il testo</b> qui sopra. Le parole evidenziate sono quelle importanti.');
+    let b=await T.pick(`<button class="btn pri wide" data-c>Ho letto il problema 👍</button>`);T.me('Ho letto il problema');
+    /* ANALISI */
+    stage(1);
+    for(const q of ex.analysis){await T.say(q.q);
+      const order=shuffle(q.opts.map((_,i)=>i));
+      if(q.multi){const sel=new Set();
+        const draw=()=>`<div class="opts">${order.map(i=>`<button class="opt" data-t="${i}" aria-pressed="${sel.has(i)}"><span class="mk" aria-hidden="true">${sel.has(i)?'✓':''}</span><span>${esc(q.opts[i][0])}</span></button>`).join('')}</div><button class="btn pri wide" data-c style="margin-top:8px">Controlla</button>`;
+        const tog=e=>{const t=e.target.closest('[data-t]');if(!t)return;const i=+t.dataset.t;sel.has(i)?sel.delete(i):sel.add(i);t.setAttribute('aria-pressed',sel.has(i));t.querySelector('.mk').textContent=sel.has(i)?'✓':''};
+        T.choices.addEventListener('click',tog);R.cleanup.push(()=>T.choices.removeEventListener('click',tog));
+        for(;;){b=await T.pick(draw());const chosen=[...sel];T.me(chosen.length?chosen.map(i=>esc(q.opts[i][0])).join(', '):'(niente)');
+          const wrong=chosen.filter(i=>!q.opts[i][1]),miss=q.opts.map((o,i)=>i).filter(i=>q.opts[i][1]&&!sel.has(i));
+          if(!wrong.length&&!miss.length){T.choices.removeEventListener('click',tog);await T.say('✅ '+q.ok,'good');break}
+          let m=wrong.map(i=>'• '+esc(q.opts[i][2]||`“${q.opts[i][0]}” non c’entra.`)).join('<br>');
+          if(miss.length)m+=(m?'<br>':'')+`• Manca ancora qualcosa: ${miss.length===1?'c’è un’altra risposta giusta':'ci sono altre risposte giuste'}. Rileggi il testo.`;
+          await T.say('Quasi! '+m+'<br>Correggi e premi di nuovo Controlla.','bad')}}
+      else{const tried=new Set();
+        for(;;){b=await T.pick(`<div class="opts">${order.map(i=>`<button class="opt" data-c data-i="${i}"${tried.has(i)?' disabled':''}><span class="mk" aria-hidden="true">${tried.has(i)?'✗':''}</span><span>${esc(q.opts[i][0])}</span></button>`).join('')}</div>`);
+          const i=+b.dataset.i,o=q.opts[i];T.me(esc(o[0]));
+          if(o[1]){await T.say('✅ '+q.ok,'good');break}tried.add(i);await T.say('Non proprio. '+esc(o[2]||'')+' Riprova.','bad')}}}
+    await T.say('Ottima analisi! 🎯 Ora sai <b>cosa entra</b>, <b>cosa esce</b> e <b>come collegarli</b>. Adesso costruiamo il diagramma.');
+    await T.pick(`<button class="btn pri wide" data-c>Costruiamo il diagramma 🔧</button>`);
+    /* COSTRUZIONE */
+    stage(2);T.clear();chartCard.hidden=false;
+    const steps=flattenSteps(sol,{k:'top'},[]);const placed=new Set();const seenCtx=new Set();let setVars=new Set();let lastNew=null;
+    const show=ghost=>{const p=ghost==='END'?partial(sol,placed,null).concat([{t:'ghost',id:'ghost'}]):partial(sol,placed,ghost);
+      chartCard.innerHTML=`<div class="ph">Il tuo diagramma</div><div class="chartwrap" style="max-height:44vh">${renderChart(p,{newId:lastNew}).html}</div>`;
+      const g=chartCard.querySelector('.k-ghost');if(g)try{const w=chartCard.querySelector('.chartwrap');const gb=g.getBoundingClientRect(),wb=w.getBoundingClientRect();w.scrollTop+=gb.top-wb.top-wb.height/2;w.scrollLeft+=gb.left-wb.left-wb.width/2+gb.width/2}catch(e){}};
+    let prev=null;
+    for(let si=0;si<steps.length;si++){const s=steps[si];
+      if(s.empty){show(null);await T.say(`Nel ramo <b>${s.empty}</b> non c’è niente da fare: lo lasciamo vuoto e andiamo avanti.`);prev=s;continue}
+      const n=s.n,c=s.ctx;show(n.id);
+      let pr;const first=!seenCtx.has(c);seenCtx.add(c);
+      if(c.k==='yes')pr=first?`Siamo nel ramo <b>Vero</b> (quando <code>${esc(c.p.c)}</code> è vera). Cosa facciamo?`:'Sempre nel ramo <b>Vero</b>: e poi?';
+      else if(c.k==='no')pr=first?`Ora il ramo <b>Falso</b> (quando <code>${esc(c.p.c)}</code> è falsa). Cosa facciamo?`:'Sempre nel ramo <b>Falso</b>: e poi?';
+      else if(c.k==='body')pr=first?`Siamo <b>dentro il ciclo</b>: questi blocchi si ripetono finché <code>${esc(c.p.c)}</code> è vera. Qual è il primo?`:(prev&&prev.ctx!==c?'Usciamo dal rombo, ma restiamo <b>dentro il ciclo</b>. Cosa manca?':'Sempre dentro il ciclo: e poi?');
+      else pr=si===0?'Dopo <b>Inizio</b>, qual è il primo blocco?':(prev&&prev.ctx!==c?`Usciamo dal ${prev.ctx.p&&prev.ctx.p.t==='if'?'rombo':'ciclo'}. Cosa viene <b>dopo</b>?`:'Qual è il prossimo blocco?');
+      await T.say(pr);
+      /* opzioni */
+      const lab=blockLabel(n);let fut=null,futWhy='';
+      if(n.t==='declare'){const f=steps.slice(si+1).find(x=>x.n&&x.n.t==='input');if(f){fut=f.n;futWhy='Non ancora! In Flowgorithm, prima di usare una variabile, bisogna <b>dichiararla</b>.'}}
+      else for(const x of steps.slice(si+1,si+6)){if(!x.n||blockLabel(x.n)===lab)continue;const miss=[...varsRead(x.n)].filter(v=>!setVars.has(v));if(miss.length){fut=x.n;futWhy=`Non ancora! Questo blocco usa <b>${esc(miss[0])}</b>, che in questo momento non ha ancora un valore. Prima bisogna leggerla o calcolarla.`;break}}
+      let wr=shuffle(ex.wrong.filter(w=>blockLabel(w[0])!==lab&&(!fut||blockLabel(w[0])!==blockLabel(fut))));wr.sort((a,b)=>(b[0].t===n.t)-(a[0].t===n.t));
+      const opts=[{n,ok:1}];if(fut)opts.push({n:fut,why:futWhy});for(const w of wr){if(opts.length>=3)break;opts.push({n:w[0],why:esc(w[1])})}
+      const ord=shuffle(opts.map((_,i)=>i));const no=new Set();let errs=0;
+      for(;;){b=await T.pick(ord.map(i=>`<button class="bopt${no.has(i)?' no':''}${errs>=3&&opts[i].ok?' hint':''}" data-c data-i="${i}"${no.has(i)?' disabled':''} aria-label="${esc(KNAME[opts[i].n.t]+': '+blockLabel(opts[i].n))}">${miniBlock(opts[i].n)}</button>`).join(''));
+        const o=opts[+b.dataset.i];T.me(esc(blockLabel(o.n)));
+        if(o.ok){placed.add(n.id);lastNew=n.id;if(n.t==='input'||n.t==='assign')setVars.add(n.v.toLowerCase());show(null);await T.say('✅ '+(n.tip||'Giusto!'),'good');break}
+        errs++;no.add(+b.dataset.i);let m=o.why;if(errs===2)m+=`<br>💡 <b>Aiutino:</b> ${esc(n.hint||TYPEHINT[n.t]||'')}`;if(errs>=3)m+='<br>Ti ho evidenziato quello giusto in arancione.';
+        await T.say(m,'bad')}
+      prev=s;lastNew=null}
+    show('END');await T.say('Abbiamo messo tutti i blocchi. Con cosa si chiude il diagramma?');
+    for(;;){const ws=shuffle(ex.wrong).slice(0,2);const o=shuffle([{n:{t:'term',txt:'Fine'},ok:1},...ws.map(w=>({n:w[0],why:w[1]}))]);
+      b=await T.pick(o.map((x,i)=>`<button class="bopt" data-c data-i="${i}">${miniBlock(x.n)}</button>`).join(''));const x=o[+b.dataset.i];T.me(esc(blockLabel(x.n)));
+      if(x.ok)break;await T.say('Il problema è già risolto: non serve altro. Ogni algoritmo deve avere una fine!','bad')}
+    chartCard.innerHTML=`<div class="ph">Il tuo diagramma</div><div class="chartwrap" style="max-height:44vh">${renderChart(sol,{draw:true}).html}</div>`;
+    confetti();await T.say('🎉 Diagramma completo! Ogni blocco è al suo posto.','good');
+    await T.pick(`<button class="btn pri wide" data-c>Proviamo se funziona ▶</button>`);
+    /* SIMULAZIONE */
+    stage(3);T.clear();chartCard.innerHTML='<div data-run></div>';let ran=false;
+    const tdesc=t=>`${esc(t[2])}. Dovresti vedere: <b>${t[1].length>6?esc(t[1].slice(0,3).join(', '))+' … '+esc(t[1][t[1].length-1]):esc(t[1].join(' · '))}</b>`;
+    mountRunner($('[data-run]',chartCard),{prog:sol,onFinish:async res=>{ran=true;if(!T.alive())return;
+      const t=ex.tests.find(t=>t[0].length===res.ins.length&&t[0].every((v,i)=>sameOut(v,res.ins[i])));
+      try{if(t){const good=t[1].length===res.outs.length&&t[1].every((v,i)=>sameOut(v,res.outs[i]));await T.say(good?'✅ Risultato giusto: proprio quello che ci aspettavamo!':'Hmm, il risultato non è quello atteso. Controlla i dati che hai inserito.',good?'good':'bad')}
+        else await T.say('Hai provato con dati tuoi: bravo! 👏 Controlla a mente se il risultato è giusto. È proprio questo il senso della <b>simulazione</b>.')}catch(e){}},
+      onError:async e=>{try{await T.say('Il programma si è fermato con un errore: '+esc(e.message)+' Leggi il messaggio sulla console e riprova.','bad')}catch(x){}}});
+    await T.say(`Questa è la fase di <b>simulazione</b>: verifichiamo che l’algoritmo funzioni. Premi <b>▶ Esegui</b> e inserisci ${tdesc(ex.tests[0])}`);
+    if(ex.tests.length>1)await T.say(`Poi prova anche con ${tdesc(ex.tests[1])}${ex.tests[2]?'. E con '+tdesc(ex.tests[2]):''}`);
+    for(;;){b=await T.pick(`<button class="btn wide" data-c data-k="auto">🧪 Fai il test automatico</button><button class="btn pri wide" data-c data-k="ok">Ho provato: funziona ✓</button>`);
+      if(b.dataset.k==='auto'){T.me('Fai il test automatico');const rows=ex.tests.map(t=>{const r=runHeadless(sol,t[0]);const good=!r.error&&t[1].length===r.outs.length&&t[1].every((v,i)=>sameOut(v,r.outs[i]));return`${good?'✅':'❌'} ${esc(t[2])}`});
+        await T.say('Ho eseguito il programma con tutti i dati di prova:<br>'+rows.join('<br>')+'<br>Tutto funziona! Provare tanti casi diversi (anche quelli “strani”) è il modo per essere sicuri.','good');ran=true;continue}
+      if(!ran){T.me('Ho provato');await T.say('Prima prova a eseguirlo almeno una volta, oppure fai il test automatico. 😉','bad');continue}
+      T.me('Funziona ✓');break}
+    /* TROVA L'ERRORE */
+    if(ex.bug){stage(4);T.clear();const bp=ensureIds(clone(ex.bug.prog));let bad=null;walk(bp,n=>{if(n.bad)bad=n.id});
+      await T.say('Ultima sfida: <b>trova l’errore</b> 🔍');await T.say(ex.bug.q);
+      let tries=0;const mark={};
+      await new Promise(res=>{chartCard.innerHTML='<div class="ph">Il programma del compagno: tocca un blocco</div><div data-bug></div>';
+        const host=$('[data-bug]',chartCard);
+        const draw=()=>{host.innerHTML=`<div class="chartwrap" style="max-height:52vh">${renderChart(bp,{tap:true,mark}).html}</div>`};draw();
+        const h=async e=>{const g=e.target.closest('.blk');if(!g||!T.alive())return;const id=g.dataset.id;if(id==='start'||id==='end'||mark[id])return;
+          if(id===bad){mark[id]='bugok';draw();host.removeEventListener('click',h);try{await T.say('✅ Trovato! '+ex.bug.why,'good')}catch(x){}res()}
+          else{tries++;mark[id]='bugno';draw();try{await T.say(tries>=2?'Quel blocco va bene. 💡 '+esc(ex.bug.hint):'Quel blocco va bene. Cerca ancora…','bad')}catch(x){}}};
+        host.addEventListener('click',h);host.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.closest('.blk')){e.preventDefault();h(e)}});R.cleanup.push(()=>{host.removeEventListener('click',h);res()})});
+      if(!T.alive())throw STOP;addSkill('debug',ex.id)}
+    /* FINE */
+    stage(stages.length-1);PROG.ex[ex.id]=1;save();(ex.skills||[]).forEach(s=>addSkill(s,ex.id));addSkill('simulatore',ex.id);if(ex.mod===2)addSkill('sequenza',ex.id);
+    confetti();const next=EXS[EXS.findIndex(e=>e.id===ex.id)+1];
+    await T.say(`🏆 <b>Esercizio ${ex.n} completato!</b> Hai fatto l’analisi, costruito l’algoritmo, l’hai provato${ex.bug?' e hai trovato un errore':''}. Proprio come un programmatore.`,'good');
+    T.choices.innerHTML=`<button class="btn pri wide" data-sim>▶️ Apri nel simulatore e modificalo</button>${next?`<a class="btn wide" href="#/es/${next.id}">Esercizio ${next.n}: ${esc(next.title)} →</a>`:''}<a class="btn wide ghost" href="#/lab">Torna al laboratorio</a>`;
+    $('[data-sim]',T.choices).addEventListener('click',()=>{if(simDirty()&&!confirm('Nel simulatore c’è già un diagramma. Vuoi sostituirlo con questo?'))return;store.set('sim',clone(ex.sol));store.set('simtask',{title:'Esercizio '+ex.n+': '+ex.title,text:ex.text});location.hash='#/sim'});
+  }catch(e){if(e!==STOP)console.error(e)}}
+const simDirty=()=>(store.get('sim',[])||[]).length>0;
+
+/* ================= SCHERMATE ================= */
+const totalSlides=MODULES.reduce((a,m)=>a+m.slides.length,0);
+function overall(){const d=Object.keys(PROG.done).length,e=Object.keys(PROG.ex).length;return Math.round((d/totalSlides*.5+e/EXS.length*.5)*100)}
+function lvlStars(n){return '<span aria-label="difficoltà '+n+' su 3">'+'●'.repeat(n)+'<span style="opacity:.25">'+'●'.repeat(3-n)+'</span></span>'}
+
+function home(){const pct=overall();const last=PROG.last;
+  const skDone=SKILLS.filter(s=>skillLv(s[0])>0).length;
+  main.innerHTML=`<section class="hero"><svg class="float" viewBox="0 0 64 64" aria-hidden="true"><rect x="10" y="4" width="44" height="15" fill="#FFFFC0" stroke="#fff" stroke-width="2"/><path d="M32 13 58 32 32 51 6 32z" fill="#FFC0C0" stroke="#fff" stroke-width="2"/><path d="M14 46h44l-6 14H8z" fill="#C0E0FF" stroke="#fff" stroke-width="2"/></svg>
+    <h2>Diagrammi di flusso da zero</h2><p>Impara a far ragionare un computer, un blocco alla volta. Con Flowgorithm.</p>
+    <div class="bar" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100" aria-label="Avanzamento del corso"><i style="width:${pct}%"></i></div><p class="small" style="margin:6px 0 10px">Hai completato il ${pct}% del corso</p>
+    <a class="btn" style="background:#fff;color:#2D6CB5;border:0" href="#/${last||'lezione/0/0'}">${last?'▶ Continua da dove eri':'▶ Comincia il corso'}</a></section>
+  <div class="tiles">
+    <a class="tile" href="#/lezioni"><span class="i" aria-hidden="true">📘</span><b>Lezioni</b><span>La teoria spiegata semplice, con un’attività in ogni pagina</span></a>
+    <a class="tile" href="#/lab"><span class="i" aria-hidden="true">🧪</span><b>Laboratorio</b><span>15 esercizi con il tutor che ti segue passo passo</span></a>
+    <a class="tile" href="#/sim"><span class="i" aria-hidden="true">▶️</span><b>Simulatore</b><span>Il tuo Flowgorithm sul telefono: costruisci ed esegui</span></a>
+    <a class="tile" href="#/video"><span class="i" aria-hidden="true">🎬</span><b>Video</b><span>Le videolezioni e gli esercizi per casa</span></a></div>
+  <a class="item" href="#/competenze"><span class="i" aria-hidden="true">🏅</span><span class="tx"><b>Le mie competenze</b><span>${skDone} su ${SKILLS.length} acquisite</span></span><span class="st" aria-hidden="true">›</span></a>
+  <div style="height:10px"></div>
+  <button class="item" data-settings><span class="i" aria-hidden="true">⚙️</span><span class="tx"><b>Impostazioni e accessibilità</b><span>Testo più grande, contrasto, animazioni</span></span><span class="st" aria-hidden="true">›</span></button>`;
+  $('[data-settings]').addEventListener('click',settings)}
+
+function lessons(){main.innerHTML=`<h2>Lezioni</h2><p class="muted">Segui l’ordine: ogni lezione usa quello che hai imparato prima.</p><div class="list">${MODULES.map((m,i)=>{const d=m.slides.filter((_,j)=>PROG.done[`m${m.id}s${j}`]).length;const all=d===m.slides.length;
+  return `<a class="item${all?' done':''}" href="#/lezione/${i}/0"><span class="i" aria-hidden="true">${m.icon}</span><span class="tx"><b>${i+1}. ${esc(m.title)}</b><span>${esc(m.sub)} · ${d}/${m.slides.length}</span></span><span class="st">${all?'✅':'›'}</span></a>`}).join('')}</div>`}
+
+function slide(mi,si){const m=MODULES[mi];if(!m)return go('#/lezioni');
+  if(si==='end')return moduleEnd(mi);si=+si;const s=m.slides[si];if(!s)return go(`#/lezione/${mi}/0`);
+  PROG.last=`lezione/${mi}/${si}`;save();
+  const key=`m${m.id}s${si}`;const done=!!PROG.done[key];
+  main.innerHTML=`<div class="slidehead"><span class="chip">${m.icon} Lezione ${mi+1}</span><div class="dots" aria-label="Pagina ${si+1} di ${m.slides.length}">${m.slides.map((_,j)=>`<i class="${j===si?'c':PROG.done[`m${m.id}s${j}`]?'d':''}"></i>`).join('')}</div></div>
+    <article class="slide card"><h2>${esc(s.t)}</h2><div class="rv">${fillSlide(s.h)}</div><div class="act" data-act></div></article>
+    <div class="slidenav"><button class="btn" data-prev ${si===0&&mi===0?'disabled':''}>← Indietro</button><button class="btn pri" data-next ${done||SET.lim?'':'disabled'}>${si===m.slides.length-1?'Fine lezione ✓':'Avanti →'}</button></div>
+    <p class="small muted" data-lock style="text-align:center;margin-top:-6px">${done||SET.lim?'':'Completa l’attività per andare avanti'}</p>`;
+  drawCharts(main);
+  const race=$('[data-race-go]');race&&race.addEventListener('click',()=>{$$('.lane',main).forEach(l=>{l.classList.remove('go');void l.offsetWidth;l.classList.add('go')})});
+  mountAct($('[data-act]'),s.act,()=>{PROG.done[key]=1;if(s.act.skill)addSkill(s.act.skill,key);save();const n=$('[data-next]');n.disabled=false;n.classList.add('pop');$('[data-lock]').textContent='';announce('Attività completata. Puoi andare avanti.')});
+  $('[data-prev]').addEventListener('click',()=>go(si>0?`#/lezione/${mi}/${si-1}`:`#/lezione/${mi-1}/${MODULES[mi-1].slides.length-1}`));
+  $('[data-next]').addEventListener('click',()=>go(si<m.slides.length-1?`#/lezione/${mi}/${si+1}`:`#/lezione/${mi}/end`))}
+
+function moduleEnd(mi){const m=MODULES[mi];const nx=MODULES[mi+1];confetti();
+  main.innerHTML=`<section class="card" style="text-align:center"><div style="font-size:3rem" aria-hidden="true">🎉</div><h2>Lezione ${mi+1} completata!</h2><p>${esc(m.title)}</p></section>
+  ${m.ex&&m.ex.length?`<section class="card"><h3>🧪 Ora mettiti alla prova</h3><p class="muted small">Il tutor ti segue passo passo.</p><div class="list">${m.ex.map(id=>{const e=EXS.find(x=>x.id===id);return `<a class="item${PROG.ex[id]?' done':''}" href="#/es/${id}"><span class="i">${PROG.ex[id]?'✅':e.n}</span><span class="tx"><b>${esc(e.title)}</b><span>Esercizio ${e.n} · ${lvlStars(e.lvl)}</span></span></a>`}).join('')}</div></section>`:''}
+  ${m.video?`<section class="card"><h3>🎬 Da guardare</h3>${m.video.map(v=>`<a class="item" href="#/video"><span class="i">▶</span><span class="tx"><b>${esc(VIDEOS[v].title)}</b></span></a>`).join('')}</section>`:''}
+  <div class="row">${nx?`<a class="btn pri" href="#/lezione/${mi+1}/0">Lezione ${mi+2}: ${esc(nx.title)} →</a>`:`<a class="btn pri" href="#/competenze">🏅 Guarda le tue competenze</a>`}<a class="btn" href="#/lezioni">Tutte le lezioni</a></div>`}
+
+function lab(){main.innerHTML=`<h2>Laboratorio</h2><p class="muted">Ogni esercizio si fa con il tutor: analisi, brainstorming, costruzione del diagramma, prova e caccia all’errore. Quelli che non fate in classe sono per casa.</p>
+  ${MODULES.filter(m=>m.ex&&m.ex.length).map(m=>`<h3 style="margin-top:16px">${m.icon} ${esc(m.title)}</h3><div class="list">${m.ex.map(id=>{const e=EXS.find(x=>x.id===id);return `<a class="item${PROG.ex[id]?' done':''}" href="#/es/${id}"><span class="i" aria-hidden="true">${PROG.ex[id]?'✅':e.game?'🎮':e.n}</span><span class="tx"><b>${e.n}. ${esc(e.title)}</b><span>${e.verifica?'<span class="chip warn">verifica</span> ':''}${e.game?'gioco · ':''}${lvlStars(e.lvl)}</span></span><span class="st" aria-hidden="true">›</span></a>`}).join('')}</div>`).join('')}`}
+
+function exercise(id){const ex=EXS.find(e=>e.id===id);if(!ex)return go('#/lab');PROG.last='es/'+id;save();
+  const sol=SET.lim&&ex.sol?`<button class="btn sm ghost" data-sol style="opacity:.6">👁 Soluzione (docente)</button>`:'';
+  if(ex.game){main.innerHTML=`<section class="card"><div class="row"><span class="chip">Esercizio ${ex.n}</span>${lvlStars(ex.lvl)}</div><h2>${esc(ex.title)}</h2><p>${ex.text}</p></section><section class="card" data-g></section><div class="row" data-after></div>`;
+    (ex.game==='river'?mountRiver:mountJugs)($('[data-g]'),()=>{PROG.ex[id]=1;save();(ex.skills||[]).forEach(s=>addSkill(s,id));const nx=EXS[EXS.indexOf(ex)+1];
+      $('[data-after]').innerHTML=`<a class="btn pri" href="#/es/${nx.id}">Esercizio ${nx.n} →</a><a class="btn" href="#/lab">Laboratorio</a>`});return}
+  main.innerHTML=`<div class="exhead" id="exSteps" aria-label="Fasi dell’esercizio">${['Problema','Analisi','Algoritmo','Simulazione',...(ex.bug?['Trova l’errore']:[]),'Fatto'].map(s=>`<span>${s}</span>`).join('')}</div>
+   <div class="exgrid"><div><section class="card"><div class="row"><span class="chip">Esercizio ${ex.n}</span>${ex.verifica?'<span class="chip warn">verifica</span>':''}${lvlStars(ex.lvl)}${sol}</div><h2>${esc(ex.title)}</h2><p>${ex.text}</p></section>
+   <section class="card" id="exChart" hidden></section></div>
+   <section class="card tutorbox" aria-label="Tutor"><div class="chat" id="chat" aria-live="polite"></div><div class="choices" id="choices"></div></section></div>`;
+  const sb=$('[data-sol]');sb&&sb.addEventListener('click',()=>{const c=$('#exChart');c.hidden=false;c.innerHTML=`<div class="ph">Soluzione</div><div class="chartwrap">${renderChart(ensureIds(clone(ex.sol)),{draw:true}).html}</div>`;c.scrollIntoView({behavior:'smooth'})});
+  tutorRun(ex)}
+
+function sim(){const task=store.get('simtask',null);let prog=ensureIds(store.get('sim',[])||[]);
+  main.innerHTML=`<div class="row" style="justify-content:space-between"><h2 style="margin:0">Simulatore</h2><div class="row"><button class="btn sm" data-ex>📂 Esempi</button><button class="btn sm" data-new>🗒️ Nuovo</button></div></div>
+   <p class="small muted" style="margin:6px 0 12px">Tocca <b>+</b> sulle frecce per aggiungere un blocco. Tocca un blocco per modificarlo, spostarlo o eliminarlo. Poi premi ▶ Esegui.</p>
+   ${task?`<div class="callout" data-task><b>📝 ${esc(task.title)}</b><br>${task.text}<div style="margin-top:6px"><button class="btn sm ghost" data-closetask>Nascondi</button></div></div>`:''}
+   <section class="card" data-run></section>
+   <details class="card"><summary><b>📝 Versione testuale (pseudocodice)</b></summary><pre data-pseudo style="white-space:pre-wrap;font-size:.92rem;margin:10px 0 0"></pre></details>
+   <details class="card"><summary><b>❓ Come si scrive in Flowgorithm</b></summary><div class="small" style="margin-top:8px">
+   <p>• Testo tra virgolette: <code>"Ciao"</code> · Unire testo e valori: <code>"Area: " &amp; area</code><br>• Uguale: <code>=</code> oppure <code>==</code> · Diverso: <code>!=</code> · E: <code>and</code> · O: <code>or</code><br>• Radice: <code>Sqrt(x)</code> · Potenza: <code>x ^ 2</code> · Resto: <code>x mod 2</code> (o <code>%</code>)<br>• Decimali con il punto: <code>2.5</code></p></div></details>`;
+  const pse=()=>{$('[data-pseudo]').textContent='Inizio\n'+pseudo(prog,1)+'Fine'};
+  const run=mountRunner($('[data-run]'),{prog,editable:true,onChange:p=>{prog=p;store.set('sim',p);pse()}});pse();
+  $('[data-new]').addEventListener('click',()=>{if(prog.length&&!confirm('Vuoi cancellare il diagramma e ricominciare da capo?'))return;prog=[];store.set('sim',prog);store.set('simtask',null);sim()});
+  const ct=$('[data-closetask]');ct&&ct.addEventListener('click',()=>{store.set('simtask',null);$('[data-task]').remove()});
+  $('[data-ex]').addEventListener('click',()=>{const L=[['primo','Ciao!','Il programma più corto'],['ciao','Ciao, nome','Input di testo e Output'],['tre','Somma di due numeri','Sequenza'],['media','Ammesso o non ammesso','Il rombo'],['conta','Conta fino a 20','Il ciclo']];
+    const done=EXS.filter(e=>e.sol&&PROG.ex[e.id]);
+    const s=sheet(`<h3>Apri un esempio</h3><div class="list">${L.map(([k,t,d])=>`<button class="item" data-k="d:${k}"><span class="i">📄</span><span class="tx"><b>${t}</b><span>${d}</span></span></button>`).join('')}
+      ${done.map(e=>`<button class="item" data-k="e:${e.id}"><span class="i">✅</span><span class="tx"><b>Esercizio ${e.n}</b><span>${esc(e.title)}</span></span></button>`).join('')}</div>
+      ${done.length?'':'<p class="small muted">Qui compariranno anche le soluzioni degli esercizi che completi nel laboratorio.</p>'}<div class="row end"><button class="btn x" data-x>Chiudi</button></div>`);
+    s.addEventListener('click',e=>{if(e.target.closest('[data-x]'))return closeSheet();const b=e.target.closest('[data-k]');if(!b)return;if(prog.length&&!confirm('Il diagramma attuale verrà sostituito. Continuare?'))return;
+      const [t,k]=b.dataset.k.split(':');prog=ensureIds(clone(t==='d'?DEMO[k]:EXS.find(x=>x.id===k).sol));store.set('sim',prog);store.set('simtask',null);closeSheet();sim()})})}
+
+function videos(){main.innerHTML=`<h2>Video</h2><p class="muted">Guarda i video della prof e poi prova gli esercizi di allenamento nel simulatore.</p>
+  ${VIDEOS.map((v,i)=>`<section class="card"><h3>${esc(v.title)}</h3><button class="yt" data-yt="${i}" aria-label="Guarda il video: ${esc(v.title)}"><img src="https://i.ytimg.com/vi/${v.id}/hqdefault.jpg" alt="" loading="lazy"><span class="pl" aria-hidden="true">▶</span></button>
+   <div class="row" style="margin-top:8px"><button class="btn sm" data-seen="${i}" aria-pressed="${!!PROG.videos[v.id]}">${PROG.videos[v.id]?'✅ Visto':'Segna come visto'}</button><a class="btn sm ghost" href="https://www.youtube.com/watch?v=${v.id}${v.start?'&t='+v.start+'s':''}" target="_blank" rel="noopener">Apri su YouTube ↗</a></div>
+   ${v.ex.length?`<div class="ph" style="margin-top:12px">Esercizi di allenamento (per casa)</div><div class="list">${v.ex.map((t,j)=>`<button class="item" data-hw="${i}:${j}"><span class="i">${j+1}</span><span class="tx"><b style="font-weight:500">${esc(t)}</b><span>Fallo nel simulatore ›</span></span></button>`).join('')}</div>`:'<p class="small muted" style="margin-top:8px">Dopo il video, ripassa la lezione sul ciclo e prova gli esercizi 11, 12 e 13.</p>'}</section>`).join('')}`;
+  main.addEventListener('click',videoClick);R.cleanup.push(()=>main.removeEventListener('click',videoClick))}
+function videoClick(e){const y=e.target.closest('[data-yt]');if(y){const v=VIDEOS[+y.dataset.yt];y.outerHTML=`<div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1&rel=0${v.start?'&start='+v.start:''}" title="${esc(v.title)}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>`;return}
+  const s=e.target.closest('[data-seen]');if(s){const v=VIDEOS[+s.dataset.seen];PROG.videos[v.id]=!PROG.videos[v.id];save();s.textContent=PROG.videos[v.id]?'✅ Visto':'Segna come visto';s.setAttribute('aria-pressed',!!PROG.videos[v.id]);return}
+  const h=e.target.closest('[data-hw]');if(h){const [i,j]=h.dataset.hw.split(':').map(Number);if(simDirty()&&!confirm('Vuoi iniziare un diagramma nuovo per questo esercizio? Quello attuale nel simulatore verrà cancellato.'))return;
+    store.set('sim',[]);store.set('simtask',{title:`${VIDEOS[i].title} · esercizio ${j+1}`,text:esc(VIDEOS[i].ex[j])+'<br><span class="small muted">Ricorda: prima l’analisi (input, output, relazione), poi i blocchi, poi prova con dei dati di cui conosci il risultato.</span>'});go('#/sim')}}
+
+function skills(){const tot=SKILLS.reduce((a,s)=>a+skillLv(s[0]),0),max=SKILLS.length*3,pct=Math.round(tot/max*100);const r=46,C=2*Math.PI*r;
+  const where={fasi:'Lezione 1',analisi:'Lezione 1 ed esercizi 3-5',blocchi:'Lezione 2',variabili:'Lezione 2',sequenza:'Esercizi 3, 4, 5',selezione:'Lezione 3 ed esercizi 6-10',ciclo:'Lezione 4 ed esercizi 11-13',simulatore:'Simulazioni nelle lezioni e negli esercizi',debug:'“Trova l’errore” negli esercizi'};
+  main.innerHTML=`<h2>Le mie competenze</h2><section class="card" style="text-align:center">
+   <svg class="ring" viewBox="0 0 110 110" role="img" aria-label="Competenze al ${pct}%"><circle cx="55" cy="55" r="${r}" fill="none" stroke="var(--line)" stroke-width="10"/><circle cx="55" cy="55" r="${r}" fill="none" stroke="var(--ok)" stroke-width="10" stroke-linecap="round" stroke-dasharray="${C}" stroke-dashoffset="${C*(1-pct/100)}" transform="rotate(-90 55 55)" style="transition:stroke-dashoffset 1s"/><text x="55" y="60" text-anchor="middle" font-size="22" font-weight="800" fill="var(--ink)">${pct}%</text></svg>
+   <p style="margin-top:8px">${pct>=100?'🏆 <b>Hai tutte le competenze, consolidate.</b> Sei pronto a usare Flowgorithm sul computer!':pct>=60?'Sei sulla buona strada. Ogni pallino in più vuol dire che hai usato quella competenza un’altra volta.':'Ogni attività e ogni esercizio aggiunge un pallino. Tre pallini = competenza consolidata.'}</p></section>
+   <section class="card">${SKILLS.map(([k,t])=>{const l=skillLv(k);return `<div class="sk"><span style="font-size:1.3rem" aria-hidden="true">${l>=3?'🏅':l?'✅':'⬜'}</span><div style="flex:1"><b>${esc(t)}</b><div class="small muted">${l?(l>=3?'Consolidata':'Acquisita, continua ad allenarla'):'Da fare: '+where[k]}</div></div><div class="lv" aria-label="livello ${l} su 3">${[0,1,2].map(i=>`<i class="${i<l?'on':''}"></i>`).join('')}</div></div>`}).join('')}</section>`}
+
+function settings(){const s=sheet(`<h3>Impostazioni e accessibilità</h3>
+  <div class="fld"><label>Grandezza del testo</label><div class="seg">${[1,2,3,4].map(n=>`<button data-fs="${n}" aria-pressed="${SET.fs===n}" style="font-size:${.75+n*.12}rem">A</button>`).join('')}</div></div>
+  <div class="fld"><label>Come si scrive l’assegnazione</label><div class="seg"><button data-no="←" aria-pressed="${SET.notation==='←'}">a ← 2 (quaderno)</button><button data-no="=" aria-pressed="${SET.notation==='='}">a = 2 (Flowgorithm)</button></div></div>
+  <div class="list" style="margin-top:10px">
+   <button class="item" data-t="hc" aria-pressed="${SET.hc}"><span class="i">🌓</span><span class="tx"><b>Contrasto alto</b><span>${SET.hc?'Attivo':'Spento'}</span></span></button>
+   <button class="item" data-t="rm" aria-pressed="${SET.rm}"><span class="i">🧘</span><span class="tx"><b>Riduci le animazioni</b><span>${SET.rm?'Attivo':'Spento'}</span></span></button>
+   <button class="item" data-t="lim" aria-pressed="${SET.lim}"><span class="i">🖥️</span><span class="tx"><b>Modalità LIM (docente)</b><span>Testi grandi, avanzamento libero, soluzioni visibili. Si attiva anche con l’icona in alto a destra.</span></span></button>
+   <button class="item" data-reset><span class="i">🗑️</span><span class="tx"><b>Azzera i progressi</b><span>Ricomincia il corso da capo</span></span></button></div>
+  <div class="row end" style="margin-top:12px"><button class="btn pri x" data-x>Fatto</button></div>`);
+  s.addEventListener('click',e=>{if(e.target.closest('[data-x]')){closeSheet();route();return}
+    const f=e.target.closest('[data-fs]');if(f){SET.fs=+f.dataset.fs;applySettings();$$('[data-fs]',s).forEach(b=>b.setAttribute('aria-pressed',b===f))}
+    const no=e.target.closest('[data-no]');if(no){SET.notation=no.dataset.no;applySettings();$$('[data-no]',s).forEach(b=>b.setAttribute('aria-pressed',b===no))}
+    const t=e.target.closest('[data-t]');if(t){const k=t.dataset.t;SET[k]=!SET[k];applySettings();t.setAttribute('aria-pressed',SET[k]);t.querySelector('.tx span').textContent=SET[k]?'Attivo':'Spento'}
+    if(e.target.closest('[data-reset]')&&confirm('Sicuro? Tutti i progressi e le competenze verranno cancellati.')){Object.assign(PROG,{done:{},ex:{},skills:{},videos:{},last:''});save();store.set('sim',[]);store.set('simtask',null);closeSheet();go('#/');route()}})}
+
+/* ================= ROUTER ================= */
+function go(h){if(location.hash===h)route();else location.hash=h}
+const TITLES={'':'Flowchart Lab',lezioni:'Lezioni',lezione:'Lezione',lab:'Laboratorio',es:'Esercizio',sim:'Simulatore',video:'Video',competenze:'Competenze'};
+function route(){R.cleanup.forEach(f=>{try{f()}catch(e){}});R.cleanup=[];R.token={};closeSheet();
+  const h=location.hash.replace(/^#\/?/,'');const [a='',b,c]=h.split('/');
+  try{
+    ({'':home,lezioni:lessons,lezione:()=>slide(+b,c),lab,es:()=>exercise(b),sim,video:videos,competenze:skills}[a]||home)();
+  }catch(e){console.error(e);$('#main').innerHTML=`<div class="card"><h2>Ops!</h2><p>Qualcosa non ha funzionato in questa pagina. Torna alla <a href="#/">Home</a>.</p></div>`}
+  const navKey={'':'home',lezioni:'lezioni',lezione:'lezioni',lab:'lab',es:'lab',sim:'sim',video:'video',competenze:'home'}[a]||'home';
+  $$('.nav a').forEach(x=>{if(x.dataset.nav===navKey)x.setAttribute('aria-current','page');else x.removeAttribute('aria-current')});
+  const t=a==='lezione'&&MODULES[+b]?MODULES[+b].title:a==='es'?(EXS.find(e=>e.id===b)||{}).title||'Esercizio':TITLES[a]||'Flowchart Lab';
+  $('#title').textContent=t;document.title=t+' · Flowchart Lab';$('#backBtn').hidden=!a;
+  window.scrollTo(0,0)}
+$('#backBtn').addEventListener('click',()=>{const h=location.hash.replace(/^#\/?/,'').split('/');if(h[0]==='lezione')go('#/lezioni');else if(h[0]==='es')go('#/lab');else go('#/')});
+$('#limBtn').addEventListener('click',()=>{SET.lim=!SET.lim;applySettings();
+  try{if(SET.lim&&document.documentElement.requestFullscreen&&!document.fullscreenElement)document.documentElement.requestFullscreen().catch(()=>{});if(!SET.lim&&document.fullscreenElement)document.exitFullscreen().catch(()=>{})}catch(e){}
+  toast(SET.lim?'Modalità LIM attiva':'Modalità LIM disattivata');route()});
+window.addEventListener('hashchange',route);
+applySettings();route();
+})()}
+
+</script>
+</body>
+</html>
