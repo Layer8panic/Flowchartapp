@@ -355,6 +355,119 @@ body.lim .top h1{font-size:1.1rem}
 body.rm *,body.rm *::before,body.rm *::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
 body.fs-1{--fs:15px}body.fs-3{--fs:19px}body.fs-4{--fs:21px}
 body.lim.fs-1{--fs:20px}body.lim.fs-3{--fs:26px}body.lim.fs-4{--fs:29px}
+/* ===== v2: verifiche, costruzione, LIM ===== */
+html,body{overflow-x:hidden}
+@supports (overflow:clip){html,body{overflow-x:clip}}
+.act{position:relative;background:linear-gradient(180deg,#F4F8FF,#FFFFFF);border:2px solid #D5E3F5;border-radius:20px;padding:16px;margin-top:16px;animation:rise .5s .15s both;transition:border-color .4s,box-shadow .4s}
+.act>.ah{display:inline-flex;background:linear-gradient(90deg,#2D6CB5,#4A90D9);color:#fff;padding:5px 14px 5px 10px;border-radius:999px;font-size:.78rem;letter-spacing:.06em;margin-bottom:12px;box-shadow:0 3px 10px rgba(45,108,181,.25)}
+.act.won{border-color:#7CC49A;box-shadow:0 0 0 4px rgba(46,125,79,.12)}
+.act .star{position:absolute;right:16px;top:12px;font-weight:800;color:#B7791F;background:#FFF6D6;border-radius:999px;padding:4px 12px;animation:starpop 1.6s ease forwards;pointer-events:none}
+@keyframes starpop{0%{opacity:0;transform:scale(.4) translateY(10px)}20%{opacity:1;transform:scale(1.15)}35%{transform:scale(1)}80%{opacity:1}100%{opacity:0;transform:translateY(-16px)}}
+.opt .mk{font-weight:800;color:var(--pri);background:var(--pri-soft);border-color:transparent}
+.opt.right .mk{background:var(--ok);color:#fff}
+.opt.wrong .mk{background:var(--ko);color:#fff}
+.opt.right{animation:pop .45s}
+.opt:hover:not([disabled]){border-color:#9DBCE3;transform:translateY(-1px)}
+.rules{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:12px 0}
+.rules div{background:var(--pri-soft);border-radius:14px;padding:10px;text-align:center;font-weight:600;font-size:.92rem;animation:rise .5s both;animation-delay:calc(var(--i)*180ms)}
+.rules b{display:block;font-size:1.4rem;color:var(--pri)}
+@media (max-width:420px){.rules{grid-template-columns:1fr}}
+.codebox{display:grid;grid-template-columns:auto 1fr;gap:8px 12px;align-items:center;background:#1E2933;color:#E6EDF3;border-radius:14px;padding:12px 14px;margin:10px 0}
+.codebox code{background:#2C3A47;color:#FFE38A;font-size:1rem;padding:4px 10px;justify-self:start}
+.codebox span{font-size:.9rem;color:#C9D3DC}
+.codebox code:only-child,.codebox:not(:has(span)) {grid-column:1/-1}
+.codebox:not(:has(span)){grid-template-columns:1fr}
+.ana{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
+.ana div{border-radius:12px;padding:8px 10px;font-size:.92rem}
+.ana div:nth-child(1){background:var(--in-f)}.ana div:nth-child(2){background:var(--out-f)}.ana div:nth-child(3){background:var(--as-f)}
+.ana b{display:block;font-size:.75rem;text-transform:uppercase;letter-spacing:.05em}
+@media (max-width:460px){.ana{grid-template-columns:1fr}}
+ul.big li{margin-bottom:6px}
+.phases{display:flex;flex-direction:column;gap:6px}
+.phase{display:flex;align-items:center;gap:10px;border:0;background:var(--card);box-shadow:var(--sh);border-radius:14px;padding:8px 12px;max-width:none;animation:rise .5s both;animation-delay:calc(var(--i)*220ms)}
+.phase span{width:28px;height:28px;border-radius:50%;background:var(--pri);color:#fff;display:grid;place-items:center;font-weight:800;flex:none}
+.buildg{display:grid;gap:12px}
+.buildg .chartwrap{max-height:46vh}
+.bq{font-weight:700;font-size:1.05rem;margin:0 0 4px;min-height:1.5em}
+.buildg .choices{margin-top:6px}
+@media (min-width:900px){.buildg{grid-template-columns:1fr 1fr;align-items:start}}
+.item.lesson .tx>span{display:block}
+.mini-bar{height:6px;margin-top:6px;max-width:220px}
+.slidehead .small{margin-left:auto}
+
+/* ===== MODALITÀ LIM: tutto lo schermo ===== */
+body.lim{--fs:clamp(19px,1.5vw,30px)}
+body.lim .top{padding:8px 2.5vw}
+body.lim .top h1{font-size:1.05rem;max-width:40vw}
+body.lim .nav{position:fixed;top:0;right:calc(2.5vw + 44px);left:auto;bottom:auto;width:auto;max-width:none;margin:0;padding:8px 0;background:transparent;border:0;gap:6px;z-index:21}
+body.lim .nav a{flex:none;flex-direction:row;gap:6px;font-size:.78rem;min-height:40px;padding:4px 14px}
+body.lim .nav a .i{font-size:1.05rem}
+body.lim main{max-width:none;padding:1.6vh 2.5vw 110px}
+body.lim .slidehead{margin-bottom:1vh}
+body.lim .slide{display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:3vw;align-items:start;padding:2.4vw 2.6vw;min-height:calc(100vh - 210px);border-radius:26px}
+body.lim .slide>h2{grid-column:1/-1;font-size:2.1em;margin:0}
+body.lim .slide .lead{font-size:1.2em}
+body.lim .slide .act{margin-top:0;align-self:start}
+body.lim .slide .rv:empty{display:none}
+body.lim .slide:has(.rv:empty) .act{grid-column:1/-1}
+body.lim .slide:has([data-act] .buildg) {grid-template-columns:minmax(0,.7fr) minmax(0,1.3fr)}
+body.lim .buildg{grid-template-columns:1fr 1fr}
+body.lim .buildg .chartwrap{max-height:62vh}
+body.lim .chartwrap.fit svg{max-height:56vh;width:auto;max-width:100%}
+body.lim .slidenav{position:fixed;left:2.5vw;right:2.5vw;bottom:12px;margin:0;padding:0;background:none}
+body.lim .slidenav .btn{min-height:64px;font-size:1.1em;border-radius:18px;box-shadow:var(--sh)}
+body.lim [data-lock]{display:none}
+body.lim .tiles{grid-template-columns:repeat(4,1fr)}
+body.lim .hero{padding:3vw}
+body.lim .hero h2{font-size:2.2em}
+body.lim .list{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+body.lim .runner{display:grid;grid-template-columns:minmax(0,1.35fr) minmax(0,1fr);gap:16px;align-items:start}
+body.lim .runner .rbar{grid-column:1/-1}
+body.lim .runner .rpanel{grid-template-columns:1fr;margin-top:0}
+body.lim .runner .chartwrap{max-height:70vh}
+body.lim .clines{max-height:40vh}
+body.lim .exgrid{grid-template-columns:minmax(0,1.15fr) minmax(0,1fr);gap:2vw}
+body.lim .exgrid .chartwrap{max-height:62vh!important}
+body.lim .card{padding:1.6vw}
+body.lim .opt{min-height:64px;font-size:1.05em}
+body.lim .seg button{min-height:56px;font-size:.95em}
+body.lim .river{min-height:42vh}
+body.lim .jug .glass{width:120px}
+@media (max-width:820px){body.lim .slide,body.lim .runner,body.lim .exgrid,body.lim .buildg{grid-template-columns:1fr}body.lim .nav a{padding:4px 8px}body.lim .nav a{font-size:0}body.lim .nav a .i{font-size:1.2rem}}
+@media (max-width:520px){.rules{grid-template-columns:1fr}.rules div{display:flex;align-items:center;gap:12px;text-align:left;padding:8px 12px}.rules b{font-size:1.15rem}
+ .codebox{grid-template-columns:1fr;gap:4px}.codebox span{margin:0 0 8px 4px}.buildg .chartwrap{max-height:36vh}}
+body.lim .nav{right:calc(2.5vw + 64px)}
+body.lim .clsrow{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:6px 14px}
+body.lim .clsrow .seg{margin-top:0}
+body.lim .clsrow [data-fb]{grid-column:1/-1}
+body.lim .chartwrap.fit svg{width:100%;height:auto}
+body.lim .ana{grid-template-columns:1fr}
+body.lim .top h1{flex:0 1 auto}
+.limbtn{margin-left:auto}
+[hidden]{display:none!important}
+.rpanel>*,.runner>*,.exgrid>*,.buildg>*,.slide>*,.grid2>*{min-width:0}
+.cin input{min-width:0;flex:1 1 120px}
+.seg{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,8.5em),1fr));gap:6px}
+.seg button{min-width:0;white-space:normal;overflow-wrap:anywhere;line-height:1.15;padding:6px 8px}
+body.lim .clsrow{display:block}
+body.lim .clsrow .seg{margin-top:8px}
+body.lim .act .runner{grid-template-columns:1fr}
+body.lim .act .runner .rpanel{grid-template-columns:1fr 1fr}
+@media (max-width:560px){body.lim .act .runner .rpanel{grid-template-columns:1fr}}
+.rbar{min-width:0}
+.runner .zoom{flex:none}
+.ah{display:flex;align-items:center;gap:8px;font-weight:800;color:var(--pri)}
+.seg{grid-template-columns:repeat(auto-fit,minmax(min(100%,6.4em),1fr))}
+.seg button{overflow-wrap:normal;-webkit-hyphens:auto;hyphens:auto;font-size:.86rem}
+.runner .rbar .btn .t{display:inline}
+@media (max-width:430px){.runner .rbar .btn .t{display:none}.runner .rbar{gap:6px}.runner .speed input{width:70px}}
+#exChart svg,.buildg svg{max-width:100%;height:auto;min-width:min(320px,100%)}
+body.lim{--fs:clamp(20px,1.7vw,32px)}
+body.lim .slide:has(.act .runner){grid-template-columns:minmax(0,.55fr) minmax(0,1.45fr)}
+body.lim .act .runner{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr)}
+body.lim .act .runner .rpanel{grid-template-columns:1fr}
+body.lim .act .runner .chartwrap{max-height:58vh}
+body.lim .seg button{font-size:.9em}
 </style>
 </head>
 <body>
@@ -386,7 +499,8 @@ const shuffle=a=>{a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math
 const clone=o=>JSON.parse(JSON.stringify(o));
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 const store={get(k,d){try{const v=localStorage.getItem('fcl_'+k);return v==null?d:JSON.parse(v)}catch(e){return d}},set(k,v){try{localStorage.setItem('fcl_'+k,JSON.stringify(v))}catch(e){}}};
-const SET=Object.assign({notation:'←',fs:2,hc:false,rm:false,lim:false},store.get('set',{}));
+const SET=Object.assign({notation:'=',fs:2,hc:false,rm:false,lim:false},store.get('set',{}));
+if(!SET.v2){SET.v2=1;SET.notation='='}
 
 /* ================= MOTORE: ESPRESSIONI ================= */
 class FErr extends Error{constructor(m,node){super(m);this.node=node}}
@@ -463,7 +577,7 @@ const FUN={
 function ev(n,env){
   switch(n.k){
     case 'num':case 'str':case 'bool':return n.v;
-    case 'var':{const r=env.get(n.n.toLowerCase());
+    case 'var':{const r=env.get(n.n.toLowerCase());if(!r&&n.n.toLowerCase()==='pi')return Math.PI;
       if(!r)throw new FErr(`La variabile "${n.n}" non esiste. Controlla di averla scritta giusta, oppure dichiarala (o leggila con Input) prima di usarla.`);
       if(!r.set)throw new FErr(`La variabile "${r.name}" è vuota: non ha ancora un valore. Dagliene uno prima di usarla (con Input o con un'assegnazione).`);
       return r.val}
@@ -494,12 +608,13 @@ function ev(n,env){
 
 /* ================= MOTORE: ESECUZIONE ================= */
 const TYPES=['Intero','Reale','Stringa','Booleano'];
-const RESERVED=['and','or','not','mod','true','false','vero','falso','sqrt','abs','int','round','random','len','tostring','tointeger','toreal'];
+const RESERVED=['and','or','not','mod','pi','true','false','vero','falso','integer','real','string','boolean','intero','reale','stringa','booleano','sqrt','abs','int','round','random','len','tostring','tointeger','toreal'];
 function checkName(s){s=String(s??'').trim();
   if(!s)throw new FErr('Manca il nome della variabile.');
-  if(/\s/.test(s))throw new FErr(`Il nome "${s}" contiene uno spazio. Usa un nome unico, per esempio prezzo_finale.`);
+  if(/\s/.test(s))throw new FErr(`Il nome "${s}" contiene uno spazio. Scrivi tutto attaccato, per esempio prezzoFinale.`);
+  if(/[À-ÿ]/.test(s))throw new FErr(`Il nome "${s}" ha una lettera accentata. Scrivila senza accento (per esempio eta invece di età).`);
   if(/^[0-9]/.test(s))throw new FErr(`Il nome di una variabile non può iniziare con un numero ("${s}").`);
-  if(!/^[A-Za-zÀ-ÿ_][A-Za-zÀ-ÿ0-9_]*$/.test(s))throw new FErr(`Il nome "${s}" contiene simboli non permessi. Usa solo lettere, numeri e _.`);
+  if(!/^[A-Za-z][A-Za-z0-9]*$/.test(s))throw new FErr(`Il nome "${s}" contiene simboli non permessi. Usa solo lettere e numeri, senza spazi.`);
   if(RESERVED.includes(s.toLowerCase()))throw new FErr(`"${s}" è una parola speciale: scegli un altro nome.`);
   return s}
 const splitNames=s=>String(s??'').split(',').map(x=>x.trim()).filter(Boolean);
@@ -590,7 +705,7 @@ function shapePath(kind,cx,y,w,h){const x=cx-w/2;
     case 'loop':{const k=16;return `<polygon points="${x+k},${y} ${x+w-k},${y} ${x+w},${y+h/2} ${x+w-k},${y+h} ${x+k},${y+h} ${x},${y+h/2}"/>`}
     default:return `<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="6"/>`}}
 function blockSVG(n,cx,y,w,h,o){const kind=KIND[n.t];const lab=blockLabel(n);
-  const cls=['blk','k-'+kind];if(o.active===n.id)cls.push('active');if(o.newId===n.id)cls.push('newb');if(o.tap&&n.t!=='term')cls.push('tap');if(o.mark&&o.mark[n.id])cls.push(o.mark[n.id]);
+  const cls=['blk','k-'+kind];if(o.active&&o.active===n.id)cls.push('active');if(o.newId&&o.newId===n.id)cls.push('newb');if(o.tap&&n.t!=='term')cls.push('tap');if(o.mark&&o.mark[n.id])cls.push(o.mark[n.id]);
   const aria=`${KNAME[n.t]}: ${lab}`;
   let s=`<g class="${cls.join(' ')}" data-id="${esc(n.id)}"${o.tap&&n.t!=='term'?` role="button" tabindex="0" aria-label="${esc(aria)}"`:''}>${shapePath(kind,cx,y,w,h)}<text class="bt" x="${cx+(kind==='dec'?4:0)}" y="${y+h/2}">${esc(lab)}</text>`;
   if(kind==='in'||kind==='out')s+=`<text class="io" x="${cx+w/2-24}" y="${y+12}">${kind==='in'?'I':'O'}</text>`;
@@ -642,200 +757,202 @@ function pseudo(seq,ind=0){let s='';const p='   '.repeat(ind);
   return s}
 /* ================= CONTENUTI ================= */
 const SKILLS=[
-  ['fasi','Conosco le fasi: dal problema al programma'],
+  ['fasi','So cos’è un algoritmo e da quali fasi passa'],
   ['analisi','So trovare i dati di input e di output'],
   ['blocchi','Riconosco i blocchi e so a cosa servono'],
   ['variabili','So usare variabili e assegnazioni'],
-  ['sequenza','So costruire un algoritmo in sequenza'],
+  ['sequenza','So costruire un diagramma in sequenza'],
   ['selezione','So usare il rombo per fare una scelta'],
   ['ciclo','So usare un ciclo per ripetere'],
-  ['simulatore','So eseguire e provare un algoritmo'],
+  ['simulatore','So eseguire e provare un diagramma'],
   ['debug','So trovare e correggere un errore']];
 
 const VIDEOS=[
-  {id:'0gcYnyn7X2I',start:26,title:'Video 1 · Algoritmi in sequenza',mod:2,
-   ex:['Dati tre numeri, visualizzali dall’ultimo al primo inserito.','Dati due numeri, visualizza il loro prodotto e la loro differenza.','Dati tre numeri, fai il loro prodotto e aggiungi 10 al totale.']},
-  {id:'xwYQyJPv03w',start:0,title:'Video 2 · Il rombo: fare una scelta',mod:3,
-   ex:['Dati due numeri in input, mostra in output la differenza tra il maggiore e il minore.','Dati i lati di un triangolo, stabilisci se è equilatero e in tal caso calcola perimetro e area.','Leggi tre numeri e scopri se tra loro ci sono numeri uguali.','Leggi due numeri e visualizzali in ordine crescente.']},
-  {id:'Gce8zbxXEOc',start:0,title:'Video 3 · Allenamento: sequenza e scelta',mod:3,
-   ex:['Dati tre numeri reali X, Y e Z, calcola il quadrato della loro somma.','Stabilisci se una persona può votare alle elezioni.','Calcola il prodotto di due numeri, ma solo se sono uguali a un valore k stabilito prima.','Un signore ha 1,75 $ (dollari) e 2,80 £ (sterline). Quanto ha in tutto in euro, se 1 $ = 1,514 € e 1 £ = 2,52 €?']},
-  {id:'6ofMNsT79BY',start:24,title:'Video 4 · Il ciclo (iterazione indefinita)',mod:4,ex:[]}];
+  {id:'0gcYnyn7X2I',start:26,title:'Video 1 · Diagrammi in sequenza',
+   ex:['Leggi tre numeri e scrivili al contrario: dall’ultimo al primo.','Leggi due numeri e scrivi il loro prodotto e la loro differenza.','Leggi tre numeri, moltiplicali tra loro e aggiungi 10 al risultato.']},
+  {id:'xwYQyJPv03w',start:0,title:'Video 2 · Il rombo: fare una scelta',
+   ex:['Leggi due numeri e scrivi la differenza tra il più grande e il più piccolo.','Leggi i tre lati di un triangolo. Se è equilatero (tre lati uguali), calcola perimetro e area.','Leggi tre numeri e scopri se tra loro ce ne sono di uguali.','Leggi due numeri e scrivili in ordine, dal più piccolo al più grande.']},
+  {id:'Gce8zbxXEOc',start:0,title:'Video 3 · Allenamento con sequenza e scelta',
+   ex:['Leggi tre numeri X, Y e Z e calcola il quadrato della loro somma.','Leggi l’età di una persona e scrivi se può votare (18 anni o più).','Leggi due numeri e calcola il loro prodotto solo se sono tutti e due uguali a un numero k che hai scelto prima.','Un signore ha 1,75 dollari e 2,80 sterline. Quanti euro ha in tutto, se 1 dollaro vale 1,514 euro e 1 sterlina vale 2,52 euro?']},
+  {id:'6ofMNsT79BY',start:24,title:'Video 4 · Il ciclo',ex:[]}];
 
-/* programmi di esempio usati nelle lezioni */
+/* programmi usati nelle lezioni */
 const DEMO={
-  ciao:[D('nome','Stringa'),O('"Come ti chiami?"'),I('nome'),O('"Ciao " & nome & "!"')],
-  media:[D('media','Reale'),I('media'),IF('media >= 6',[O('"Ammesso"')],[O('"Non ammesso"')])],
-  conta:[D('i','Intero'),A('i','1'),WH('i <= 20',[O('i'),A('i','i + 1')])],
   primo:[O('"Ciao!"')],
-  tre:[D('a, b, somma','Intero'),I('a'),I('b'),A('somma','a + b'),O('somma')]};
+  ciao:[D('nome','Stringa'),O('"Come ti chiami?"'),I('nome'),O('"Ciao " & nome')],
+  tre:[D('a, b, somma','Intero'),I('a'),I('b'),A('somma','a + b'),O('somma')],
+  media:[D('media','Reale'),I('media'),IF('media >= 6',[O('"Ammesso"')],[O('"Non ammesso"')])],
+  conta:[D('i','Intero'),A('i','1'),WH('i <= 20',[O('i'),A('i','i + 1')])]};
+
+/* diagrammi da costruire dentro le lezioni */
+const BUILD={
+  somma:{prog:[D('a, b, somma','Intero','Prima si creano le scatole che servono: a, b e somma.'),I('a','Il computer chiede il primo numero.'),I('b','Poi chiede il secondo.'),A('somma','a + b','Ora calcola la somma e la mette nella scatola somma.'),O('somma','Infine scrive il risultato sullo schermo.')],
+    wrong:[[O('"somma"'),'Con le virgolette il computer scrive la parola “somma”, non il numero. Togli le virgolette.'],[I('somma'),'La somma non si chiede: la calcola il computer.'],[A('somma','a * b'),'Con * fai una moltiplicazione. Qui serve la somma: +.'],[D('a, b, somma','Stringa'),'Stringa vuol dire testo. Con il testo non si fanno calcoli: servono numeri (Intero).']]},
+  area:{prog:[D('b, h, area','Reale','Tre scatole: base, altezza e area. Reale perché le misure possono avere la virgola.'),I('b','Leggiamo la base.'),I('h','Leggiamo l’altezza.'),A('area','b * h','Area = base per altezza.'),O('"Area: " & area','Scriviamo una frase con il risultato. Il simbolo & unisce il testo al numero.')],
+    wrong:[[A('area','b + h'),'b + h è una somma. L’area è base per altezza: b * h.'],[I('area'),'L’area non si chiede: la calcola il computer.'],[O('"area"'),'Così sullo schermo compare la parola “area”, non il numero.'],[A('area','(b + h) * 2'),'Questo è il perimetro, non l’area.']]},
+  eta:{prog:[D('eta','Intero','Una scatola per l’età. In Flowgorithm i nomi non possono avere accenti: eta, non età.'),I('eta','Chiediamo l’età.'),IF('eta >= 18',[O('"Maggiorenne"','Ramo Vero: ha 18 anni o più.')],[O('"Minorenne"','Ramo Falso: ha meno di 18 anni.')],'Il rombo: l’età è almeno 18?')],
+    wrong:[[IF('eta > 18',[],[]),'Con > chi ha esattamente 18 anni risulterebbe minorenne. Serve >=.'],[IF('eta <= 18',[],[]),'Così la domanda è al contrario.'],[O('Maggiorenne'),'Il testo da scrivere va tra virgolette: "Maggiorenne".'],[A('eta','18'),'Così l’età diventa sempre 18! Va chiesta con Input.']]},
+  conta:{prog:[D('i','Intero','Una scatola per il contatore.'),A('i','1','Il contatore parte da 1.'),WH('i <= 5',[O('i','Scriviamo il numero.'),A('i','i + 1','Il contatore aumenta di 1. Senza questo blocco il ciclo non finirebbe mai.')],'Il ciclo: si ripete finché i è minore o uguale a 5.')],
+    wrong:[[WH('i < 5',[]),'Con i < 5 il 5 non verrebbe scritto: ti fermi a 4.'],[A('i','i - 1'),'Così il contatore va indietro e il ciclo non finisce mai.'],[I('i'),'Il contatore non si chiede: parte da 1 e aumenta da solo.'],[A('i','1'),'Rimettere i a 1 dentro il ciclo lo fa ripartire ogni volta: non finisce più.']]}};
 
 /* ---------- LEZIONI ---------- */
 const MODULES=[
-{id:1,icon:'🧩',title:'Dal problema al programma',sub:'Problema, analisi, algoritmo',ex:['e1','e2'],slides:[
- {t:'Benvenuto!',h:`<p class="lead">Qui impari a <b>far ragionare un computer</b>. Non serve sapere niente di informatica: partiamo proprio da zero.</p>
-  <p>Funziona così: leggi una cosa nuova, poi la provi subito. Ogni pagina ha un’attività da fare. Se sbagli non succede niente: ti spiego dove e perché, e riprovi.</p>
-  <div class="callout">Alla fine saprai disegnare un <b>diagramma di flusso</b> come questo, e farlo funzionare.</div>
-  <div class="chartwrap fit" data-chart="primo"></div>`,
-  act:{type:'tf',q:'Vero o falso?',items:[['Per seguire questo corso devo già saper programmare.',false,'Falso: partiamo da zero, davvero.'],['Se sbaglio un’attività posso riprovare.',true,'Vero: sbagliare fa parte del gioco. È così che si impara.']]}},
- {t:'Che cos’è un problema',h:`<p class="lead">Un <b>problema</b> è una situazione da risolvere.</p>
-  <p>Hai sete e vuoi un tè caldo? Quello è un problema. Per risolverlo fai delle azioni, <b>una dopo l’altra</b>, nell’ordine giusto.</p>
-  <div class="callout warn">Se sbagli l’ordine il risultato non viene. Prova a versare l’acqua prima di scaldarla…</div>`,
-  act:{type:'order',q:'Metti in ordine i passi per preparare un tè. Tocca i passi nell’ordine giusto.',items:['Riempi il pentolino d’acqua','Metti il pentolino sul fuoco','Aspetta che l’acqua bolla','Versa l’acqua nella tazza con la bustina','Aspetta 3 minuti e togli la bustina'],ok:'Perfetto! Hai appena scritto il tuo primo algoritmo: una lista di passi in ordine che risolve un problema.'}},
- {t:'Il computer esegue, non pensa',h:`<p class="lead">Il computer è velocissimo, ma <b>non pensa da solo</b>.</p>
-  <p>Fa solo quello che gli dici, esattamente come lo dici. Non indovina cosa intendi.</p>
-  <p>Per questo le istruzioni devono essere:</p>
-  <ul class="rv"><li style="--i:1"><b>chiare</b>: si capiscono in un solo modo</li><li style="--i:2"><b>in ordine</b>: una dopo l’altra</li><li style="--i:3"><b>finite</b>: prima o poi si arriva alla fine</li></ul>`,
-  act:{type:'quiz',q:'Quale istruzione va bene per un computer?',opts:[['Fai un po’ di conti',0,'“Un po’ di conti” quali? Il computer non può indovinare.'],['Somma 5 e 3',1,'Esatto: è chiara, si capisce in un solo modo.'],['Fai quello che serve',0,'Il computer non sa cosa “serve”. Bisogna dirglielo con precisione.']]}},
- {t:'Le fasi: dal problema al programma',h:`<p>Un programmatore ha un problema e deve creare un programma che lo risolve. Ci arriva passando per queste fasi:</p>
-  <div class="phases">
-   <div class="phase" style="--i:0"><b>1. Problema</b>: cosa devo risolvere?</div><div class="parrow" style="--i:0"></div>
-   <div class="phase" style="--i:1"><b>2. Analisi</b>: quali dati ho, quali risultati voglio?</div><div class="parrow" style="--i:1"></div>
-   <div class="phase" style="--i:2"><b>3. Algoritmo</b>: i passi per risolverlo</div><div class="parrow" style="--i:2"></div>
-   <div class="phase" style="--i:3"><b>4. Simulazione</b>: provo se funziona</div><div class="parrow" style="--i:3"></div>
-   <div class="phase" style="--i:4"><b>5. Codifica</b>: lo scrivo al computer</div><div class="parrow" style="--i:4"></div>
-   <div class="phase" style="--i:5"><b>6. Programma</b>: funziona!</div></div>`,
-  act:{type:'order',q:'Rimetti le fasi nell’ordine giusto.',items:['Problema','Analisi','Algoritmo','Simulazione','Codifica','Programma'],ok:'Giusto. Prima si capisce, poi si progetta, poi si prova, e solo alla fine si scrive al computer.',skill:'fasi'}},
- {t:'L’algoritmo',h:`<p class="lead">Un <b>algoritmo</b> è una <b>sequenza di operazioni che risolve un problema</b>.</p>
-  <p>Ne usi tanti ogni giorno senza saperlo: una ricetta, le istruzioni per montare un mobile, la strada per andare a scuola.</p>
-  <div class="callout">Un algoritmo ha un inizio, una fine, e in mezzo dei passi chiari e in ordine.</div>`,
-  act:{type:'tf',q:'Vero o falso?',items:[['Una ricetta di cucina è un algoritmo.',true,'Vero: è una sequenza di passi che porta a un risultato.'],['Un algoritmo può andare avanti per sempre senza finire.',false,'Falso: un algoritmo deve finire, prima o poi.'],['In un algoritmo l’ordine dei passi non conta.',false,'Falso: come per il tè, se cambi l’ordine il risultato cambia.']]}},
- {t:'L’analisi: input e output',h:`<p>Prima di scrivere l’algoritmo si fa l’<b>analisi</b>. Serve a capire tre cose:</p>
-  <div class="machine" aria-hidden="true"><span class="data">dati</span><span>→</span><span class="mb"><span>⚙️</span></span><span>→</span><span class="data o">risultati</span></div>
-  <ul><li><b>Input</b> (ingresso): i dati che <b>conosco</b> o che mi vengono dati</li><li><b>Output</b> (uscita): i <b>risultati</b> che devo trovare</li><li><b>Relazione</b>: come passo dagli input agli output (di solito una formula)</li></ul>`,
-  act:{type:'classify',q:'Problema: “calcolare l’area di un rettangolo”. Dove va ogni cosa?',bins:['Input','Output','Non serve'],items:[['La base',0,'La base la conosciamo: è un dato in ingresso.'],['L’altezza',0,'Anche l’altezza è un dato che ci viene dato.'],['L’area',1,'L’area è il risultato da trovare: è l’output.'],['Il colore del rettangolo',2,'Il colore non serve a calcolare l’area.']],skill:'analisi'}},
- {t:'Efficace o efficiente?',h:`<p>Due algoritmi possono risolvere lo stesso problema in modi diversi.</p>
-  <div class="grid2"><div class="callout ok"><b>Efficace</b> = funziona.<br>Arriva al risultato giusto.</div><div class="callout"><b>Efficiente</b> = funziona <b>bene</b>.<br>Ci mette meno tempo e usa meno risorse.</div></div>
-  <p>Premi <b>Via!</b> e guarda: tutti e due mettono in ordine gli stessi numeri.</p>
-  <div class="race" data-race><div class="lane" style="--d:4s"><span>🐢 A</span><div class="tr"><span class="rn">📦</span></div></div><div class="lane" style="--d:1s"><span>🐇 B</span><div class="tr"><span class="rn">📦</span></div></div></div>
-  <button class="btn sm" data-race-go>🏁 Via!</button>`,
-  act:{type:'quiz',q:'A ci mette 4 secondi, B ci mette 1 secondo. Il risultato è giusto per tutti e due. Quale frase è vera?',opts:[['Sono efficaci tutti e due, ma B è più efficiente',1,'Esatto: funzionano entrambi (efficaci), B lo fa meglio (efficiente).'],['Solo B è efficace',0,'Anche A arriva al risultato giusto, quindi anche A è efficace.'],['A è più efficiente perché è più lento',0,'Più efficiente vuol dire più veloce o più leggero, non più lento.']]}},
- {t:'Laboratorio: il lupo, la capra e i cavoli',h:`<p>Un contadino deve portare sull’altra riva un <b>lupo</b>, una <b>capra</b> e dei <b>cavoli</b>. La barca porta lui e <b>una sola cosa</b> alla volta.</p>
-  <p>Se li lascia soli: il lupo mangia la capra 🐺🐐, la capra mangia i cavoli 🐐🥬. Il lupo i cavoli non li mangia.</p>
-  <p class="small muted">Tocca un animale per caricarlo sulla barca, poi premi Attraversa. Le tue mosse diventano i passi dell’algoritmo.</p>`,
-  act:{type:'river',skill:'fasi'}},
- {t:'Laboratorio: i travasi',h:`<p>Il contadino deve innaffiare i cavolfiori. Ha tre recipienti:</p>
-  <ul><li>25 litri, con dentro 16 litri d’acqua</li><li>5 litri, pieno</li><li>3 litri, pieno</li></ul>
-  <p>Deve ottenere <b>esattamente 20 litri</b> nel recipiente grande. Può solo versare l’acqua da un recipiente all’altro.</p>
-  <p class="small muted">Tocca il recipiente da cui versare, poi quello in cui versare.</p>`,
-  act:{type:'jugs',skill:'analisi'}}
+{id:1,icon:'🧩',title:'Che cos’è un algoritmo',sub:'Istruzioni in ordine, input e output',min:8,ex:['e1','e2'],slides:[
+ {t:'Benvenuto!',h:`<p class="lead">In questo corso impari a dare istruzioni a un computer <b>disegnandole</b>.</p>
+  <p>Non serve sapere niente di informatica: si parte da zero.</p>
+  <p>Ogni pagina finisce con una <b>verifica lampo</b>: una domanda veloce per controllare che hai capito.</p>
+  <div class="chartwrap fit" data-chart="primo"></div>
+  <p class="small muted">Questo è un diagramma di flusso: il più piccolo possibile. Tra poco ne disegnerai uno tu.</p>`,
+  act:{type:'tf',q:'Vero o falso?',items:[['Per seguire il corso devo già saper programmare.',false,'Falso: si parte da zero.'],['Se sbaglio una risposta posso riprovare.',true,'Vero: sbagliare serve a imparare.']]}},
+ {t:'Istruzioni in ordine',h:`<p class="lead">Per fare qualsiasi cosa segui dei <b>passi</b>, uno dopo l’altro.</p>
+  <p>Per esempio, per preparare un tè.</p>
+  <div class="callout warn">Se cambi l’ordine dei passi, il risultato non viene. Prova a versare l’acqua prima di scaldarla…</div>`,
+  act:{type:'order',q:'Metti in ordine i passi per preparare un tè.',items:['Riempi il pentolino d’acqua','Metti il pentolino sul fuoco','Aspetta che l’acqua bolla','Versa l’acqua nella tazza con la bustina','Aspetta 3 minuti e togli la bustina'],ok:'Perfetto! Hai scritto il tuo primo algoritmo.'}},
+ {t:'Che cos’è un algoritmo',h:`<p class="lead">Un <b>algoritmo</b> è una serie di passi, in ordine, che risolve un problema.</p>
+  <div class="rules"><div style="--i:1"><b>1</b>Ogni passo è chiaro</div><div style="--i:2"><b>2</b>I passi sono in ordine</div><div style="--i:3"><b>3</b>Prima o poi finisce</div></div>
+  <p>Una ricetta è un algoritmo. Anche la strada per andare a scuola.</p>`,
+  act:{type:'tf',q:'Vero o falso?',items:[['Una ricetta di cucina è un algoritmo.',true,'Vero: è una serie di passi in ordine.'],['Un algoritmo può andare avanti per sempre.',false,'Falso: prima o poi deve finire.'],['In un algoritmo l’ordine dei passi non conta.',false,'Falso: se cambi l’ordine, cambia il risultato.']],skill:'fasi'}},
+ {t:'Il computer non indovina',h:`<p class="lead">Il computer è velocissimo, ma <b>non pensa</b>.</p>
+  <p>Fa solo quello che gli scrivi, esattamente come lo scrivi. Non capisce cosa “volevi dire”.</p>
+  <div class="callout">Per questo le istruzioni devono essere precise.</div>`,
+  act:{type:'quiz',q:'Quale istruzione può eseguire un computer?',opts:[['Somma 5 e 3',1,'Esatto: è precisa, si capisce in un solo modo.'],['Fai un po’ di conti',0,'Quali conti? Il computer non può indovinarlo.'],['Fai quello che serve',0,'Il computer non sa cosa “serve”. Bisogna dirglielo.']]}},
+ {t:'Entra, lavora, esce',h:`<div class="machine" aria-hidden="true"><span class="data">base, altezza</span><span>→</span><span class="mb"><span>⚙️</span></span><span>→</span><span class="data o">area</span></div>
+  <ul class="big"><li><b>Input</b>: i dati che <b>entrano</b> (li scrive chi usa il programma)</li><li><b>Output</b>: i risultati che <b>escono</b> (il computer li scrive sullo schermo)</li></ul>
+  <p>In mezzo il computer fa i calcoli. Capire input e output si chiama <b>analisi</b> del problema.</p>`,
+  act:{type:'classify',q:'Problema: “calcola l’area di un rettangolo”. Dove va ogni cosa?',bins:['Input','Output','Non serve'],items:[['La base',0,'La base la conosciamo: entra. È un input.'],['L’altezza',0,'Anche l’altezza entra: input.'],['L’area',1,'L’area è il risultato: esce. È un output.'],['Il colore del rettangolo',2,'Il colore non serve per calcolare l’area.']],skill:'analisi'}},
+ {t:'Dal problema al programma',h:`<p>Chi programma segue sempre queste fasi:</p>
+  <div class="phases">${['<b>Problema</b>: cosa devo risolvere?','<b>Analisi</b>: cosa entra, cosa esce?','<b>Algoritmo</b>: quali passi servono?','<b>Prova</b>: funziona davvero?','<b>Codifica</b>: lo scrivo al computer','<b>Programma</b>: è pronto!'].map((t,i)=>`<div class="phase" style="--i:${i}"><span>${i+1}</span>${t}</div>`).join('')}</div>`,
+  act:{type:'order',q:'Rimetti le fasi in ordine.',items:['Problema','Analisi','Algoritmo','Prova','Codifica','Programma'],ok:'Giusto: prima si capisce il problema, poi si progetta, si prova e solo alla fine si scrive al computer.',skill:'fasi'}}
 ]},
-{id:2,icon:'🔷',title:'I blocchi e le variabili',sub:'Ovale, parallelogramma, rettangolo',ex:['e3','e4','e5'],video:[0],slides:[
- {t:'Il diagramma di flusso',h:`<p class="lead">Un algoritmo si può <b>disegnare</b>. Il disegno si chiama <b>diagramma di flusso</b> (o diagramma a blocchi, o flow chart: è la stessa cosa).</p>
-  <p>È fatto di <b>blocchi</b> collegati da <b>frecce</b>. Ogni forma ha un compito diverso.</p>
+{id:2,icon:'🔷',title:'I blocchi',sub:'Ovale, parallelogramma, rettangolo',min:10,ex:[],slides:[
+ {t:'Il diagramma di flusso',h:`<p class="lead">Un algoritmo si può <b>disegnare</b>. Il disegno si chiama <b>diagramma di flusso</b> (in inglese <i>flow chart</i>).</p>
+  <p>È fatto di <b>blocchi</b> uniti da <b>frecce</b>. Ogni forma ha un compito diverso.</p>
   <div class="chartwrap fit" data-chart="tre"></div>
-  <p class="small muted">Questo diagramma legge due numeri, li somma e mostra il risultato.</p>`,
-  act:{type:'quiz',q:'Come si legge un diagramma di flusso?',opts:[['Dall’alto verso il basso, seguendo le frecce',1,'Giusto: si parte da Inizio e si seguono le frecce fino a Fine.'],['Dal basso verso l’alto',0,'No: si parte sempre da Inizio, che sta in alto.'],['In qualsiasi ordine',0,'No: l’ordine conta. Si seguono le frecce.']]}},
- {t:'L’ovale: Inizio e Fine',h:`<div class="toy">${'__SHAPE_term__'}</div>
-  <p>L’<b>ovale</b> si usa solo per due cose: segnare l’<b>Inizio</b> e la <b>Fine</b> dell’algoritmo (in inglese Start ed End).</p>
+  <p class="small muted">Questo diagramma chiede due numeri, li somma e scrive il risultato.</p>`,
+  act:{type:'quiz',q:'Come si legge un diagramma di flusso?',opts:[['Dall’alto in basso, seguendo le frecce',1,'Giusto: si parte da Inizio e si seguono le frecce fino a Fine.'],['Dal basso verso l’alto',0,'No: si parte da Inizio, che sta in alto.'],['In qualsiasi ordine',0,'No: l’ordine lo decidono le frecce.']]}},
+ {t:'L’ovale: Inizio e Fine',h:`<div class="toy">__SHAPE_term__</div>
+  <p class="lead">L’<b>ovale</b> segna dove l’algoritmo <b>comincia</b> e dove <b>finisce</b>.</p>
   <div class="callout">In ogni diagramma c’è <b>un solo</b> Inizio e <b>una sola</b> Fine.</div>`,
-  act:{type:'quiz',q:'Quanti blocchi Inizio ci sono in un diagramma?',opts:[['Uno',1,'Esatto: uno solo, all’inizio.'],['Due',0,'No: Inizio è uno solo. Si parte da un unico punto.'],['Dipende da quanti calcoli ci sono',0,'No: anche con mille calcoli, l’Inizio resta uno.']]}},
- {t:'Il parallelogramma: Input e Output',h:`<div class="toy">${'__SHAPE_io__'}</div>
-  <p>Il <b>parallelogramma</b> è il blocco di <b>comunicazione</b>: serve a parlare con chi usa il programma.</p>
-  <ul><li><b>Input</b> (dentro c’è una <b>I</b>): <b>legge</b> un dato, cioè chiede di scriverlo con la tastiera</li><li><b>Output</b> (dentro c’è una <b>O</b>): <b>scrive</b> un dato sullo schermo</li></ul>
+  act:{type:'quiz',q:'Quanti blocchi Inizio ci sono in un diagramma?',opts:[['Uno',1,'Esatto: uno solo.'],['Due',0,'No: si parte sempre da un unico punto.'],['Dipende dai calcoli',0,'No: anche con mille calcoli l’Inizio è uno solo.']]}},
+ {t:'Il parallelogramma: Input e Output',h:`<div class="toy">__SHAPE_io__</div>
+  <p class="lead">Il <b>parallelogramma</b> serve a parlare con chi usa il programma.</p>
+  <ul class="big"><li><b>Input</b>: il computer <b>chiede</b> un dato, che si scrive con la tastiera</li><li><b>Output</b>: il computer <b>scrive</b> qualcosa sullo schermo</li></ul>
   <p class="small muted">In Flowgorithm l’Input è azzurro e l’Output è verde.</p>`,
-  act:{type:'classify',q:'Input o Output?',bins:['Input','Output'],items:[['Chiedere l’età all’utente',0,'Chiedere un dato = leggere = Input.'],['Mostrare il risultato',1,'Mostrare sullo schermo = scrivere = Output.'],['Leggere il prezzo',0,'Leggere = Input.'],['Scrivere “Ciao!” sullo schermo',1,'Scrivere sullo schermo = Output.']],skill:'blocchi'}},
- {t:'Le variabili: scatole con un nome',h:`<p class="lead">Una <b>variabile</b> è come una <b>scatola con un nome</b>. Dentro ci metti un valore.</p>
-  <div class="boxes" aria-hidden="true"><div class="vbox"><div class="bx">7</div><div class="nm">età</div></div><div class="vbox"><div class="bx">2.5</div><div class="nm">prezzo</div></div></div>
-  <p>Si chiama variabile perché il contenuto <b>può cambiare</b> mentre l’algoritmo va avanti.</p>
-  <p>Una <b>costante</b> invece non cambia mai (per esempio pi greco, 3,14).</p>`,
-  act:{type:'quiz',q:'Quale di questi è una costante?',opts:[['Il numero di giorni in una settimana',1,'Giusto: sono sempre 7, non cambia mai.'],['La temperatura di oggi',0,'La temperatura cambia di continuo: è una variabile.'],['Il tuo punteggio in un gioco',0,'Il punteggio cambia mentre giochi: è una variabile.']]}},
- {t:'Il rettangolo: l’assegnazione',h:`<div class="toy">${'__SHAPE_asg__'}</div>
-  <p>Il <b>rettangolo</b> è il blocco di <b>azione</b> (o di <b>assegnazione</b>): mette un valore dentro una variabile.</p>
-  <p>Si scrive <code>a ← 2</code> e si legge “<b>a prende 2</b>”.</p>
-  <div class="callout warn">La freccia va da destra a sinistra: <b>prima</b> si calcola quello che c’è a destra, <b>poi</b> il risultato va nella scatola a sinistra. Il vecchio valore viene buttato via.</div>
-  <p class="small muted">In Flowgorithm vedrai scritto <code>a = 2</code>: vuol dire la stessa cosa.</p>`,
+  act:{type:'classify',q:'Input o Output?',bins:['Input','Output'],items:[['Chiedere l’età',0,'Il computer chiede un dato: Input.'],['Scrivere il risultato',1,'Il computer scrive sullo schermo: Output.'],['Chiedere il prezzo',0,'Chiede un dato: Input.'],['Scrivere “Ciao!”',1,'Scrive sullo schermo: Output.']],skill:'blocchi'}},
+ {t:'Le variabili: scatole con un nome',h:`<div class="boxes" aria-hidden="true"><div class="vbox"><div class="bx">12</div><div class="nm">eta</div></div><div class="vbox"><div class="bx">2.5</div><div class="nm">prezzo</div></div></div>
+  <p class="lead">Una <b>variabile</b> è una <b>scatola con un nome</b>. Dentro c’è un valore.</p>
+  <p>Si chiama variabile perché il valore dentro <b>può cambiare</b>.</p>
+  <p>Una <b>costante</b> invece non cambia mai.</p>`,
+  act:{type:'quiz',q:'Quale di questi valori è una costante?',opts:[['I giorni di una settimana',1,'Giusto: sono sempre 7.'],['La temperatura di oggi',0,'Cambia durante il giorno: è una variabile.'],['Il punteggio di un gioco',0,'Cambia mentre giochi: è una variabile.']]}},
+ {t:'Il rettangolo: l’assegnazione',h:`<div class="toy">__SHAPE_asg__</div>
+  <p class="lead">Il <b>rettangolo</b> mette un valore dentro una variabile. Questa azione si chiama <b>assegnazione</b>.</p>
+  <p><code>a {=} 2</code> si legge: “<b>a prende 2</b>”.</p>
+  <div class="callout warn">Il computer prima calcola quello che c’è a <b>destra</b>. Poi mette il risultato nella scatola a <b>sinistra</b>. Il valore vecchio si perde.</div>
+  <p class="small muted">In Flowgorithm si scrive <code>a = 2</code>. Su libri e quaderni trovi spesso <code>a ← 2</code>. Vogliono dire la stessa cosa.</p>`,
   act:{type:'varbox',skill:'variabili'}},
- {t:'Allenati con le scatole',h:`<p>Ora prova tu, a mente. Il computer esegue questi blocchi uno dopo l’altro:</p>
-  <div class="callout"><code>a ← 5</code><br><code>a ← a + 3</code></div>`,
-  act:{type:'quiz',q:'Alla fine, cosa c’è nella scatola a?',opts:[['8',1,'Esatto: a valeva 5, si calcola 5 + 3 = 8 e il risultato torna in a.'],['5',0,'Il secondo blocco cambia a: prima calcola a + 3, poi mette il risultato in a.'],['a + 3',0,'Nella scatola finisce il risultato del calcolo, non la scritta “a + 3”.'],['3',0,'Si aggiunge 3 al valore che c’era già (5).']]}},
+ {t:'Prova a mente',h:`<p>Il computer esegue questi due rettangoli, uno dopo l’altro:</p>
+  <div class="codebox"><code>a {=} 5</code><code>a {=} a + 3</code></div>`,
+  act:{type:'quiz',q:'Alla fine, cosa c’è nella scatola a?',opts:[['8',1,'Esatto: a vale 5, il computer calcola 5 + 3 = 8 e lo rimette in a.'],['5',0,'Il secondo rettangolo cambia a: calcola a + 3 e mette il risultato in a.'],['a + 3',0,'Nella scatola va il risultato del calcolo, non la scritta.'],['3',0,'Il 3 si aggiunge al valore che c’era già (5).']],skill:'variabili'}},
+ {t:'I calcoli',h:`<table class="tbl"><tr><th>Operazione</th><th>Si scrive</th><th>Esempio</th></tr><tr><td>più</td><td><code>+</code></td><td><code>a + b</code></td></tr><tr><td>meno</td><td><code>-</code></td><td><code>a - b</code></td></tr><tr><td>per</td><td><code>*</code></td><td><code>a * b</code></td></tr><tr><td>diviso</td><td><code>/</code></td><td><code>a / b</code></td></tr><tr><td>potenza</td><td><code>^</code></td><td><code>a ^ 2</code></td></tr><tr><td>radice quadrata</td><td><code>Sqrt( )</code></td><td><code>Sqrt(a)</code></td></tr></table>
+  <div class="callout">Come in matematica: prima <b>per</b> e <b>diviso</b>, poi <b>più</b> e <b>meno</b>. Per cambiare l’ordine usa le parentesi.</div>
+  <p class="small muted">I numeri con la virgola si scrivono con il punto: 2.5</p>`,
+  act:{type:'quiz',q:'Quanto fa 2 + 3 * 4 ?',opts:[['14',1,'Giusto: prima 3 × 4 = 12, poi 2 + 12 = 14.'],['20',0,'20 viene con le parentesi: (2 + 3) * 4.'],['24',0,'Ricontrolla: prima la moltiplicazione 3 × 4.']]}},
+ {t:'Ripasso dei blocchi',h:`<div class="row" style="justify-content:center;gap:12px">__SHAPE_all__</div>`,
+  act:{type:'classify',q:'Quale blocco usi?',bins:['Ovale','Parallelogramma','Rettangolo'],items:[['Calcolare l’area',2,'Calcolare e mettere il risultato in una variabile: rettangolo.'],['Chiedere la base',1,'Chiedere un dato: Input, parallelogramma.'],['Finire l’algoritmo',0,'La Fine va nell’ovale.'],['Scrivere il perimetro',1,'Scrivere sullo schermo: Output, parallelogramma.'],['Mettere 0 nella variabile somma',2,'È un’assegnazione: rettangolo.']],skill:'blocchi'}}
+]},
+{id:3,icon:'✏️',title:'Il tuo primo diagramma',sub:'Costruisci, esegui, correggi',min:12,ex:['e3','e4','e5'],slides:[
+ {t:'Costruiamo insieme',h:`<p><b>Problema:</b> il computer chiede due numeri e scrive la loro somma.</p>
+  <div class="ana"><div><b>Input</b>due numeri: a e b</div><div><b>Output</b>la somma</div><div><b>Calcolo</b>somma {=} a + b</div></div>
+  <p>Ora scegli i blocchi, uno alla volta.</p>`,
+  act:{type:'build',b:'somma',skill:'sequenza'}},
+ {t:'Fallo funzionare',h:`<p>Ecco il diagramma che hai costruito. Premi <b>▶ Esegui</b>.</p>
+  <ul><li>il blocco che lavora <b>si illumina</b></li><li>nelle <b>scatole</b> vedi le variabili</li><li>sullo <b>schermo nero</b> scrivi gli input e leggi l’output</li></ul>`,
+  act:{type:'run',prog:'tre',skill:'simulatore'}},
+ {t:'In Flowgorithm: dichiarare le variabili',h:`<p class="lead">Prima di usare una scatola bisogna <b>crearla</b> con il blocco <b>Dichiara</b>: le dai un nome e scegli il <b>tipo</b>.</p>
+  <table class="tbl"><tr><th>Tipo</th><th>Contiene</th><th>Esempio</th></tr><tr><td><b>Intero</b></td><td>numeri senza virgola</td><td>7, -3</td></tr><tr><td><b>Reale</b></td><td>numeri con la virgola</td><td>2.5</td></tr><tr><td><b>Stringa</b></td><td>testo</td><td>"Ciao"</td></tr><tr><td><b>Booleano</b></td><td>vero o falso</td><td>vero</td></tr></table>
+  <p class="small muted">I nomi delle variabili: solo lettere e numeri, senza spazi e senza accenti. Per esempio <code>prezzoFinale</code>.</p>`,
+  act:{type:'classify',q:'Che tipo usi?',bins:['Intero','Reale','Stringa'],items:[['Il numero di alunni',0,'Gli alunni si contano: niente virgola, Intero.'],['Il prezzo di una pizza (6.50 €)',1,'Ha i centesimi: Reale.'],['Il nome di una città',2,'È un testo: Stringa.'],['L’altezza in metri (1.62)',1,'Ha la virgola: Reale.']],skill:'variabili'}},
+ {t:'Testo o valore?',h:`<p>Nell’Output puoi scrivere due cose diverse:</p>
+  <div class="codebox"><code>Output "area"</code><span>scrive la parola <b>area</b></span><code>Output area</code><span>scrive il <b>numero</b> che c’è nella scatola area</span><code>Output "Area: " &amp; area</code><span>scrive <b>Area: 15</b> (il simbolo &amp; unisce testo e numero)</span></div>`,
+  act:{type:'quiz',q:'Nella scatola area c’è 15. Cosa scrive  Output "area" ?',opts:[['La parola area',1,'Esatto: tra virgolette c’è un testo, e il computer lo copia così com’è.'],['Il numero 15',0,'Per scrivere il numero, togli le virgolette: Output area.'],['Niente',0,'Scrive qualcosa: il testo tra virgolette.']]}},
+ {t:'Ora tocca a te: l’area',h:`<p><b>Problema:</b> chiedi base e altezza di un rettangolo e scrivi l’area.</p>
+  <p>Stavolta prova senza aiuti. Se sbagli, ti spiego perché.</p>`,
+  act:{type:'build',b:'area',skill:'sequenza'}},
  {t:'La trappola dello scambio',h:`<p>Vogliamo <b>scambiare</b> il contenuto di due scatole. Un compagno scrive:</p>
-  <div class="callout"><code>x ← 4</code><br><code>y ← 7</code><br><code>x ← y</code><br><code>y ← x</code></div>`,
-  act:{type:'quiz',q:'Alla fine quanto valgono x e y?',opts:[['x = 7 e y = 7',1,'Proprio così! Quando fai x ← y, il 4 viene buttato via. Poi y ← x rimette 7 in y. Per scambiare serve una terza scatola di appoggio: tmp ← x, x ← y, y ← tmp.'],['x = 7 e y = 4',0,'Sembra giusto, ma è una trappola: dopo x ← y il vecchio 4 non c’è più!'],['x = 4 e y = 7',0,'I blocchi cambiano i valori: almeno x diventa 7.']],skill:'variabili'}},
- {t:'Le operazioni',h:`<p>Nei blocchi puoi fare calcoli. In Flowgorithm si scrivono così:</p>
-  <table class="tbl"><tr><th>Operazione</th><th>Si scrive</th><th>Esempio</th></tr><tr><td>somma</td><td><code>+</code></td><td><code>a + b</code></td></tr><tr><td>sottrazione</td><td><code>-</code></td><td><code>a - b</code></td></tr><tr><td>moltiplicazione</td><td><code>*</code></td><td><code>a * b</code></td></tr><tr><td>divisione</td><td><code>/</code></td><td><code>a / b</code></td></tr><tr><td>potenza</td><td><code>^</code></td><td><code>a ^ 2</code></td></tr><tr><td>radice quadrata</td><td><code>Sqrt( )</code></td><td><code>Sqrt(a)</code></td></tr></table>
-  <div class="callout">Come in matematica: <b>prima</b> moltiplicazioni e divisioni, <b>poi</b> somme e sottrazioni. Se vuoi cambiare l’ordine usa le parentesi.</div>
-  <p class="small muted">Per i numeri con la virgola si usa il punto: 2.5</p>`,
-  act:{type:'quiz',q:'Quanto fa 2 + 3 * 4 ?',opts:[['14',1,'Giusto: prima 3 × 4 = 12, poi 2 + 12 = 14.'],['20',0,'20 verrebbe con le parentesi: (2 + 3) * 4. Senza parentesi si fa prima la moltiplicazione.'],['24',0,'Ricontrolla: prima la moltiplicazione 3 × 4.']]}},
- {t:'In Flowgorithm: dichiarare le variabili',h:`<p>In Flowgorithm, prima di usare una scatola, devi <b>dichiararla</b>: dire il suo nome e che <b>tipo</b> di cose contiene.</p>
-  <table class="tbl"><tr><th>Tipo</th><th>Contiene</th><th>Esempio</th></tr><tr><td><b>Intero</b></td><td>numeri senza virgola</td><td>7, -3, 100</td></tr><tr><td><b>Reale</b></td><td>numeri anche con la virgola</td><td>2.5, 9.99</td></tr><tr><td><b>Stringa</b></td><td>testo, tra virgolette</td><td>"Ciao"</td></tr><tr><td><b>Booleano</b></td><td>vero o falso</td><td>vero</td></tr></table>
-  <div class="callout">Il blocco <b>Dichiara</b> è giallo come l’assegnazione, con due righe nell’angolo.</div>`,
-  act:{type:'classify',q:'Che tipo usi per ogni valore?',bins:['Intero','Reale','Stringa'],items:[['Il numero di alunni in classe',0,'Gli alunni si contano: niente virgola, Intero.'],['Il prezzo di una pizza (6.50 €)',1,'Un prezzo può avere i centesimi: Reale.'],['Il nome di una città',2,'Un nome è testo: Stringa.'],['L’altezza in metri (1.62)',1,'Ha la virgola: Reale.']],skill:'variabili'}},
- {t:'Il tuo primo programma',h:`<p>Ecco un programma vero. Chiede il tuo nome e ti saluta.</p>
-  <p>Premi <b>▶ Esegui</b>: guarda il blocco che si illumina, le scatole delle variabili e lo schermo nero (la <b>console</b>), dove compaiono input e output.</p>`,
-  act:{type:'run',prog:'ciao',skill:'simulatore'}},
- {t:'Ripasso dei blocchi',h:`<p>Prima di passare agli esercizi, un ultimo controllo.</p>`,
-  act:{type:'classify',q:'Quale blocco usi per ogni azione?',bins:['Ovale','Parallelogramma','Rettangolo'],items:[['Calcolare l’area',2,'Calcolare e mettere il risultato in una variabile = rettangolo.'],['Leggere la base',1,'Leggere un dato = Input = parallelogramma.'],['Terminare l’algoritmo',0,'La Fine si scrive nell’ovale.'],['Mostrare il perimetro',1,'Mostrare = Output = parallelogramma.'],['Mettere 0 nella variabile somma',2,'È un’assegnazione: rettangolo.']],skill:'blocchi'}}
+  <div class="codebox"><code>x {=} 4</code><code>y {=} 7</code><code>x {=} y</code><code>y {=} x</code></div>`,
+  act:{type:'quiz',q:'Alla fine quanto valgono x e y?',opts:[['x = 7 e y = 7',1,'Esatto! Con x {=} y il 4 si perde. Poi y {=} x rimette 7 in y. Per scambiare serve una terza scatola: t {=} x, x {=} y, y {=} t.'],['x = 7 e y = 4',0,'È la trappola: dopo x {=} y il 4 non c’è più!'],['x = 4 e y = 7',0,'I rettangoli cambiano i valori: almeno x diventa 7.']],skill:'variabili'}}
 ]},
-{id:3,icon:'🔶',title:'Il rombo: fare una scelta',sub:'Condizioni, Vero e Falso',ex:['e6','e7','e8','e9','e10'],video:[1,2],slides:[
- {t:'Fare una scelta',h:`<p class="lead">Nella vita scegli in continuazione: <b>se</b> piove prendo l’ombrello, <b>altrimenti</b> no.</p>
-  <p>Anche un algoritmo a volte deve scegliere quale strada prendere. Per farlo c’è un blocco speciale: il <b>rombo</b>.</p>
-  <p>Prova: scegli se piove o no e guarda che strada prende l’algoritmo.</p>`,
+{id:4,icon:'🔶',title:'Il rombo: fare una scelta',sub:'Condizioni, Vero e Falso',min:12,ex:['e6','e7','e8','e9','e10'],slides:[
+ {t:'Fare una scelta',h:`<p class="lead">Ogni giorno scegli: <b>se</b> piove prendo l’ombrello, <b>altrimenti</b> no.</p>
+  <p>Anche un algoritmo a volte deve scegliere che strada prendere. Per farlo c’è il <b>rombo</b>.</p>
+  <p>Prova le due strade:</p>`,
   act:{type:'branch',skill:'selezione'}},
- {t:'Il rombo: un ingresso, due uscite',h:`<div class="toy">${'__SHAPE_if__'}</div>
-  <p>Il <b>rombo</b> è il <b>blocco di controllo</b>. Dentro si scrive una <b>condizione</b>.</p>
-  <p>Gli altri blocchi hanno un ingresso e un’uscita. Il rombo ha <b>un ingresso e due uscite</b>:</p>
-  <ul><li>se la condizione è <b>vera</b> si va da una parte</li><li>se è <b>falsa</b> si va dall’altra</li></ul>
-  <p>Poi le due strade si riuniscono. Nel foglio di calcolo questa cosa si chiama funzione <b>SE</b>.</p>`,
-  act:{type:'quiz',q:'Quante uscite ha il rombo?',opts:[['Due: Vero e Falso',1,'Esatto.'],['Una',0,'Una sola uscita ce l’hanno gli altri blocchi. Il rombo ne ha due.'],['Tre',0,'No, solo due: Vero e Falso. Per tre casi servono due rombi.']]}},
- {t:'Le condizioni',h:`<p>Una condizione è un <b>confronto</b>. Il risultato può essere solo <b>Vero</b> o <b>Falso</b>.</p>
-  <table class="tbl"><tr><th>Simbolo</th><th>Significa</th></tr><tr><td><code>&gt;</code></td><td>maggiore</td></tr><tr><td><code>&lt;</code></td><td>minore</td></tr><tr><td><code>&gt;=</code></td><td>maggiore o uguale</td></tr><tr><td><code>&lt;=</code></td><td>minore o uguale</td></tr><tr><td><code>=</code> oppure <code>==</code></td><td>uguale</td></tr><tr><td><code>!=</code></td><td>diverso</td></tr></table>`,
-  act:{type:'tf',q:'Se a vale 5 e b vale 3, queste condizioni sono vere o false?',items:[['a > b',true,'5 è maggiore di 3: Vero.'],['a = b',false,'5 non è uguale a 3: Falso.'],['a != b',true,'5 è diverso da 3: Vero.'],['a <= 3',false,'5 non è minore né uguale a 3: Falso.'],['b >= 3',true,'3 è uguale a 3, quindi “maggiore o uguale” è Vero.']]}},
- {t:'Unire due condizioni: and e or',h:`<ul><li><code>and</code> (e): è vera solo se sono vere <b>tutte e due</b></li><li><code>or</code> (o): è vera se ne è vera <b>almeno una</b></li></ul>
-  <div class="callout">Esempio: posso entrare al cinema <b>se</b> ho il biglietto <code>and</code> il film è iniziato da meno di 10 minuti.</div>`,
-  act:{type:'quiz',q:'a vale 4 e b vale -2. Quanto vale la condizione  a > 0 and b > 0 ?',opts:[['Falso',1,'Giusto: a > 0 è vero, ma b > 0 è falso. Con and servono tutte e due vere.'],['Vero',0,'Con and devono essere vere tutte e due. b > 0 è falsa.']],skill:'selezione'}},
- {t:'Esempio: ammesso o non ammesso',h:`<p>Esempio della prof: un alunno è <b>ammesso</b> se la sua media è maggiore o uguale a 6.</p>
-  <p>Esegui il programma <b>due volte</b>: una volta con una media sufficiente (per esempio 7) e una con una insufficiente (per esempio 5). Guarda quale strada si illumina.</p>`,
+ {t:'Il rombo',h:`<div class="toy">__SHAPE_if__</div>
+  <p class="lead">Dentro il rombo c’è una <b>domanda</b> che ha solo due risposte: <b>Vero</b> o <b>Falso</b>.</p>
+  <p>Il rombo ha <b>un ingresso e due uscite</b>. Poi le due strade si riuniscono.</p>`,
+  act:{type:'quiz',q:'Quante uscite ha il rombo?',opts:[['Due: Vero e Falso',1,'Esatto.'],['Una',0,'Una sola uscita ce l’hanno gli altri blocchi. Il rombo ne ha due.'],['Tre',0,'Solo due: Vero e Falso.']]}},
+ {t:'Le condizioni',h:`<p>La domanda nel rombo si chiama <b>condizione</b>. Di solito è un confronto:</p>
+  <table class="tbl"><tr><th>Simbolo</th><th>Significa</th></tr><tr><td><code>&gt;</code></td><td>maggiore</td></tr><tr><td><code>&lt;</code></td><td>minore</td></tr><tr><td><code>&gt;=</code></td><td>maggiore o uguale</td></tr><tr><td><code>&lt;=</code></td><td>minore o uguale</td></tr><tr><td><code>=</code> oppure <code>==</code></td><td>uguale</td></tr><tr><td><code>!=</code> oppure <code>&lt;&gt;</code></td><td>diverso</td></tr></table>
+  <p class="small muted">Nel rombo il simbolo = fa una domanda: “sono uguali?”.</p>`,
+  act:{type:'tf',q:'a vale 5 e b vale 3. Vero o falso?',items:[['a > b',true,'5 è maggiore di 3: Vero.'],['a = b',false,'5 non è uguale a 3: Falso.'],['a != b',true,'5 è diverso da 3: Vero.'],['b >= 3',true,'3 è uguale a 3, quindi “maggiore o uguale” è Vero.']]}},
+ {t:'Due condizioni insieme',h:`<ul class="big"><li><code>and</code> (e): Vero solo se sono vere <b>tutte e due</b></li><li><code>or</code> (o): Vero se ne è vera <b>almeno una</b></li></ul>
+  <div class="callout">Esempio: entro al cinema se ho il biglietto <b>and</b> il film non è ancora iniziato.</div>`,
+  act:{type:'quiz',q:'a vale 4 e b vale -2. La condizione  a > 0 and b > 0  è…',opts:[['Falsa',1,'Giusto: a > 0 è vera, ma b > 0 è falsa. Con and devono essere vere tutte e due.'],['Vera',0,'Con and devono essere vere tutte e due, e b > 0 è falsa.']],skill:'selezione'}},
+ {t:'Guarda la strada che si illumina',h:`<p>Un alunno è <b>ammesso</b> se la media è almeno 6.</p>
+  <p>Esegui il programma <b>due volte</b>: prima con 7, poi con 5.</p>`,
   act:{type:'run',prog:'media',times:2,skill:'simulatore'}},
- {t:'Rombi dentro rombi',h:`<p>A volte i casi sono <b>più di due</b>. Per esempio una partita: vince la prima squadra, vince la seconda, oppure pareggio.</p>
-  <p>Un rombo ha solo due uscite, quindi si mette un <b>secondo rombo dentro</b> una delle strade del primo. Si dice che i rombi sono <b>annidati</b>.</p>`,
-  act:{type:'quiz',q:'Con 3 casi possibili, quanti rombi servono almeno?',opts:[['2',1,'Giusto: il primo divide in due, il secondo divide di nuovo una delle due strade.'],['3',0,'Ne bastano 2: se non è il primo caso e non è il secondo, per forza è il terzo.'],['1',0,'Un rombo ha solo due uscite: per tre casi non basta.']]}},
- {t:'Errori tipici con il rombo',h:`<p>Leggi bene il testo del problema: le parole contano.</p>
-  <ul><li>“<b>supera</b> 100” vuol dire <code>&gt; 100</code></li><li>“<b>almeno</b> 18” vuol dire <code>&gt;= 18</code></li><li>“<b>tutti e due</b>” vuol dire <code>and</code></li><li>“<b>uno dei due</b>” vuol dire <code>or</code></li></ul>`,
-  act:{type:'quiz',q:'“Si può votare se si hanno almeno 18 anni.” Quale condizione scrivi?',opts:[['eta >= 18',1,'Esatto: “almeno 18” comprende anche 18.'],['eta > 18',0,'Così chi ha esattamente 18 anni non potrebbe votare. “Almeno” vuol dire >=.'],['eta = 18',0,'Così potrebbe votare solo chi ha esattamente 18 anni!']],skill:'selezione'}}
+ {t:'Costruisci: maggiorenne o minorenne?',h:`<p><b>Problema:</b> chiedi l’età e scrivi “Maggiorenne” se ha almeno 18 anni, altrimenti “Minorenne”.</p>`,
+  act:{type:'build',b:'eta',skill:'selezione'}},
+ {t:'Leggi bene le parole',h:`<div class="codebox"><span>“<b>supera</b> 100”</span><code>&gt; 100</code><span>“<b>almeno</b> 18”</span><code>&gt;= 18</code><span>“<b>tutti e due</b>”</span><code>and</code><span>“<b>uno dei due</b>”</span><code>or</code></div>`,
+  act:{type:'quiz',q:'“Lo sconto si fa se il prezzo supera 100 euro.” Quale condizione scrivi?',opts:[['prezzo > 100',1,'Esatto: “supera” vuol dire più di 100. Con 100 esatti niente sconto.'],['prezzo >= 100',0,'Così anche 100 esatti avrebbe lo sconto. “Supera” vuol dire >.'],['prezzo < 100',0,'Così lo sconto andrebbe a chi spende poco.']],skill:'selezione'}},
+ {t:'Rombi dentro rombi',h:`<p>A volte i casi sono <b>tre</b>. Per esempio una partita: vince la prima squadra, vince la seconda, oppure pareggio.</p>
+  <p>Un rombo ha solo due uscite. Allora si mette un <b>secondo rombo</b> dentro una delle due strade.</p>`,
+  act:{type:'quiz',q:'Con 3 casi possibili, quanti rombi servono?',opts:[['2',1,'Giusto: il primo divide in due, il secondo divide di nuovo una delle due strade.'],['3',0,'Ne bastano 2: se non è il primo caso e non è il secondo, è per forza il terzo.'],['1',0,'Un rombo ha solo due uscite: per tre casi non basta.']]}}
 ]},
-{id:4,icon:'🔁',title:'Il ciclo: ripetere',sub:'Contatore, accumulatore, Mentre',ex:['e11','e12','e13'],video:[3],slides:[
- {t:'Ripetere: il ciclo',h:`<p class="lead">L’<b>iterazione</b> (o <b>ciclo</b>, in inglese <b>loop</b>) serve a <b>ripetere</b> gli stessi blocchi più volte.</p>
-  <p>Si ripete finché una condizione resta vera. Quando diventa falsa, si esce dal ciclo.</p>
-  <p>Prova: il programma deve fare 5 flessioni. Premi il pulsante per fare un giro alla volta.</p>`,
+{id:5,icon:'🔁',title:'Il ciclo: ripetere',sub:'Contatore e somma',min:12,ex:['e11','e12','e13'],slides:[
+ {t:'Ripetere',h:`<p class="lead">Il <b>ciclo</b> (in inglese <i>loop</i>) ripete gli stessi blocchi più volte.</p>
+  <p>Si ripete <b>finché</b> la condizione è vera. Quando diventa falsa, si esce.</p>
+  <p>Il programma deve fare 5 flessioni. Premi il pulsante per fare un giro alla volta.</p>`,
   act:{type:'loop',skill:'ciclo'}},
- {t:'Il contatore',h:`<p>Per sapere quante volte hai ripetuto, usi una variabile che fa da <b>contatore</b>:</p>
-  <div class="callout"><code>i ← i + 1</code><br>“i prende il valore di i più uno”: il contatore va avanti di uno.</div>
-  <p>Il contatore si prepara <b>prima</b> del ciclo, per esempio <code>i ← 1</code>.</p>`,
-  act:{type:'quiz',q:'i vale 4. Il computer esegue  i ← i + 1. Quanto vale ora i?',opts:[['5',1,'Giusto: 4 + 1 = 5.'],['4',0,'Il blocco cambia i: calcola 4 + 1 e mette il risultato in i.'],['1',0,'Non si mette 1: si aggiunge 1 al valore che c’era.']]}},
- {t:'L’accumulatore',h:`<p>Per <b>sommare</b> tanti numeri uno alla volta si usa un <b>accumulatore</b>: una variabile che funziona come un <b>salvadanaio</b>.</p>
-  <div class="callout"><code>somma ← 0</code> prima del ciclo (salvadanaio vuoto)<br><code>somma ← somma + n</code> dentro il ciclo (ci aggiungo n)</div>`,
-  act:{type:'quiz',q:'Perché scrivo somma ← 0 prima del ciclo?',opts:[['Per partire da un salvadanaio vuoto',1,'Esatto: se non la azzeri, la variabile è vuota e il computer non può calcolare somma + n.'],['Non serve, è una cosa in più',0,'Serve: senza un valore di partenza, somma + n non si può calcolare.'],['Per far finire il ciclo',0,'A far finire il ciclo ci pensa il contatore. somma ← 0 prepara il salvadanaio.']]}},
- {t:'Esempio: contare fino a 20',h:`<p>Esempio della prof: si parte da 1. <b>Finché</b> il numero è minore o uguale a 20, lo si scrive e si aggiunge 1.</p>
-  <p>Premi <b>▶ Esegui</b> e guarda il ciclo che gira. Puoi aumentare la velocità.</p>`,
+ {t:'Il contatore',h:`<p>Per contare i giri si usa una variabile <b>contatore</b>, di solito <code>i</code>.</p>
+  <div class="codebox"><code>i {=} 1</code><span>prima del ciclo: si parte da 1</span><code>i {=} i + 1</code><span>dentro il ciclo: aumenta di 1</span></div>`,
+  act:{type:'quiz',q:'i vale 4. Il computer esegue  i {=} i + 1. Quanto vale ora i?',opts:[['5',1,'Giusto: 4 + 1 = 5.'],['4',0,'Il blocco cambia i: calcola 4 + 1 e lo rimette in i.'],['1',0,'Non diventa 1: si aggiunge 1 al valore di prima.']]}},
+ {t:'Costruisci: conta da 1 a 5',h:`<p><b>Problema:</b> scrivi sullo schermo i numeri da 1 a 5.</p>
+  <p>Il ciclo ha la forma di un <b>esagono</b> arancione.</p>`,
+  act:{type:'build',b:'conta',skill:'ciclo'}},
+ {t:'Guardalo girare',h:`<p>Questo programma conta da 1 a 20. Premi <b>▶ Esegui</b> e guarda il ciclo. Puoi aumentare la velocità con il coniglio 🐇.</p>`,
   act:{type:'run',prog:'conta',skill:'simulatore'}},
- {t:'Attenzione al ciclo infinito',h:`<p>Se nel ciclo dimentichi <code>i ← i + 1</code>, il contatore resta sempre uguale. La condizione resta sempre vera e il ciclo <b>non finisce mai</b>.</p>
-  <div class="callout warn">Questo errore si chiama <b>ciclo infinito</b>. Ricorda: un algoritmo deve sempre finire.</div>`,
-  act:{type:'quiz',q:'Cosa succede in questo ciclo?  i ← 1 · Mentre i <= 10: Output i',opts:[['Scrive 1 all’infinito',1,'Esatto: i resta sempre 1, quindi i <= 10 è sempre vera. Manca i ← i + 1.'],['Scrive i numeri da 1 a 10',0,'Lo farebbe se ci fosse i ← i + 1 dentro il ciclo. Qui manca.'],['Non scrive niente',0,'La condizione all’inizio è vera (1 <= 10), quindi entra nel ciclo e scrive.']],skill:'debug'}},
- {t:'Simula a mente',h:`<div class="callout"><code>i ← 1</code><br>Mentre <code>i &lt;= 3</code>:<br>&nbsp;&nbsp;&nbsp;<code>Output i * 2</code><br>&nbsp;&nbsp;&nbsp;<code>i ← i + 1</code></div>`,
-  act:{type:'quiz',q:'Cosa compare sullo schermo?',opts:[['2  4  6',1,'Giusto: i vale 1, 2, 3 e ogni volta si scrive il doppio. Quando i diventa 4 si esce.'],['1  2  3',0,'Si scrive i * 2, non i.'],['2  4  6  8',0,'Quando i vale 4 la condizione i <= 3 è falsa: si esce prima di scrivere 8.']],skill:'ciclo'}},
- {t:'Mentre e Per in Flowgorithm',h:`<p>Flowgorithm ha due cicli principali. Hanno la forma di un esagono arancione.</p>
-  <ul><li><b>Mentre</b> (While): ripete finché la condizione è vera. Il contatore lo gestisci tu.</li><li><b>Per</b> (For): conta da solo, per esempio “i da 1 a 10”.</li></ul>
-  <div class="callout">In questo corso usiamo soprattutto <b>Mentre</b>, come negli esempi della prof: così vedi bene come funziona il contatore.</div>`,
-  act:{type:'quiz',q:'Devi chiedere numeri all’utente finché non scrive 0. Non sai quante volte. Quale ciclo usi?',opts:[['Mentre',1,'Giusto: non sai quante volte ripetere, quindi ripeti finché la condizione è vera.'],['Per',0,'Il ciclo Per va bene quando sai già quante volte ripetere.']]}}
+ {t:'La somma che cresce',h:`<p>Per sommare tanti numeri si usa una variabile che fa da <b>salvadanaio</b>.</p>
+  <div class="codebox"><code>somma {=} 0</code><span>prima del ciclo: salvadanaio vuoto</span><code>somma {=} somma + n</code><span>dentro il ciclo: aggiungo n</span></div>`,
+  act:{type:'quiz',q:'Perché si scrive somma {=} 0 prima del ciclo?',opts:[['Per partire con il salvadanaio vuoto',1,'Esatto: senza un valore di partenza il computer non può calcolare somma + n.'],['Non serve',0,'Serve: se la scatola è vuota, somma + n non si può calcolare.'],['Per far finire il ciclo',0,'A far finire il ciclo ci pensa il contatore.']]}},
+ {t:'Il ciclo infinito',h:`<p>Se dimentichi <code>i {=} i + 1</code>, il contatore non cambia mai.</p>
+  <p>La condizione resta sempre vera e il ciclo <b>non finisce più</b>.</p>
+  <div class="callout warn">Si chiama <b>ciclo infinito</b>. È uno degli errori più comuni.</div>`,
+  act:{type:'quiz',q:'i {=} 1, poi un ciclo con  i <= 10  che contiene solo  Output i. Cosa succede?',opts:[['Scrive 1 all’infinito',1,'Esatto: i resta 1, quindi i <= 10 è sempre vera. Manca i {=} i + 1.'],['Scrive da 1 a 10',0,'Lo farebbe se dentro ci fosse anche i {=} i + 1.'],['Non scrive niente',0,'1 <= 10 è vera, quindi entra nel ciclo e scrive.']],skill:'debug'}},
+ {t:'Simula a mente',h:`<div class="codebox"><code>i {=} 1</code><code>finché i &lt;= 3:</code><code>&nbsp;&nbsp;Output i * 2</code><code>&nbsp;&nbsp;i {=} i + 1</code></div>`,
+  act:{type:'quiz',q:'Cosa compare sullo schermo?',opts:[['2  4  6',1,'Giusto: i vale 1, 2, 3 e ogni volta si scrive il doppio. Con i = 4 si esce.'],['1  2  3',0,'Si scrive i * 2, non i.'],['2  4  6  8',0,'Quando i vale 4 la condizione è falsa: si esce prima di scrivere 8.']],skill:'ciclo'}}
 ]},
-{id:5,icon:'🏅',title:'Ripasso finale',sub:'Controlla di sapere tutto',ex:['e14','e15'],slides:[
- {t:'Domanda 1',h:`<p>Un ultimo giro di domande su tutto il corso. Rispondi con calma.</p>`,act:{type:'quiz',q:'Che cos’è un algoritmo?',opts:[['Una sequenza di operazioni che risolve un problema',1,'Esatto.'],['Un programma per computer',0,'Il programma viene dopo: è l’algoritmo scritto al computer (codifica).'],['Un disegno con le frecce',0,'Quello è il diagramma di flusso: un modo per rappresentare l’algoritmo.']],skill:'fasi'}},
- {t:'Domanda 2',h:'',act:{type:'classify',q:'Problema: “dato il prezzo di un prodotto, calcola il prezzo con l’IVA al 22%”.',bins:['Input','Output','Costante'],items:[['Il prezzo',0,'Il prezzo ce lo dà l’utente: input.'],['Il prezzo con IVA',1,'È il risultato: output.'],['22%',2,'L’IVA è fissa nel problema: è una costante.']],skill:'analisi'}},
- {t:'Domanda 3',h:'',act:{type:'classify',q:'Che forma ha ogni blocco?',bins:['Ovale','Parallelogramma','Rettangolo','Rombo'],items:[['Input',1,'Input e Output: parallelogramma.'],['Assegnazione',2,'Assegnazione: rettangolo.'],['Scelta (condizione)',3,'Condizione: rombo.'],['Fine',0,'Inizio e Fine: ovale.']],skill:'blocchi'}},
- {t:'Domanda 4',h:`<div class="callout"><code>a ← 10</code><br><code>b ← a - 4</code><br><code>a ← b * 2</code></div>`,act:{type:'quiz',q:'Quanto valgono a e b alla fine?',opts:[['a = 12, b = 6',1,'Giusto: b = 10 - 4 = 6, poi a = 6 × 2 = 12.'],['a = 10, b = 6',0,'L’ultimo blocco cambia a.'],['a = 20, b = 6',0,'a prende b * 2, cioè 6 × 2.']],skill:'variabili'}},
- {t:'Domanda 5',h:'',act:{type:'quiz',q:'Problema: “se il voto è almeno 6 scrivi Promosso, altrimenti Bocciato”. Cosa va nel rombo?',opts:[['voto >= 6',1,'Esatto.'],['voto > 6',0,'Con > il 6 sarebbe bocciato. “Almeno 6” vuol dire >= 6.'],['voto = 6',0,'Così sarebbe promosso solo chi prende esattamente 6.']],skill:'selezione'}},
- {t:'Domanda 6',h:'',act:{type:'order',q:'Metti in ordine i blocchi per sommare 5 numeri.',items:['somma ← 0','i ← 1','Mentre i <= 5','Input n','somma ← somma + n','i ← i + 1','Output somma'],ok:'Perfetto: prima si preparano le variabili, poi il ciclo, e alla fine si mostra il risultato.',skill:'ciclo'}},
- {t:'Domanda 7',h:`<p>Un programma deve calcolare la media di due voti. Qualcuno ha scritto:</p><div class="callout"><code>media ← a + b / 2</code></div>`,act:{type:'quiz',q:'Con a = 6 e b = 8 cosa succede?',opts:[['Esce 10 invece di 7: mancano le parentesi',1,'Esatto: si fa prima b / 2 = 4, poi 6 + 4 = 10. Serve (a + b) / 2.'],['Esce 7, è giusto',0,'Ricorda: prima la divisione. b / 2 = 4, poi a + 4.'],['Il programma si blocca',0,'Non si blocca: dà un risultato, ma sbagliato.']],skill:'debug'}},
- {t:'Domanda 8',h:'',act:{type:'quiz',q:'Hai costruito un algoritmo. Come fai a essere sicuro che funziona?',opts:[['Lo provo con dei dati di cui conosco già il risultato',1,'Esatto: è la fase di simulazione. Prova anche i casi limite (per esempio 0, numeri uguali, numeri negativi).'],['Se mi sembra giusto va bene',0,'Sembrare giusto non basta: bisogna provarlo con dei dati.'],['Lo provo una volta sola con un numero a caso',0,'Una prova sola può non bastare: prova più casi diversi.']],skill:'simulatore'}}
+{id:6,icon:'🏅',title:'Ripasso finale',sub:'Controlla di sapere tutto',min:8,ex:['e14','e15'],slides:[
+ {t:'Efficace o efficiente?',h:`<div class="grid2"><div class="callout ok"><b>Efficace</b> = funziona, il risultato è giusto.</div><div class="callout"><b>Efficiente</b> = funziona <b>e</b> ci mette poco.</div></div>
+  <p>Premi <b>Via!</b>: tutti e due mettono in ordine gli stessi numeri.</p>
+  <div class="race"><div class="lane" style="--d:4s"><span>🐢 A</span><div class="tr"><span class="rn">📦</span></div></div><div class="lane" style="--d:1s"><span>🐇 B</span><div class="tr"><span class="rn">📦</span></div></div></div>
+  <button class="btn sm" data-race-go>🏁 Via!</button>`,
+  act:{type:'quiz',q:'A ci mette 4 secondi, B 1 secondo. Il risultato è giusto per tutti e due.',opts:[['Tutti e due efficaci, B più efficiente',1,'Esatto.'],['Solo B è efficace',0,'Anche A arriva al risultato giusto: è efficace.'],['A è più efficiente',0,'Efficiente vuol dire più veloce, non più lento.']],skill:'fasi'}},
+ {t:'Domanda 1',h:'',act:{type:'classify',q:'“Dato un prezzo, calcola il prezzo con l’IVA al 22%.”',bins:['Input','Output','Costante'],items:[['Il prezzo',0,'Lo scrive l’utente: input.'],['Il prezzo con IVA',1,'È il risultato: output.'],['22%',2,'Non cambia mai: costante.']],skill:'analisi'}},
+ {t:'Domanda 2',h:'',act:{type:'classify',q:'Che forma ha ogni blocco?',bins:['Ovale','Parallelogramma','Rettangolo','Rombo'],items:[['Input',1,'Input e Output: parallelogramma.'],['Assegnazione',2,'Rettangolo.'],['Condizione',3,'Rombo.'],['Fine',0,'Ovale.']],skill:'blocchi'}},
+ {t:'Domanda 3',h:`<div class="codebox"><code>a {=} 10</code><code>b {=} a - 4</code><code>a {=} b * 2</code></div>`,act:{type:'quiz',q:'Quanto valgono a e b alla fine?',opts:[['a = 12, b = 6',1,'Giusto: b = 10 - 4 = 6, poi a = 6 × 2 = 12.'],['a = 10, b = 6',0,'L’ultimo blocco cambia a.'],['a = 20, b = 6',0,'a prende b * 2, cioè 6 × 2.']],skill:'variabili'}},
+ {t:'Domanda 4',h:'',act:{type:'quiz',q:'“Se il voto è almeno 6 scrivi Promosso, altrimenti Bocciato.” Cosa va nel rombo?',opts:[['voto >= 6',1,'Esatto.'],['voto > 6',0,'Con > il 6 sarebbe bocciato.'],['voto = 6',0,'Così sarebbe promosso solo chi prende 6.']],skill:'selezione'}},
+ {t:'Domanda 5',h:'',act:{type:'order',q:'Metti in ordine i blocchi per sommare 5 numeri.',items:['somma {=} 0','i {=} 1','finché i <= 5','Input n','somma {=} somma + n','i {=} i + 1','Output somma'],ok:'Perfetto: prima si preparano le variabili, poi il ciclo, alla fine il risultato.',skill:'ciclo'}},
+ {t:'Domanda 6',h:`<p>Per la media di due voti qualcuno ha scritto:</p><div class="codebox"><code>media {=} a + b / 2</code></div>`,act:{type:'quiz',q:'Con a = 6 e b = 8 cosa succede?',opts:[['Esce 10 invece di 7: mancano le parentesi',1,'Esatto: prima b / 2 = 4, poi 6 + 4 = 10. Serve (a + b) / 2.'],['Esce 7, è giusto',0,'Prima si fa la divisione: b / 2 = 4, poi a + 4.'],['Il programma si blocca',0,'Non si blocca: dà un risultato sbagliato.']],skill:'debug'}},
+ {t:'Domanda 7',h:'',act:{type:'quiz',q:'Come fai a sapere se il tuo diagramma funziona?',opts:[['Lo provo con dati di cui conosco già il risultato',1,'Esatto. E prova anche i casi “strani”: lo zero, numeri uguali, numeri negativi.'],['Se mi sembra giusto va bene',0,'Sembrare giusto non basta: bisogna provarlo.'],['Lo provo una volta sola',0,'Una prova sola spesso non basta.']],skill:'simulatore'}}
 ]}];
-
 /* ---------- ESERCIZI DEL LABORATORIO ---------- */
 const TYPEHINT={declare:'Si comincia sempre dichiarando le variabili.',input:'Ci serve un dato dall’utente: un parallelogramma di Input.',output:'È il momento di mostrare un risultato: un Output.',assign:'Bisogna calcolare o preparare un valore: un rettangolo di assegnazione.',if:'Qui c’è una decisione da prendere: un rombo.',while:'Qui bisogna ripetere qualcosa: un ciclo.',for:'Qui bisogna ripetere qualcosa: un ciclo.'};
 const EXS=[
-{id:'e1',n:1,mod:1,game:'river',title:'Il lupo, la capra e i cavoli',lvl:1,skills:['fasi'],text:'Un contadino deve portare sull’altra riva del fiume un lupo, una capra e un cesto di cavoli. La barca porta lui e una sola cosa alla volta. Se restano soli, il lupo mangia la capra e la capra mangia i cavoli. Come fa a portarli tutti dall’altra parte? Scrivi le fasi dell’algoritmo.'},
-{id:'e2',n:2,mod:1,game:'jugs',title:'I travasi del contadino',lvl:1,skills:['analisi'],text:'Il contadino ha un recipiente da 25 litri (con 16 litri d’acqua), uno da 5 litri pieno e uno da 3 litri pieno. Deve ottenere esattamente 20 litri in un recipiente. Come fa? Scrivi le fasi dell’algoritmo.'},
-{id:'e3',n:3,mod:2,title:'Area e perimetro del rettangolo',lvl:1,skills:['analisi','sequenza'],
- text:'Scrivere l’algoritmo che, dato un rettangolo, <mark>legge in ingresso</mark> il valore dei suoi <mark>lati</mark> e fornisce <mark>in uscita</mark> l’<mark>area</mark> ed il <mark>perimetro</mark>.',
+{id:'e1',n:1,mod:1,game:'river',title:'Il lupo, la capra e i cavoli',lvl:1,skills:['fasi'],text:'Un contadino deve portare sull’altra riva del fiume un lupo, una capra e un cesto di cavoli. La barca porta lui e <b>una sola cosa</b> alla volta. Se restano soli, il lupo mangia la capra e la capra mangia i cavoli. Come fa a portarli tutti dall’altra parte?'},
+{id:'e2',n:2,mod:1,game:'jugs',title:'I travasi del contadino',lvl:1,skills:['analisi'],text:'Il contadino ha tre recipienti: uno da 25 litri con dentro 16 litri d’acqua, uno da 5 litri pieno e uno da 3 litri pieno. Versando l’acqua da un recipiente all’altro, deve avere <b>esattamente 20 litri</b> nel recipiente grande. Come fa?'},
+{id:'e3',n:3,mod:3,title:'Area e perimetro del rettangolo',lvl:1,skills:['analisi','sequenza'],
+ text:'Chiedi la <mark>base</mark> e l’<mark>altezza</mark> di un rettangolo. Calcola e scrivi l’<mark>area</mark> e il <mark>perimetro</mark>.',
  analysis:[
   {q:'Partiamo dall’analisi. Quali dati ci servono in <b>ingresso</b> (input)? Scegli tutti quelli giusti.',multi:1,opts:[['La base',1],['L’altezza',1],['L’area',0,'L’area non la conosciamo: è proprio quello che dobbiamo calcolare. È un dato di uscita.'],['Il colore del rettangolo',0,'Il colore non serve per fare i calcoli.']],ok:'Giusto: base e altezza sono i dati che conosciamo e che l’utente scrive.'},
   {q:'E in <b>uscita</b> (output), cosa dobbiamo mostrare?',multi:1,opts:[['L’area',1],['Il perimetro',1],['La base',0,'La base la conosciamo già: è un input.']],ok:'Esatto: area e perimetro sono i risultati.'},
@@ -846,8 +963,8 @@ const EXS=[
  wrong:[[D('b, h, perimetro, area','Stringa'),'Stringa vuol dire testo: con il testo non si fanno calcoli. Servono numeri, quindi Reale.'],[I('area'),'L’area non si chiede all’utente: la calcola il programma.'],[A('perimetro','b + h'),'Mancano due lati: il perimetro è (b + h) * 2.'],[A('area','(b + h) * 2'),'Questo è il perimetro, non l’area.'],[O('"area"'),'Con le virgolette il computer scrive la parola “area”, non il suo valore. Le virgolette vanno tolte.']],
  tests:[[[5,3],['16','15'],'base 5 e altezza 3'],[[2.5,4],['13','10'],'base 2.5 e altezza 4']],
  bug:{prog:[D('b, h, perimetro, area','Reale'),I('b'),I('h'),BAD(A('perimetro','b + h * 2')),O('perimetro'),A('area','b * h'),O('area')],q:'Un compagno ha scritto questo programma. Con base 5 e altezza 3 il perimetro gli viene 11 invece di 16. <b>Tocca il blocco sbagliato.</b>',why:'b + h * 2 fa prima h * 2 (la moltiplicazione ha la precedenza) e poi aggiunge b: 5 + 6 = 11. Servono le parentesi: (b + h) * 2.',hint:'Guarda i calcoli: ricordi chi si fa prima tra + e * ?'}},
-{id:'e4',n:4,mod:2,title:'Il triangolo nel quadrato',lvl:2,skills:['analisi','sequenza'],
- text:'Scrivere l’algoritmo che, dato in input il <mark>lato di un quadrato</mark>, calcoli l’<mark>area del triangolo</mark> che ha per <mark>base la diagonale</mark> del quadrato e per <mark>altezza il lato</mark> del quadrato.',
+{id:'e4',n:4,mod:3,title:'Il triangolo nel quadrato',lvl:2,skills:['analisi','sequenza'],
+ text:'Chiedi il <mark>lato di un quadrato</mark>. Pensa a un triangolo che ha come <mark>base la diagonale</mark> del quadrato e come <mark>altezza il lato</mark>. Calcola e scrivi l’<mark>area del triangolo</mark>.',
  analysis:[
   {q:'Quali dati servono in <b>input</b>?',multi:1,opts:[['Il lato del quadrato',1],['La diagonale',0,'La diagonale non ce la danno: la calcoliamo noi partendo dal lato.'],['L’area del triangolo',0,'È il risultato da trovare: output.']],ok:'Giusto: basta il lato. Tutto il resto si calcola.'},
   {q:'Cosa dobbiamo dare in <b>output</b>?',opts:[['L’area del triangolo',1],['L’area del quadrato',0,'Il problema chiede l’area del triangolo, non quella del quadrato.'],['La diagonale',0,'La diagonale ci serve per il calcolo, ma il risultato richiesto è l’area del triangolo.']],ok:'Esatto.'},
@@ -857,8 +974,8 @@ const EXS=[
  wrong:[[A('d','l * 2'),'La diagonale non è il doppio del lato: è l × √2.'],[A('area','d * l'),'Manca la divisione per 2.'],[A('area','l * l'),'Questa è l’area del quadrato, non del triangolo.'],[I('d'),'La diagonale non la chiediamo all’utente: la calcoliamo.'],[D('l, d, area','Intero'),'Con Intero non puoi tenere la virgola, ma l × √2 ce l’ha. Serve Reale.']],
  tests:[[[4],['11.31'],'lato 4 (risultato circa 11.31)'],[[10],['70.71'],'lato 10 (circa 70.71)']],
  bug:{prog:[D('l, d, area','Reale'),I('l'),A('d','l * Sqrt(2)'),BAD(A('area','d * l')),O('area')],q:'Con lato 4 questo programma dà 22.63, cioè il doppio del giusto. <b>Tocca il blocco sbagliato.</b>',why:'Manca “/ 2”: l’area del triangolo è base per altezza <b>diviso 2</b>.',hint:'Il risultato è esattamente il doppio. Quale formula ha un “diviso 2”?'}},
-{id:'e5',n:5,mod:2,title:'Ore, minuti e secondi',lvl:1,skills:['analisi','sequenza'],
- text:'Scrivere l’algoritmo che, ricevuto in input un <mark>orario</mark> attraverso le sue tre componenti (<mark>ore, minuti e secondi</mark>), ne calcoli il <mark>valore totale in secondi</mark>.',
+{id:'e5',n:5,mod:3,title:'Ore, minuti e secondi',lvl:1,skills:['analisi','sequenza'],
+ text:'Chiedi un orario in <mark>ore, minuti e secondi</mark>. Calcola e scrivi quanti <mark>secondi in tutto</mark> sono.',
  analysis:[
   {q:'Quali sono gli <b>input</b>?',multi:1,opts:[['Le ore',1],['I minuti',1],['I secondi',1],['Il totale in secondi',0,'Il totale è il risultato: output.']],ok:'Giusto: tre dati in ingresso.'},
   {q:'Quanti secondi ci sono in <b>un’ora</b>?',opts:[['3600',1],['60',0,'60 secondi fanno un minuto. Un’ora ha 60 minuti, cioè 60 × 60 secondi.'],['100',0,'Il tempo non si conta a centinaia: un’ora ha 60 minuti da 60 secondi.']],ok:'Esatto: 60 × 60 = 3600.'},
@@ -866,9 +983,9 @@ const EXS=[
  sol:[D('ore, minuti, secondi, tot','Intero','Qui bastano numeri interi.'),I('ore','Leggiamo le ore.'),I('minuti','Poi i minuti.'),I('secondi','Poi i secondi.'),A('tot','ore * 3600 + minuti * 60 + secondi','Trasformiamo tutto in secondi e sommiamo.'),O('tot','Mostriamo il totale.')],
  wrong:[[A('tot','ore * 60 + minuti * 60 + secondi'),'Le ore vanno moltiplicate per 3600.'],[A('tot','ore + minuti + secondi'),'Prima bisogna trasformare ore e minuti in secondi.'],[I('tot'),'Il totale non si chiede: si calcola.'],[O('"tot"'),'Con le virgolette scrivi la parola “tot”, non il valore. Togli le virgolette.']],
  tests:[[[1,30,15],['5415'],'1 ora, 30 minuti e 15 secondi'],[[0,2,5],['125'],'0 ore, 2 minuti e 5 secondi']],
- bug:{prog:[D('ore, minuti, secondi, tot','Intero'),I('ore'),I('minuti'),I('secondi'),BAD(A('tot','ore * 60 + minuti * 60 + secondi')),O('tot')],q:'Con 1 ora, 0 minuti e 0 secondi questo programma dà 60 invece di 3600. <b>Tocca il blocco sbagliato.</b>',why:'Le ore vanno moltiplicate per 3600, non per 60.',hint:'Il problema è nelle ore. Dove si usano?'}},
-{id:'e6',n:6,mod:3,title:'Lo sconto del 20%',lvl:1,skills:['analisi','selezione'],
- text:'Calcolare ed applicare lo <mark>sconto del 20%</mark> ad un <mark>prezzo</mark> fornito in ingresso <mark>solo se il prezzo supera 100 €</mark>. (Siete un negoziante e fate lo sconto solo a chi spende più di 100 €.)',
+ bug:{prog:[D('ore, minuti, secondi, tot','Intero'),I('ore'),I('minuti'),I('secondi'),BAD(A('tot','ore * 60 + minuti * 60 + secondi')),O('tot')],q:'Con 1 ora, 0 minuti e 0 secondi questo programma dà 60 invece di 3600. <b>Tocca il blocco sbagliato.</b>',why:'Le ore vanno moltiplicate per 3600, non per 60.',hint:'Il problema riguarda le ore. In quale blocco si usano?'}},
+{id:'e6',n:6,mod:4,title:'Lo sconto del 20%',lvl:1,skills:['analisi','selezione'],
+ text:'Chiedi il <mark>prezzo</mark> di un acquisto. <mark>Solo se il prezzo supera 100 €</mark>, fai uno <mark>sconto del 20%</mark>. Scrivi il prezzo da pagare.',
  analysis:[
   {q:'Qual è l’<b>input</b>?',opts:[['Il prezzo',1],['Lo sconto',0,'Lo sconto lo calcoliamo noi: non lo chiediamo.'],['Il prezzo finale',0,'È il risultato: output.']],ok:'Giusto: l’utente scrive solo il prezzo.'},
   {q:'Brainstorming: serve un rombo?',opts:[['Sì: lo sconto si fa solo se il prezzo supera 100 €',1],['No, basta una sequenza',0,'Il testo dice “solo se”: c’è una decisione da prendere, quindi serve un rombo.']],ok:'Esatto. Quando leggi “solo se”, “se… altrimenti”, pensa al rombo.'},
@@ -879,8 +996,8 @@ const EXS=[
  wrong:[[IF('prezzo < 100',[],[]),'Così lo sconto andrebbe a chi spende meno di 100 €.'],[IF('prezzo >= 100',[],[]),'Il testo dice “supera”: 100 € esatti non hanno lo sconto. Serve >.'],[A('sconto','prezzo - 20'),'Così togli 20 euro, non il 20%.'],[A('finale','prezzo + sconto'),'Lo sconto si toglie, non si aggiunge!'],[A('finale','0'),'Il cliente deve pagare qualcosa!']],
  tests:[[[150],['120'],'prezzo 150 (si aspetta 120)'],[[80],['80'],'prezzo 80 (niente sconto)'],[[100],['100'],'prezzo 100 esatti (niente sconto)']],
  bug:{prog:[D('prezzo, sconto, finale','Reale'),I('prezzo'),BAD(IF('prezzo < 100',[A('sconto','prezzo * 20 / 100'),A('finale','prezzo - sconto')],[A('finale','prezzo')])),O('finale')],q:'Con questo programma chi spende 50 € ha lo sconto e chi spende 200 € no. <b>Tocca il blocco sbagliato.</b>',why:'La condizione è al contrario: dev’essere prezzo > 100.',hint:'Chi decide se fare lo sconto?'}},
-{id:'e7',n:7,mod:3,title:'1, X, 2: chi ha vinto?',lvl:2,skills:['selezione'],
- text:'Scrivere l’algoritmo che, dato il <mark>risultato di una partita</mark> di calcio, stampa <mark>“1”</mark> se vince la prima squadra, <mark>“2”</mark> se vince la seconda, <mark>“X”</mark> in caso di pareggio.',
+{id:'e7',n:7,mod:4,title:'1, X, 2: chi ha vinto?',lvl:2,skills:['selezione'],
+ text:'Chiedi i <mark>gol della prima squadra</mark> e i <mark>gol della seconda</mark>. Scrivi <mark>1</mark> se vince la prima, <mark>2</mark> se vince la seconda, <mark>X</mark> se è pareggio.',
  analysis:[
   {q:'Quali sono gli <b>input</b>?',multi:1,opts:[['I gol della prima squadra',1],['I gol della seconda squadra',1],['Il vincitore',0,'Il vincitore lo scopre il programma: è l’output.']],ok:'Esatto: due numeri, per esempio 3 e 2.'},
   {q:'Quanti casi diversi ci sono?',opts:[['3',1],['2',0,'Ci sono anche i pareggi: 1, X e 2 sono tre casi.']],ok:'Tre casi: vince la prima, pareggio, vince la seconda.'},
@@ -889,8 +1006,8 @@ const EXS=[
  wrong:[[IF('g1 < g2',[],[]),'Partiamo dal caso “1”: vince la prima squadra se ha fatto più gol.'],[O('1'),'Si può fare, ma 1 qui è un simbolo da scrivere, come X: mettiamolo tra virgolette, “1”.'],[O('X'),'Senza virgolette il computer cerca una variabile che si chiama X! Il testo va tra virgolette: "X".'],[I('risultato'),'Il risultato lo calcoliamo noi: chiediamo i gol.']],
  tests:[[[3,2],['1'],'3 a 2'],[[1,1],['X'],'1 a 1'],[[0,2],['2'],'0 a 2']],
  bug:{prog:[D('g1, g2','Intero'),I('g1'),I('g2'),BAD(IF('g1 < g2',[O('"1"')],[IF('g1 = g2',[O('"X"')],[O('"2"')])])),],q:'Con 3 a 2 questo programma scrive “2”. <b>Tocca il blocco sbagliato.</b>',why:'Il primo rombo ha la condizione al contrario: la prima squadra vince se g1 > g2.',hint:'Chi decide quando scrivere “1”?'}},
-{id:'e8',n:8,mod:3,title:'Somma o prodotto?',lvl:2,skills:['selezione'],
- text:'Scrivere l’algoritmo che, dati <mark>due numeri</mark>, calcoli la <mark>somma se sono entrambi positivi</mark>, <mark>altrimenti il prodotto</mark>.',
+{id:'e8',n:8,mod:4,title:'Somma o prodotto?',lvl:2,skills:['selezione'],
+ text:'Chiedi <mark>due numeri</mark>. Se sono <mark>tutti e due positivi</mark> scrivi la loro <mark>somma</mark>, <mark>altrimenti</mark> il loro <mark>prodotto</mark>.',
  analysis:[
   {q:'Cosa vuol dire “entrambi positivi”?',opts:[['Il primo è positivo e anche il secondo',1],['Almeno uno dei due è positivo',0,'“Entrambi” vuol dire tutti e due.'],['La loro somma è positiva',0,'Con -1 e 5 la somma è positiva, ma -1 non è positivo.']],ok:'Esatto: tutti e due.'},
   {q:'Quale <b>condizione</b> scriviamo?',opts:[['a > 0 and b > 0',1],['a > 0 or b > 0',0,'Con or basta che UNO dei due sia positivo. Il testo dice entrambi.'],['a + b > 0',0,'Con -1 e 5 sarebbe vera, ma -1 non è positivo.']],ok:'Perfetto: and = tutte e due vere. (Si poteva fare anche con due rombi uno dentro l’altro.)'},
@@ -899,17 +1016,17 @@ const EXS=[
  wrong:[[IF('a > 0 or b > 0',[],[]),'Con or basta un numero positivo. Il testo dice entrambi: and.'],[IF('a + b > 0',[],[]),'La somma positiva non vuol dire che lo sono tutti e due.'],[A('r','a * b'),'Questo è il prodotto: va nel caso Falso.'],[A('r','a - b'),'Il testo non chiede la differenza.']],
  tests:[[[3,4],['7'],'3 e 4'],[[-2,5],['-10'],'-2 e 5'],[[0,4],['0'],'0 e 4']],
  bug:{prog:[D('a, b, r','Reale'),I('a'),I('b'),BAD(IF('a > 0 or b > 0',[A('r','a + b')],[A('r','a * b')])),O('r')],q:'Con -2 e 5 questo programma dà 3 invece di -10. <b>Tocca il blocco sbagliato.</b>',why:'Con or basta che uno solo sia positivo. Il testo dice “entrambi”: serve and.',hint:'Guarda la parola che unisce le due condizioni.'}},
-{id:'e9',n:9,mod:3,title:'Sottrazione, somma o uguali',lvl:2,skills:['selezione'],
- text:'Ricevuti in ingresso <mark>due valori</mark>: fanne la <mark>sottrazione se il primo è maggiore</mark> del secondo e la <mark>somma se il primo è minore</mark>. <mark>Se sono uguali</mark> segnalalo a video.',
+{id:'e9',n:9,mod:4,title:'Sottrazione, somma o uguali',lvl:2,skills:['selezione'],
+ text:'Chiedi <mark>due numeri</mark>. Se il primo è <mark>più grande</mark>, scrivi la loro <mark>differenza</mark>. Se il primo è <mark>più piccolo</mark>, scrivi la loro <mark>somma</mark>. Se sono <mark>uguali</mark>, scrivi un messaggio.',
  analysis:[
   {q:'Quanti casi ci sono?',opts:[['3: maggiore, minore, uguali',1],['2',0,'Rileggi: c’è anche il caso “uguali”.']],ok:'Tre casi, quindi due rombi.'},
   {q:'Se i numeri sono uguali, cosa facciamo?',opts:[['Scriviamo un messaggio, per esempio “I numeri sono uguali”',1],['Facciamo la somma',0,'Il testo dice di segnalarlo a video: un Output con un messaggio.'],['Niente',0,'Il testo chiede di segnalarlo.']],ok:'Giusto: un Output con un testo tra virgolette.'}],
- sol:[D('a, b, r','Reale','Due valori e il risultato.'),I('a','Primo valore.'),I('b','Secondo valore.'),IF('a = b',[O('"I numeri sono uguali"','Caso uguali: lo segnaliamo.')],[IF('a > b',[A('r','a - b','Il primo è maggiore: sottrazione.'),O('r','Mostriamo il risultato.')],[A('r','a + b','Il primo è minore: somma.'),O('r','Mostriamo il risultato.')],'Non sono uguali: il primo è maggiore?')],'Primo controllo, come nel disegno della prof: sono uguali?')],
- wrong:[[IF('a < b',[],[]),'Partiamo come la prof: prima controlliamo se sono uguali.'],[O('I numeri sono uguali'),'Il testo va tra virgolette, altrimenti il computer pensa che siano nomi di variabili.'],[A('r','b - a'),'Il testo dice di sottrarre il secondo dal primo: a - b.'],[A('r','a * b'),'Il testo chiede somma o sottrazione, non prodotto.']],
+ sol:[D('a, b, r','Reale','Due valori e il risultato.'),I('a','Primo valore.'),I('b','Secondo valore.'),IF('a = b',[O('"I numeri sono uguali"','Caso uguali: lo segnaliamo.')],[IF('a > b',[A('r','a - b','Il primo è maggiore: sottrazione.'),O('r','Mostriamo il risultato.')],[A('r','a + b','Il primo è minore: somma.'),O('r','Mostriamo il risultato.')],'Non sono uguali: il primo è maggiore?')],'Primo controllo: sono uguali?')],
+ wrong:[[IF('a < b',[],[]),'Conviene partire dal caso più semplice: sono uguali?'],[O('I numeri sono uguali'),'Il testo va tra virgolette, altrimenti il computer pensa che siano nomi di variabili.'],[A('r','b - a'),'Il testo dice di sottrarre il secondo dal primo: a - b.'],[A('r','a * b'),'Il testo chiede somma o sottrazione, non prodotto.']],
  tests:[[[7,3],['4'],'7 e 3'],[[2,6],['8'],'2 e 6'],[[5,5],['I numeri sono uguali'],'5 e 5']],
  bug:{prog:[D('a, b, r','Reale'),I('a'),I('b'),IF('a = b',[O('"I numeri sono uguali"')],[IF('a > b',[BAD(A('r','b - a')),O('r')],[A('r','a + b'),O('r')])])],q:'Con 7 e 3 il programma scrive -4 invece di 4. <b>Tocca il blocco sbagliato.</b>',why:'La sottrazione è al contrario: dev’essere a - b (il primo meno il secondo).',hint:'Il risultato ha il segno sbagliato. Dove si sottrae?'}},
-{id:'e10',n:10,mod:3,title:'Il maggiore di tre',lvl:3,skills:['selezione'],
- text:'Ricevi in ingresso <mark>tre valori</mark> e <mark>visualizza il maggiore</mark>.',
+{id:'e10',n:10,mod:4,title:'Il maggiore di tre',lvl:3,skills:['selezione'],
+ text:'Chiedi <mark>tre numeri</mark> e scrivi il <mark>più grande</mark>.',
  analysis:[
   {q:'Come facciamo a trovare il maggiore tra a, b e c?',opts:[['Confronto a con b, poi il vincitore con c',1],['Li sommo e divido per 3',0,'Così trovi la media, non il maggiore.'],['Confronto solo a con b',0,'E c? Potrebbe essere lui il più grande.']],ok:'Esatto: come in un torneo. Prima a contro b, poi chi vince sfida c.'},
   {q:'Se a > b è vero, con chi confronto c?',opts:[['Con a',1],['Con b',0,'b ha già perso contro a: ora la sfida è tra a e c.']],ok:'Giusto. E se a > b è falso, confronto b con c.'},
@@ -918,8 +1035,8 @@ const EXS=[
  wrong:[[IF('a > b and b > c',[],[]),'Così controlli un caso solo. Cominciamo semplice: a contro b.'],[O('(a + b + c) / 3'),'Questa è la media, non il maggiore.'],[O('"a"'),'Con le virgolette scrivi la lettera a, non il suo valore.']],
  tests:[[[3,9,4],['9'],'3, 9 e 4'],[[8,2,5],['8'],'8, 2 e 5'],[[1,2,7],['7'],'1, 2 e 7']],
  bug:{prog:[D('a, b, c','Reale'),I('a'),I('b'),I('c'),IF('a > b',[IF('a > c',[O('a')],[O('c')])],[IF('b > c',[BAD(O('a'))],[O('c')])])],q:'Con 1, 9 e 4 il programma scrive 1. <b>Tocca il blocco sbagliato.</b>',why:'In quel ramo b ha battuto sia a che c: bisogna scrivere b, non a.',hint:'Segui la strada con 1, 9 e 4: a > b è falso, b > c è vero…'}},
-{id:'e11',n:11,mod:4,title:'La somma di 10 numeri',lvl:2,skills:['ciclo'],
- text:'Scrivere un algoritmo che calcoli la <mark>somma di 10 numeri</mark> forniti in ingresso.',
+{id:'e11',n:11,mod:5,title:'La somma di 10 numeri',lvl:2,skills:['ciclo'],
+ text:'Chiedi <mark>10 numeri</mark>, uno alla volta, e scrivi la loro <mark>somma</mark>.',
  analysis:[
   {q:'Brainstorming: come leggiamo 10 numeri?',opts:[['Con un ciclo che ripete 10 volte: leggi e somma',1],['Con 10 blocchi di Input e 10 variabili',0,'Funzionerebbe (è efficace), ma è lungo e scomodo. Con un ciclo bastano poche variabili, riusate ogni volta: è più efficiente.']],ok:'Esatto: un ciclo.'},
   {q:'Quali variabili servono?',multi:1,opts:[['Un contatore i',1],['Il numero letto n',1],['La somma',1],['Dieci variabili n1, n2… n10',0,'Non servono: n viene riusata a ogni giro.']],ok:'Bastano tre scatole: i, n e somma.'},
@@ -929,18 +1046,18 @@ const EXS=[
  wrong:[[WH('i < 10',[]),'Con i < 10 fai solo 9 giri.'],[A('somma','n'),'Così butti via quello che avevi: somma prende solo l’ultimo numero. Serve somma + n.'],[A('i','1'),'Rimettere i a 1 nel ciclo lo fa ripartire sempre: ciclo infinito!'],[A('somma','1'),'La somma deve partire da 0.']],
  tests:[[[1,2,3,4,5,6,7,8,9,10],['55'],'i numeri da 1 a 10 (somma 55). Usa il dado 🎲 per fare prima!']],
  bug:{prog:[D('i','Intero'),D('n, somma','Reale'),A('somma','0'),A('i','1'),WH('i <= 10',[I('n'),BAD(A('somma','n')),A('i','i + 1')]),O('somma')],q:'Questo programma scrive sempre l’ultimo numero inserito, non la somma. <b>Tocca il blocco sbagliato.</b>',why:'somma ← n butta via il totale e ci mette solo n. Serve somma ← somma + n.',hint:'Quale blocco dovrebbe “accumulare”?'}},
-{id:'e12',n:12,mod:4,title:'I primi 50 numeri pari',lvl:2,skills:['ciclo'],
- text:'Scrivere un algoritmo che <mark>visualizza 50 numeri pari</mark> che partono <mark>da 2</mark>.',
+{id:'e12',n:12,mod:5,title:'I primi 50 numeri pari',lvl:2,skills:['ciclo'],
+ text:'Scrivi sullo schermo i <mark>primi 50 numeri pari</mark>, partendo <mark>da 2</mark>.',
  analysis:[
   {q:'Quali dati servono in <b>input</b>?',opts:[['Nessuno: i numeri li genera il programma',1],['50 numeri',0,'Non li chiediamo: li calcola il programma, 2, 4, 6…'],['Il numero 2',0,'Il 2 è scritto nel testo: lo mettiamo noi in una variabile, non serve chiederlo.']],ok:'Giusto: niente Input.'},
   {q:'Se p è un numero pari, il pari dopo è…',opts:[['p + 2',1],['p + 1',0,'Da un pari, +1 dà un dispari.'],['p * 2',0,'Da 2 faresti 4, 8, 16… raddoppia ogni volta.']],ok:'Esatto.'},
-  {q:'Quante variabili usiamo, come nella soluzione della prof?',opts:[['Due: p (il numero pari) e i (il contatore)',1],['Una sola',0,'Si può fare anche con una (finché p <= 100), ma la prof usa il contatore i. Facciamo così.']],ok:'Bene: p per il numero, i per contare fino a 50.'}],
+  {q:'Quali variabili usiamo?',opts:[['Due: p (il numero pari) e i (il contatore)',1],['Una sola',0,'Si può fare anche con una sola (finché p <= 100), ma con il contatore i è più facile capire quando fermarsi.']],ok:'Bene: p per il numero, i per contare fino a 50.'}],
  sol:[D('p, i','Intero','Due interi: il numero pari e il contatore.'),A('p','2','Il primo numero pari è 2.'),A('i','1','Il contatore parte da 1.'),WH('i <= 50',[O('p','Scriviamo il numero pari.'),A('p','p + 2','Passiamo al pari successivo.'),A('i','i + 1','Il contatore va avanti.')],'Ripetiamo 50 volte.')],
  wrong:[[A('p','p + 1'),'Da un pari, +1 dà un dispari.'],[I('p'),'Il numero non lo chiediamo: lo genera il programma.'],[WH('i <= 100',[]),'Il contatore conta i numeri scritti: ne servono 50, non 100.'],[A('p','p * 2'),'Così raddoppi: 2, 4, 8, 16…']],
  tests:[[[],Array.from({length:50},(_,k)=>String(2*k+2)),'nessun input (si aspetta 2, 4, 6 … 100)']],
  bug:{prog:[D('p, i','Intero'),A('p','2'),A('i','1'),WH('i <= 50',[O('p'),BAD(A('p','p + 1')),A('i','i + 1')])],q:'Questo programma scrive 2, 3, 4, 5… <b>Tocca il blocco sbagliato.</b>',why:'Per passare da un pari al successivo si aggiunge 2, non 1.',hint:'Dove cambia il numero da scrivere?'}},
-{id:'e13',n:13,mod:4,title:'Quanti numeri negativi?',lvl:3,skills:['ciclo','selezione'],
- text:'Scrivere un algoritmo che, presi in input <mark>20 numeri interi</mark>, diversi da zero, dica <mark>quanti valori negativi</mark> sono stati inseriti.',
+{id:'e13',n:13,mod:5,title:'Quanti numeri negativi?',lvl:3,skills:['ciclo','selezione'],
+ text:'Chiedi <mark>20 numeri</mark> (nessuno è zero). Scrivi <mark>quanti sono negativi</mark>.',
  analysis:[
   {q:'Brainstorming: cosa serve?',multi:1,opts:[['Un ciclo per leggere 20 numeri',1],['Un rombo per capire se il numero è negativo',1],['20 variabili diverse',0,'No: un numero alla volta nella stessa variabile n.']],ok:'Esatto: un rombo dentro un ciclo!'},
   {q:'Quando un numero è negativo?',opts:[['n < 0',1],['n > 0',0,'Maggiore di 0 vuol dire positivo.'],['n = 0',0,'Lo zero non è negativo (e il testo dice che non ci sarà).']],ok:'Giusto.'},
@@ -949,21 +1066,21 @@ const EXS=[
  wrong:[[IF('n > 0',[],[]),'n > 0 vuol dire positivo.'],[O('n'),'Il testo chiede quanti sono, non di scriverli.'],[A('neg','n'),'neg deve contare: neg + 1, non prendere il valore del numero.'],[WH('i < 20',[]),'Con i < 20 leggi solo 19 numeri.']],
  tests:[[[3,-1,4,-5,9,2,-6,5,3,5,-8,9,7,9,3,2,-3,8,4,6],['5'],'20 numeri, di cui 5 negativi (inseriti in automatico dal test)']],
  bug:{prog:[D('i, n, neg','Intero'),A('neg','0'),A('i','1'),WH('i <= 20',[I('n'),BAD(IF('n > 0',[A('neg','neg + 1')],[])),A('i','i + 1')]),O('neg')],q:'Questo programma conta i numeri positivi invece dei negativi. <b>Tocca il blocco sbagliato.</b>',why:'La condizione dev’essere n < 0.',hint:'Chi decide cosa contare?'}},
-{id:'e14',n:14,mod:5,title:'Verifica: massimo e minimo',lvl:3,verifica:1,skills:['ciclo','selezione'],
- text:'Scrivere un algoritmo che, dati in input dei numeri, <mark>visualizzi il massimo e il minimo</mark>.',
+{id:'e14',n:14,mod:6,title:'Verifica: massimo e minimo',lvl:3,verifica:1,skills:['ciclo','selezione'],
+ text:'Chiedi <mark>quanti numeri</mark> vuoi inserire, poi chiedili uno alla volta. Scrivi il <mark>più grande</mark> e il <mark>più piccolo</mark>.',
  analysis:[
-  {q:'Non sappiamo quanti numeri arriveranno. Come facciamo?',opts:[['Chiediamo prima quanti numeri vuole inserire (n)',1],['Ne leggiamo sempre 10',0,'Il testo non dice quanti: meglio chiederlo all’utente.']],ok:'Esatto, come nella soluzione della prof.'},
+  {q:'Non sappiamo quanti numeri arriveranno. Come facciamo?',opts:[['Chiediamo prima quanti numeri vuole inserire (n)',1],['Ne leggiamo sempre 10',0,'Il testo non dice quanti: meglio chiederlo all’utente.']],ok:'Esatto: così sappiamo quante volte ripetere.'},
   {q:'Da quale valore partono max e min?',opts:[['Dal primo numero letto',1],['Da 0',0,'Se tutti i numeri sono negativi, il massimo resterebbe 0, che non è tra i numeri! Meglio partire dal primo numero.'],['Da 100',0,'E se i numeri sono più grandi di 100?']],ok:'Giusto: il primo numero è, per ora, sia il più grande sia il più piccolo.'},
   {q:'Dentro il ciclo, quando cambiamo max?',opts:[['Quando il numero letto è più grande di max',1],['Sempre',0,'Se lo cambi sempre, max diventa l’ultimo numero, non il più grande.']],ok:'Esatto. Stessa cosa per min, ma con <.'}],
  sol:[D('n, i','Intero','Quanti numeri, e il contatore.'),D('v, max, min','Reale','Il numero letto, il massimo e il minimo.'),I('n','Prima chiediamo quanti numeri vuole inserire.'),I('v','Leggiamo il primo numero.'),A('max','v','Il primo numero è, per ora, il più grande…'),A('min','v','…e anche il più piccolo.'),A('i','1','Ne abbiamo letto 1.'),WH('i < n',[I('v','Leggiamo il numero successivo.'),IF('v > max',[A('max','v','Nuovo massimo!')],[],'È più grande del massimo?'),IF('v < min',[A('min','v','Nuovo minimo!')],[],'È più piccolo del minimo?'),A('i','i + 1','Il contatore va avanti.')],'Finché ne mancano da leggere. i < n perché il primo l’abbiamo già letto.'),O('max','Mostriamo il massimo.'),O('min','E il minimo.')],
  wrong:[[A('max','0'),'Se i numeri sono tutti negativi, il massimo resterebbe 0.'],[IF('v < max',[],[]),'Il massimo cambia quando arriva un numero più grande: v > max.'],[A('max','max + v'),'Così fai una somma, non trovi il massimo.'],[WH('i <= n',[]),'Il primo numero l’abbiamo già letto prima del ciclo: con i <= n ne leggeresti uno in più.']],
  tests:[[[4,7,2,9,5],['9','2'],'n = 4, poi 7, 2, 9, 5'],[[3,-5,-2,-9],['-2','-9'],'n = 3, poi -5, -2, -9']],
  bug:{prog:[D('n, i','Intero'),D('v, max, min','Reale'),I('n'),I('v'),BAD(A('max','0')),A('min','v'),A('i','1'),WH('i < n',[I('v'),IF('v > max',[A('max','v')],[]),IF('v < min',[A('min','v')],[]),A('i','i + 1')]),O('max'),O('min')],q:'Con i numeri -5, -2, -9 il massimo esce 0! <b>Tocca il blocco sbagliato.</b>',why:'max non deve partire da 0 ma dal primo numero letto: max ← v.',hint:'Da dove parte il massimo?'}},
-{id:'e15',n:15,mod:5,title:'Verifica: voti sufficienti',lvl:3,verifica:1,skills:['ciclo','selezione'],
- text:'Scrivere un algoritmo che, dati in input <mark>5 voti</mark>, dica <mark>quanti sono sufficienti</mark>, <mark>quanti insufficienti</mark> e <mark>quali sono in numero maggiore</mark>.',
+{id:'e15',n:15,mod:6,title:'Verifica: voti sufficienti',lvl:3,verifica:1,skills:['ciclo','selezione'],
+ text:'Chiedi <mark>5 voti</mark>. Scrivi <mark>quanti sono sufficienti</mark> (almeno 6), <mark>quanti insufficienti</mark> e <mark>quali sono di più</mark>.',
  analysis:[
   {q:'Quando un voto è sufficiente?',opts:[['voto >= 6',1],['voto > 6',0,'Il 6 è sufficiente! Serve >=.'],['voto = 6',0,'Anche 7, 8, 9 e 10 sono sufficienti.']],ok:'Giusto.'},
-  {q:'Se conto i sufficienti (s), come trovo gli insufficienti?',opts:[['5 - s',1],['Li conto con un altro rombo',0,'Si può fare, ma è più semplice: i voti sono 5, quindi gli insufficienti sono 5 - s. Più efficiente!'],['s - 5',0,'Verrebbe un numero negativo.']],ok:'Esatto: come nella soluzione della prof.'},
+  {q:'Se conto i sufficienti (s), come trovo gli insufficienti?',opts:[['5 - s',1],['Li conto con un altro rombo',0,'Si può fare, ma è più semplice: i voti sono 5, quindi gli insufficienti sono 5 - s. Più efficiente!'],['s - 5',0,'Verrebbe un numero negativo.']],ok:'Esatto: meno lavoro, stesso risultato.'},
   {q:'Brainstorming: cosa serve?',multi:1,opts:[['Un ciclo per i 5 voti',1],['Un rombo per contare i sufficienti',1],['Un rombo finale per dire chi sono di più',1]],ok:'Perfetto: due rombi e un ciclo.'}],
  sol:[D('i, s, ins','Intero','Contatore, sufficienti, insufficienti.'),D('v','Reale','Il voto può essere 6.5.'),A('s','0','Sufficienti trovati: zero.'),A('i','1','Il contatore parte da 1.'),WH('i <= 5',[I('v','Leggiamo un voto.'),IF('v >= 6',[A('s','s + 1','Sufficiente: lo contiamo.')],[],'È sufficiente?'),A('i','i + 1','Avanti il prossimo.')],'Cinque voti.'),A('ins','5 - s','Gli insufficienti sono quelli che restano.'),O('"Sufficienti: " & s','Con & attacchiamo un testo e un numero.'),O('"Insufficienti: " & ins','Lo stesso per gli insufficienti.'),IF('s > ins',[O('"Sono di più i sufficienti"')],[O('"Sono di più gli insufficienti"')],'Chi sono di più? (Con 5 voti non può esserci pareggio.)')],
  wrong:[[IF('v > 6',[],[]),'Il 6 è sufficiente: serve >=.'],[A('ins','s - 5'),'Verrebbe negativo. Gli insufficienti sono 5 - s.'],[O('s'),'Va bene, ma scriviamo anche cosa vuol dire quel numero: "Sufficienti: " & s.'],[WH('i < 5',[]),'Con i < 5 leggi solo 4 voti.']],
@@ -973,7 +1090,7 @@ const EXS=[
 /* ================= APP ================= */
 if(typeof document!=='undefined'){(function(){
 const main=$('#main');
-const PROG=Object.assign({done:{},ex:{},skills:{},videos:{},last:''},store.get('prog',{}));
+const PROG=Object.assign({done:{},ex:{},skills:{},videos:{},mods:{},last:''},store.get('prog',{}));
 const save=()=>store.set('prog',PROG);
 const STOP={stop:1};
 const R={cleanup:[],token:{}};
@@ -1006,18 +1123,20 @@ function shapeDemo(k){const mk=(nodes)=>`<div class="row" style="justify-content
   if(k==='term')return mk([{t:'term',txt:'Inizio'},{t:'term',txt:'Fine'}]);
   if(k==='io')return mk([{t:'input',v:'base'},{t:'output',e:'area'}]);
   if(k==='asg')return mk([{t:'assign',v:'a',e:'2'},{t:'assign',v:'area',e:'b * h'}]);
-  if(k==='if')return mk([{t:'if',c:'media >= 6'}]);return ''}
-function fillSlide(html){return html.replace(/__SHAPE_(\w+)__/g,(_,k)=>shapeDemo(k))}
+  if(k==='if')return mk([{t:'if',c:'media >= 6'}]);
+  if(k==='all')return mk([{t:'term',txt:'Inizio'},{t:'input',v:'base'},{t:'assign',v:'area',e:'b * h'},{t:'output',e:'area'}]);return ''}
+const NT=s=>String(s).split('{=}').join(SET.notation);
+function fillSlide(html){return NT(html).replace(/__SHAPE_(\w+)__/g,(_,k)=>shapeDemo(k))}
 function drawCharts(root){$$('[data-chart]',root).forEach(el=>{const p=ensureIds(clone(DEMO[el.dataset.chart]));el.innerHTML=renderChart(p,{draw:true}).html})}
 
 /* ================= ESECUTORE ================= */
 function mountRunner(el,opt){
-  const st={prog:opt.prog,zoom:opt.zoom||(innerWidth<420?.9:1),ex:null,playing:false,timer:null,outs:[],ins:[],speed:store.get('speed',2),active:null,seqs:[],newId:null,infos:new Set()};
+  const st={prog:opt.prog,zoom:opt.zoom||1,fitted:!!opt.zoom,ex:null,playing:false,timer:null,outs:[],ins:[],speed:store.get('speed',2),active:null,seqs:[],newId:null,infos:new Set()};
   el.innerHTML=`<div class="runner">
     <div class="rbar">
       <button class="btn sm pri" data-r="play">▶ Esegui</button>
-      <button class="btn sm" data-r="step" title="Esegui un blocco alla volta">⏭ Un passo</button>
-      <button class="btn sm" data-r="stop" disabled>⏹ Stop</button>
+      <button class="btn sm" data-r="step" title="Esegui un blocco alla volta" aria-label="Un passo">⏭<span class="t"> Un passo</span></button>
+      <button class="btn sm" data-r="stop" disabled aria-label="Stop">⏹<span class="t"> Stop</span></button>
       <label class="speed">🐢<input type="range" min="0" max="4" step="1" value="${st.speed}" data-r="speed" aria-label="Velocità di esecuzione">🐇</label>
       <span class="zoom"><button class="btn icon sm" data-r="zout" aria-label="Rimpicciolisci il diagramma">−</button><button class="btn icon sm" data-r="zin" aria-label="Ingrandisci il diagramma">+</button></span>
     </div>
@@ -1029,7 +1148,9 @@ function mountRunner(el,opt){
     </div></div>`;
   const q=k=>el.querySelector(`[data-r="${k}"]`);
   const box=q('box'),lines=q('lines'),vars=q('vars'),form=q('form'),inp=q('inp');
-  function draw(){const r=renderChart(st.prog,{editable:opt.editable,tap:opt.editable||!!opt.onTap,zoom:st.zoom,active:st.active,newId:st.newId,mark:opt.mark});box.innerHTML=r.html;st.seqs=r.seqs;st.newId=null}
+  function draw(){let r=renderChart(st.prog,{editable:opt.editable,tap:opt.editable||!!opt.onTap,zoom:st.zoom,active:st.active,newId:st.newId,mark:opt.mark});
+    if(!st.fitted&&box.clientWidth){st.fitted=true;const z=Math.max(.6,Math.min(1,(box.clientWidth-16)/r.W));if(Math.abs(z-st.zoom)>.01){st.zoom=z;r=renderChart(st.prog,{editable:opt.editable,tap:opt.editable||!!opt.onTap,zoom:st.zoom,active:st.active,newId:st.newId,mark:opt.mark})}}
+    box.innerHTML=r.html;st.seqs=r.seqs;st.newId=null}
   function line(t,c){const d=document.createElement('div');d.className='cl '+c;d.textContent=t;lines.appendChild(d);while(lines.children.length>400)lines.firstChild.remove();lines.scrollTop=lines.scrollHeight}
   function btns(){q('play').disabled=st.playing;q('play').textContent=st.ex&&!st.playing?'▶ Continua':'▶ Esegui';q('stop').disabled=!st.ex}
   function setActive(id){$$('.blk.active,.blk.err',box).forEach(g=>g.classList.remove('active','err'));st.active=id;const g=box.querySelector(`.blk[data-id="${CSS.escape(id)}"]`);
@@ -1122,22 +1243,24 @@ function mountRunner(el,opt){
 
 /* ================= ATTIVITÀ ================= */
 function mountAct(el,a,done){
-  let fired=false;const ok=()=>{if(!fired){fired=true;done()}};
-  const head=t=>`<div class="ah"><span aria-hidden="true">✋</span>${t||'Tocca a te'}</div>`;
+  a=JSON.parse(NT(JSON.stringify(a)));
+  let fired=false;const ok=()=>{if(!fired){fired=true;el.classList.add('won');const s=document.createElement('div');s.className='star';s.setAttribute('aria-hidden','true');s.textContent='⭐ Bravo!';el.appendChild(s);setTimeout(()=>s.remove(),1600);done()}};
+  const KIND={quiz:['⚡','Verifica lampo'],tf:['⚡','Verifica lampo'],classify:['⚡','Verifica lampo'],order:['⚡','Verifica lampo'],build:['🛠️','Costruisci il diagramma']};
+  const head=t=>{const k=KIND[a.type]||['✋','Prova tu'];return `<div class="ah"><span aria-hidden="true">${k[0]}</span>${t&&!KIND[a.type]?t:k[1]}</div>`};
   const fb=(box,html,good)=>{box.innerHTML=`<div class="fb ${good?'ok':'ko'}" role="status">${good?'✅ ':'💡 '}${html}</div>`};
   if(a.type==='quiz'){const order=shuffle(a.opts.map((_,i)=>i));
-    el.innerHTML=head()+`<p><b>${esc(a.q)}</b></p><div class="opts">${order.map(i=>`<button class="opt" data-i="${i}"><span class="mk" aria-hidden="true"></span><span>${esc(a.opts[i][0])}</span></button>`).join('')}</div><div data-fb></div>`;
+    el.innerHTML=head()+`<p><b>${esc(a.q)}</b></p><div class="opts">${order.map((i,j)=>`<button class="opt" data-i="${i}"><span class="mk" aria-hidden="true">${'ABCD'[j]}</span><span>${esc(a.opts[i][0])}</span></button>`).join('')}</div><div data-fb></div>`;
     el.addEventListener('click',e=>{const b=e.target.closest('.opt');if(!b||b.disabled)return;const o=a.opts[+b.dataset.i];
       if(o[1]){b.classList.add('right');b.querySelector('.mk').textContent='✓';$$('.opt',el).forEach(x=>x.disabled=true);fb($('[data-fb]',el),esc(o[2]||'Giusto!'),true);ok()}
       else{b.classList.add('wrong','shake');b.disabled=true;b.querySelector('.mk').textContent='✗';fb($('[data-fb]',el),esc(o[2]||'Non è questa.')+' Riprova.',false)}})}
   else if(a.type==='tf'){let right=0;
-    el.innerHTML=head()+`<p><b>${esc(a.q)}</b></p><div class="cls">${a.items.map((it,i)=>`<div class="clsrow" data-i="${i}"><div>${esc(it[0])}</div><div class="seg"><button data-v="1">Vero</button><button data-v="0">Falso</button></div><div data-fb></div></div>`).join('')}</div>`;
+    el.innerHTML=head()+`<p><b>${esc(a.q)}</b></p><div class="cls">${a.items.map((it,i)=>`<div class="clsrow" data-i="${i}"><div>${esc(it[0])}</div><div class="seg" style="grid-template-columns:repeat(2,minmax(0,1fr))"><button data-v="1">Vero</button><button data-v="0">Falso</button></div><div data-fb></div></div>`).join('')}</div>`;
     el.addEventListener('click',e=>{const b=e.target.closest('.seg button');if(!b||b.disabled)return;const row=b.closest('.clsrow');const it=a.items[+row.dataset.i];const v=b.dataset.v==='1';
       $$('button',row).forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));
       if(v===it[1]){row.classList.remove('wrong');row.classList.add('right');$$('button',row).forEach(x=>x.disabled=true);fb($('[data-fb]',row),esc(it[2]),true);if(++right===a.items.length)ok()}
       else{row.classList.add('wrong','shake');setTimeout(()=>row.classList.remove('shake'),400);fb($('[data-fb]',row),'Non proprio. Ripensaci e riprova.',false)}})}
   else if(a.type==='classify'){let right=0;
-    el.innerHTML=head()+`<p><b>${esc(a.q)}</b></p><div class="cls">${a.items.map((it,i)=>`<div class="clsrow" data-i="${i}"><div><b>${esc(it[0])}</b></div><div class="seg">${a.bins.map((bn,j)=>`<button data-j="${j}">${esc(bn)}</button>`).join('')}</div><div data-fb></div></div>`).join('')}</div>`;
+    el.innerHTML=head()+`<p><b>${esc(a.q)}</b></p><div class="cls">${a.items.map((it,i)=>`<div class="clsrow" data-i="${i}"><div><b>${esc(it[0])}</b></div><div class="seg" style="grid-template-columns:repeat(${a.bins.length>3?2:a.bins.length},minmax(0,1fr))">${a.bins.map((bn,j)=>`<button data-j="${j}">${esc(bn)}</button>`).join('')}</div><div data-fb></div></div>`).join('')}</div>`;
     el.addEventListener('click',e=>{const b=e.target.closest('.seg button');if(!b||b.disabled)return;const row=b.closest('.clsrow');const it=a.items[+row.dataset.i];
       $$('button',row).forEach(x=>x.setAttribute('aria-pressed',x===b?'true':'false'));
       if(+b.dataset.j===it[1]){row.classList.remove('wrong');row.classList.add('right');$$('button',row).forEach(x=>x.disabled=true);fb($('[data-fb]',row),esc(it[2]),true);if(++right===a.items.length)ok()}
@@ -1177,6 +1300,27 @@ function mountAct(el,a,done){
       if(i===null){i=1;act(prog[0].id);$('[data-c]',el).textContent=1;$('[data-calc]',el).textContent='Preparo il contatore: i ← 1';$('[data-go]',el).textContent='Controlla la condizione ▶';return}
       if(i<=5){act(W.id);$('[data-calc]',el).textContent=`${i} <= 5 ? Vero → entro nel ciclo`;setTimeout(()=>{act(W.body[0].id);$('[data-man]',el).textContent='💪'.repeat(i);i++;setTimeout(()=>{act(W.body[1].id);$('[data-c]',el).textContent=i;$('[data-c]',el).classList.add('pop');setTimeout(()=>$('[data-c]',el).classList.remove('pop'),400)},SET.rm?0:500)},SET.rm?0:500);$('[data-go]',el).textContent='Fai un altro giro ▶'}
       else{act(W.id);$('[data-calc]',el).textContent=`${i} <= 5 ? Falso → esco dal ciclo`;setTimeout(()=>act('end'),SET.rm?0:600);fin=true;$('[data-go]',el).disabled=true;fb($('[data-fb]',el),'Fatto! Il ciclo ha ripetuto 5 volte. Quando i è diventato 6 la condizione è diventata falsa e il programma è uscito dal ciclo.',true);ok()}})}
+  else if(a.type==='build'){const B=BUILD[a.b];const sol=ensureIds(clone(B.prog));const steps=flattenSteps(sol,{k:'top'},[]);const placed=new Set(),setV=new Set();let si=0,lastNew=null,errs=0,opts=[];
+    el.innerHTML=head()+`<div class="buildg"><div class="chartwrap" data-ch></div><div><p class="bq" data-q aria-live="polite"></p><div class="choices" data-o></div><div data-fb aria-live="polite"></div></div></div>`;
+    const ch=$('[data-ch]',el),q=$('[data-q]',el),o=$('[data-o]',el),fbx=$('[data-fb]',el);
+    const show=g=>{const p=g==='END'?partial(sol,placed,null).concat([{t:'ghost',id:'ghost'}]):g?partial(sol,placed,g):sol;ch.innerHTML=renderChart(p,{newId:lastNew,draw:!g}).html;
+      const gh=ch.querySelector('.k-ghost');if(gh)try{const gb=gh.getBoundingClientRect(),wb=ch.getBoundingClientRect();ch.scrollTop+=gb.top-wb.top-wb.height/2}catch(e){}};
+    function next(){while(si<steps.length&&steps[si].empty)si++;
+      if(si>=steps.length){show('END');q.innerHTML='Abbiamo messo tutti i blocchi. Con cosa si chiude il diagramma?';
+        opts=shuffle([{n:{t:'term',txt:'Fine'},ok:1},...shuffle(B.wrong).slice(0,2).map(w=>({n:w[0],why:'Il problema è già risolto: ora il diagramma deve finire.'}))]);draw();return}
+      const s=steps[si],n=s.n,c=s.ctx;show(n.id);
+      q.innerHTML=c.k==='yes'?`Ramo <b>Vero</b> (<code>${esc(c.p.c)}</code> è vera): cosa succede?`:c.k==='no'?`Ramo <b>Falso</b> (<code>${esc(c.p.c)}</code> è falsa): cosa succede?`:c.k==='body'?'<b>Dentro il ciclo</b>: quale blocco?':si===0?'Dopo <b>Inizio</b>, quale blocco viene per primo?':'Qual è il <b>prossimo</b> blocco?';
+      const lab=blockLabel(n);let fut=null,fw='';
+      if(n.t==='declare'){const f=steps.slice(si+1).find(x=>x.n&&x.n.t==='input');if(f){fut=f.n;fw='Non ancora: prima bisogna <b>creare</b> le scatole con Dichiara.'}}
+      else for(const x of steps.slice(si+1,si+5)){if(!x.n||blockLabel(x.n)===lab)continue;const miss=[...varsRead(x.n)].filter(v=>!setV.has(v));if(miss.length){fut=x.n;fw=`Non ancora: questo blocco usa <b>${esc(miss[0])}</b>, che adesso è ancora vuota.`;break}}
+      const wr=shuffle(B.wrong.filter(w=>blockLabel(w[0])!==lab&&(!fut||blockLabel(w[0])!==blockLabel(fut))));
+      opts=[{n,ok:1}];if(fut)opts.push({n:fut,why:fw});for(const w of wr){if(opts.length>=3)break;opts.push({n:w[0],why:esc(w[1])})}opts=shuffle(opts);errs=0;draw()}
+    function draw(){o.innerHTML=opts.map((x,i)=>`<button class="bopt${errs>=3&&x.ok?' hint':''}" data-i="${i}" aria-label="${esc(KNAME[x.n.t]+': '+blockLabel(x.n))}">${miniBlock(x.n)}</button>`).join('')}
+    o.addEventListener('click',e=>{const b=e.target.closest('.bopt');if(!b||b.disabled)return;const x=opts[+b.dataset.i];
+      if(x.ok){if(x.n.t==='term'){show(null);o.innerHTML='';q.innerHTML='';fb(fbx,'🎉 Diagramma completo! Ogni blocco è al suo posto.',true);confetti();ok();return}
+        placed.add(x.n.id);lastNew=x.n.id;if(x.n.t==='input'||x.n.t==='assign')setV.add(x.n.v.toLowerCase());fb(fbx,esc(x.n.tip||'Giusto!'),true);si++;next();return}
+      errs++;b.disabled=true;b.classList.add('no','shake');let m=x.why;if(errs===2)m+=`<br><b>Aiutino:</b> ${esc(steps[si]&&steps[si].n?TYPEHINT[steps[si].n.t]:'')}`;if(errs>=3){m+='<br>Ti ho evidenziato quello giusto.';$$('.bopt',o).forEach((bb,i)=>{if(opts[i].ok)bb.classList.add('hint')})}fb(fbx,m,false)});
+    next()}
   else if(a.type==='river')mountRiver(el,()=>{ok()});
   else if(a.type==='jugs')mountJugs(el,()=>{ok()});
 }
@@ -1210,7 +1354,7 @@ function mountJugs(el,onWin){const CAP=[25,5,3],H=[180,80,56];let v,sel,log,won;
     <div class="jugs">${CAP.map((c,i)=>`<button class="jug${sel===i?' sel':''}" data-j="${i}" aria-label="Recipiente da ${c} litri, contiene ${v[i]} litri${sel===i?', selezionato':''}"><div class="glass" style="height:${H[i]}px"><div class="w" style="height:${v[i]/c*100}%"></div><div class="num">${v[i]}</div></div><b>${c} L</b></button>`).join('')}</div>
     <p class="small muted" style="margin:8px 0" data-hint aria-live="polite">${won?'':sel===null?'Tocca il recipiente da cui versare.':`Versi dal ${CAP[sel]} L. Ora tocca dove versare (o di nuovo lo stesso per annullare).`}</p>
     <div class="row"><button class="btn" data-reset>↺ Ricomincia</button>${log.length>8&&!won?'<button class="btn" data-help>💡 Aiuto</button>':''}</div><div data-msg aria-live="polite"></div>
-    <div class="ph" style="margin-top:12px">Il tuo algoritmo (come nella tabella della prof)</div>
+    <div class="ph" style="margin-top:12px">Il tuo algoritmo, travaso dopo travaso</div>
     <table class="tbl"><tr><th>#</th><th>25 L</th><th>5 L</th><th>3 L</th></tr>${log.map((r,i)=>`<tr><td>${i+1}</td><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join('')}</table>`}
   el.addEventListener('click',e=>{if(e.target.closest('[data-reset]'))return reset();
     if(e.target.closest('[data-help]')){$('[data-msg]',el).innerHTML='<div class="fb ko">💡 Idea: alla fine nel 25 L ci vogliono 20 litri, quindi negli altri due devono restare 4 litri in tutto (per esempio 1 + 3). Prova a usare il 3 L come “misurino” per lasciare 1 litro nel 5 L.</div>';return}
@@ -1219,7 +1363,7 @@ function mountJugs(el,onWin){const CAP=[25,5,3],H=[180,80,56];let v,sel,log,won;
     if(sel===i){sel=null;return render()}
     const amt=Math.min(v[sel],CAP[i]-v[i]);if(!amt){sel=null;render();$('[data-msg]',el).innerHTML='<div class="fb ko">Il recipiente di arrivo è già pieno.</div>';return}
     v[sel]-=amt;v[i]+=amt;sel=null;log.push([...v]);render();
-    if(v[0]===20){won=true;render();$('[data-msg]',el).innerHTML=`<div class="fb ok">🎉 20 litri esatti in ${log.length-1} travasi! La tabella qui sotto è il tuo algoritmo. Ci sono tanti modi per risolverlo: la prof ne ha trovato uno in 9 travasi.</div>`;confetti();onWin()}});
+    if(v[0]===20){won=true;render();$('[data-msg]',el).innerHTML=`<div class="fb ok">🎉 20 litri esatti in ${log.length-1} travasi! La tabella qui sotto è il tuo algoritmo. Ci sono tanti modi per risolverlo: provane un altro!</div>`;confetti();onWin()}});
   reset()}
 
 /* ================= TUTOR ================= */
@@ -1334,7 +1478,7 @@ async function tutorRun(ex){
         host.addEventListener('click',h);host.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.closest('.blk')){e.preventDefault();h(e)}});R.cleanup.push(()=>{host.removeEventListener('click',h);res()})});
       if(!T.alive())throw STOP;addSkill('debug',ex.id)}
     /* FINE */
-    stage(stages.length-1);PROG.ex[ex.id]=1;save();(ex.skills||[]).forEach(s=>addSkill(s,ex.id));addSkill('simulatore',ex.id);if(ex.mod===2)addSkill('sequenza',ex.id);
+    stage(stages.length-1);PROG.ex[ex.id]=1;save();(ex.skills||[]).forEach(s=>addSkill(s,ex.id));addSkill('simulatore',ex.id);if(ex.mod===3)addSkill('sequenza',ex.id);
     confetti();const next=EXS[EXS.findIndex(e=>e.id===ex.id)+1];
     await T.say(`🏆 <b>Esercizio ${ex.n} completato!</b> Hai fatto l’analisi, costruito l’algoritmo, l’hai provato${ex.bug?' e hai trovato un errore':''}. Proprio come un programmatore.`,'good');
     T.choices.innerHTML=`<button class="btn pri wide" data-sim>▶️ Apri nel simulatore e modificalo</button>${next?`<a class="btn wide" href="#/es/${next.id}">Esercizio ${next.n}: ${esc(next.title)} →</a>`:''}<a class="btn wide ghost" href="#/lab">Torna al laboratorio</a>`;
@@ -1363,14 +1507,15 @@ function home(){const pct=overall();const last=PROG.last;
   <button class="item" data-settings><span class="i" aria-hidden="true">⚙️</span><span class="tx"><b>Impostazioni e accessibilità</b><span>Testo più grande, contrasto, animazioni</span></span><span class="st" aria-hidden="true">›</span></button>`;
   $('[data-settings]').addEventListener('click',settings)}
 
-function lessons(){main.innerHTML=`<h2>Lezioni</h2><p class="muted">Segui l’ordine: ogni lezione usa quello che hai imparato prima.</p><div class="list">${MODULES.map((m,i)=>{const d=m.slides.filter((_,j)=>PROG.done[`m${m.id}s${j}`]).length;const all=d===m.slides.length;
-  return `<a class="item${all?' done':''}" href="#/lezione/${i}/0"><span class="i" aria-hidden="true">${m.icon}</span><span class="tx"><b>${i+1}. ${esc(m.title)}</b><span>${esc(m.sub)} · ${d}/${m.slides.length}</span></span><span class="st">${all?'✅':'›'}</span></a>`}).join('')}</div>`}
+const modDone=m=>!!(PROG.mods&&PROG.mods[m.id])||m.slides.every((_,j)=>PROG.done[`m${m.id}s${j}`]);
+function lessons(){main.innerHTML=`<h2>Lezioni</h2><p class="muted">Segui l’ordine: ogni lezione usa quello che hai imparato prima. Dopo la lezione 3 sai già disegnare il tuo primo diagramma.</p><div class="list">${MODULES.map((m,i)=>{const d=m.slides.filter((_,j)=>PROG.done[`m${m.id}s${j}`]).length;const all=modDone(m);const pc=all?100:Math.round(d/m.slides.length*100);
+  return `<a class="item lesson${all?' done':''}" href="#/lezione/${i}/0"><span class="i" aria-hidden="true">${all?'✅':m.icon}</span><span class="tx"><b>${i+1}. ${esc(m.title)}</b><span>${esc(m.sub)} · ${m.slides.length} pagine · circa ${m.min} minuti</span><span class="bar mini-bar"><i style="width:${pc}%"></i></span></span><span class="st">${all?'<span class="chip ok">Fatta</span>':pc?pc+'%':'›'}</span></a>`}).join('')}</div>`}
 
 function slide(mi,si){const m=MODULES[mi];if(!m)return go('#/lezioni');
   if(si==='end')return moduleEnd(mi);si=+si;const s=m.slides[si];if(!s)return go(`#/lezione/${mi}/0`);
   PROG.last=`lezione/${mi}/${si}`;save();
   const key=`m${m.id}s${si}`;const done=!!PROG.done[key];
-  main.innerHTML=`<div class="slidehead"><span class="chip">${m.icon} Lezione ${mi+1}</span><div class="dots" aria-label="Pagina ${si+1} di ${m.slides.length}">${m.slides.map((_,j)=>`<i class="${j===si?'c':PROG.done[`m${m.id}s${j}`]?'d':''}"></i>`).join('')}</div></div>
+  main.innerHTML=`<div class="slidehead"><span class="chip">${m.icon} Lezione ${mi+1}</span><span class="small muted">${si+1} di ${m.slides.length}</span><div class="dots" aria-label="Pagina ${si+1} di ${m.slides.length}">${m.slides.map((_,j)=>`<i class="${j===si?'c':PROG.done[`m${m.id}s${j}`]?'d':''}"></i>`).join('')}</div></div>
     <article class="slide card"><h2>${esc(s.t)}</h2><div class="rv">${fillSlide(s.h)}</div><div class="act" data-act></div></article>
     <div class="slidenav"><button class="btn" data-prev ${si===0&&mi===0?'disabled':''}>← Indietro</button><button class="btn pri" data-next ${done||SET.lim?'':'disabled'}>${si===m.slides.length-1?'Fine lezione ✓':'Avanti →'}</button></div>
     <p class="small muted" data-lock style="text-align:center;margin-top:-6px">${done||SET.lim?'':'Completa l’attività per andare avanti'}</p>`;
@@ -1378,12 +1523,11 @@ function slide(mi,si){const m=MODULES[mi];if(!m)return go('#/lezioni');
   const race=$('[data-race-go]');race&&race.addEventListener('click',()=>{$$('.lane',main).forEach(l=>{l.classList.remove('go');void l.offsetWidth;l.classList.add('go')})});
   mountAct($('[data-act]'),s.act,()=>{PROG.done[key]=1;if(s.act.skill)addSkill(s.act.skill,key);save();const n=$('[data-next]');n.disabled=false;n.classList.add('pop');$('[data-lock]').textContent='';announce('Attività completata. Puoi andare avanti.')});
   $('[data-prev]').addEventListener('click',()=>go(si>0?`#/lezione/${mi}/${si-1}`:`#/lezione/${mi-1}/${MODULES[mi-1].slides.length-1}`));
-  $('[data-next]').addEventListener('click',()=>go(si<m.slides.length-1?`#/lezione/${mi}/${si+1}`:`#/lezione/${mi}/end`))}
+  $('[data-next]').addEventListener('click',()=>{PROG.done[key]=1;save();go(si<m.slides.length-1?`#/lezione/${mi}/${si+1}`:`#/lezione/${mi}/end`)})}
 
-function moduleEnd(mi){const m=MODULES[mi];const nx=MODULES[mi+1];confetti();
-  main.innerHTML=`<section class="card" style="text-align:center"><div style="font-size:3rem" aria-hidden="true">🎉</div><h2>Lezione ${mi+1} completata!</h2><p>${esc(m.title)}</p></section>
+function moduleEnd(mi){const m=MODULES[mi];const nx=MODULES[mi+1];confetti();PROG.mods=PROG.mods||{};PROG.mods[m.id]=1;m.slides.forEach((_,j)=>PROG.done[`m${m.id}s${j}`]=1);save();
+  main.innerHTML=`<section class="card" style="text-align:center"><div style="font-size:3rem" aria-hidden="true">🎉</div><h2>Lezione ${mi+1} completata! ✅</h2><p>${esc(m.title)}</p></section>
   ${m.ex&&m.ex.length?`<section class="card"><h3>🧪 Ora mettiti alla prova</h3><p class="muted small">Il tutor ti segue passo passo.</p><div class="list">${m.ex.map(id=>{const e=EXS.find(x=>x.id===id);return `<a class="item${PROG.ex[id]?' done':''}" href="#/es/${id}"><span class="i">${PROG.ex[id]?'✅':e.n}</span><span class="tx"><b>${esc(e.title)}</b><span>Esercizio ${e.n} · ${lvlStars(e.lvl)}</span></span></a>`}).join('')}</div></section>`:''}
-  ${m.video?`<section class="card"><h3>🎬 Da guardare</h3>${m.video.map(v=>`<a class="item" href="#/video"><span class="i">▶</span><span class="tx"><b>${esc(VIDEOS[v].title)}</b></span></a>`).join('')}</section>`:''}
   <div class="row">${nx?`<a class="btn pri" href="#/lezione/${mi+1}/0">Lezione ${mi+2}: ${esc(nx.title)} →</a>`:`<a class="btn pri" href="#/competenze">🏅 Guarda le tue competenze</a>`}<a class="btn" href="#/lezioni">Tutte le lezioni</a></div>`}
 
 function lab(){main.innerHTML=`<h2>Laboratorio</h2><p class="muted">Ogni esercizio si fa con il tutor: analisi, brainstorming, costruzione del diagramma, prova e caccia all’errore. Quelli che non fate in classe sono per casa.</p>
@@ -1421,15 +1565,15 @@ function sim(){const task=store.get('simtask',null);let prog=ensureIds(store.get
     s.addEventListener('click',e=>{if(e.target.closest('[data-x]'))return closeSheet();const b=e.target.closest('[data-k]');if(!b)return;if(prog.length&&!confirm('Il diagramma attuale verrà sostituito. Continuare?'))return;
       const [t,k]=b.dataset.k.split(':');prog=ensureIds(clone(t==='d'?DEMO[k]:EXS.find(x=>x.id===k).sol));store.set('sim',prog);store.set('simtask',null);closeSheet();sim()})})}
 
-function videos(){main.innerHTML=`<h2>Video</h2><p class="muted">Guarda i video della prof e poi prova gli esercizi di allenamento nel simulatore.</p>
+function videos(){main.innerHTML=`<h2>Video</h2><p class="muted">Puoi guardarli quando vuoi, in qualsiasi ordine. Sotto ogni video trovi degli esercizi da fare nel simulatore.</p>
   ${VIDEOS.map((v,i)=>`<section class="card"><h3>${esc(v.title)}</h3><button class="yt" data-yt="${i}" aria-label="Guarda il video: ${esc(v.title)}"><img src="https://i.ytimg.com/vi/${v.id}/hqdefault.jpg" alt="" loading="lazy"><span class="pl" aria-hidden="true">▶</span></button>
    <div class="row" style="margin-top:8px"><button class="btn sm" data-seen="${i}" aria-pressed="${!!PROG.videos[v.id]}">${PROG.videos[v.id]?'✅ Visto':'Segna come visto'}</button><a class="btn sm ghost" href="https://www.youtube.com/watch?v=${v.id}${v.start?'&t='+v.start+'s':''}" target="_blank" rel="noopener">Apri su YouTube ↗</a></div>
-   ${v.ex.length?`<div class="ph" style="margin-top:12px">Esercizi di allenamento (per casa)</div><div class="list">${v.ex.map((t,j)=>`<button class="item" data-hw="${i}:${j}"><span class="i">${j+1}</span><span class="tx"><b style="font-weight:500">${esc(t)}</b><span>Fallo nel simulatore ›</span></span></button>`).join('')}</div>`:'<p class="small muted" style="margin-top:8px">Dopo il video, ripassa la lezione sul ciclo e prova gli esercizi 11, 12 e 13.</p>'}</section>`).join('')}`;
+   ${v.ex.length?`<div class="ph" style="margin-top:12px">Esercizi di allenamento (per casa)</div><div class="list">${v.ex.map((t,j)=>`<button class="item" data-hw="${i}:${j}"><span class="i">${j+1}</span><span class="tx"><b style="font-weight:500">${esc(t)}</b><span>Fallo nel simulatore ›</span></span></button>`).join('')}</div>`:''}</section>`).join('')}`;
   main.addEventListener('click',videoClick);R.cleanup.push(()=>main.removeEventListener('click',videoClick))}
 function videoClick(e){const y=e.target.closest('[data-yt]');if(y){const v=VIDEOS[+y.dataset.yt];y.outerHTML=`<div class="yt"><iframe src="https://www.youtube-nocookie.com/embed/${v.id}?autoplay=1&rel=0${v.start?'&start='+v.start:''}" title="${esc(v.title)}" allow="autoplay; encrypted-media; picture-in-picture; fullscreen" allowfullscreen></iframe></div>`;return}
   const s=e.target.closest('[data-seen]');if(s){const v=VIDEOS[+s.dataset.seen];PROG.videos[v.id]=!PROG.videos[v.id];save();s.textContent=PROG.videos[v.id]?'✅ Visto':'Segna come visto';s.setAttribute('aria-pressed',!!PROG.videos[v.id]);return}
   const h=e.target.closest('[data-hw]');if(h){const [i,j]=h.dataset.hw.split(':').map(Number);if(simDirty()&&!confirm('Vuoi iniziare un diagramma nuovo per questo esercizio? Quello attuale nel simulatore verrà cancellato.'))return;
-    store.set('sim',[]);store.set('simtask',{title:`${VIDEOS[i].title} · esercizio ${j+1}`,text:esc(VIDEOS[i].ex[j])+'<br><span class="small muted">Ricorda: prima l’analisi (input, output, relazione), poi i blocchi, poi prova con dei dati di cui conosci il risultato.</span>'});go('#/sim')}}
+    store.set('sim',[]);store.set('simtask',{title:`${VIDEOS[i].title} · esercizio ${j+1}`,text:esc(VIDEOS[i].ex[j])+'<br><span class="small muted">Prima l’analisi (cosa entra, cosa esce, che calcolo serve), poi i blocchi, poi provalo con dati di cui conosci il risultato.</span>'});go('#/sim')}}
 
 function skills(){const tot=SKILLS.reduce((a,s)=>a+skillLv(s[0]),0),max=SKILLS.length*3,pct=Math.round(tot/max*100);const r=46,C=2*Math.PI*r;
   const where={fasi:'Lezione 1',analisi:'Lezione 1 ed esercizi 3-5',blocchi:'Lezione 2',variabili:'Lezione 2',sequenza:'Esercizi 3, 4, 5',selezione:'Lezione 3 ed esercizi 6-10',ciclo:'Lezione 4 ed esercizi 11-13',simulatore:'Simulazioni nelle lezioni e negli esercizi',debug:'“Trova l’errore” negli esercizi'};
@@ -1440,18 +1584,18 @@ function skills(){const tot=SKILLS.reduce((a,s)=>a+skillLv(s[0]),0),max=SKILLS.l
 
 function settings(){const s=sheet(`<h3>Impostazioni e accessibilità</h3>
   <div class="fld"><label>Grandezza del testo</label><div class="seg">${[1,2,3,4].map(n=>`<button data-fs="${n}" aria-pressed="${SET.fs===n}" style="font-size:${.75+n*.12}rem">A</button>`).join('')}</div></div>
-  <div class="fld"><label>Come si scrive l’assegnazione</label><div class="seg"><button data-no="←" aria-pressed="${SET.notation==='←'}">a ← 2 (quaderno)</button><button data-no="=" aria-pressed="${SET.notation==='='}">a = 2 (Flowgorithm)</button></div></div>
+  <div class="fld"><label>Come si scrive l’assegnazione</label><div class="seg"><button data-no="=" aria-pressed="${SET.notation==='='}">a = 2 (come Flowgorithm)</button><button data-no="←" aria-pressed="${SET.notation==='←'}">a ← 2 (come sui libri)</button></div></div>
   <div class="list" style="margin-top:10px">
    <button class="item" data-t="hc" aria-pressed="${SET.hc}"><span class="i">🌓</span><span class="tx"><b>Contrasto alto</b><span>${SET.hc?'Attivo':'Spento'}</span></span></button>
    <button class="item" data-t="rm" aria-pressed="${SET.rm}"><span class="i">🧘</span><span class="tx"><b>Riduci le animazioni</b><span>${SET.rm?'Attivo':'Spento'}</span></span></button>
-   <button class="item" data-t="lim" aria-pressed="${SET.lim}"><span class="i">🖥️</span><span class="tx"><b>Modalità LIM (docente)</b><span>Testi grandi, avanzamento libero, soluzioni visibili. Si attiva anche con l’icona in alto a destra.</span></span></button>
+   <button class="item" data-t="lim" aria-pressed="${SET.lim}"><span class="i">🖥️</span><span class="tx"><b>Modalità LIM (docente)</b><span>Tutto lo schermo, testi grandi, avanzamento libero, soluzioni visibili. Si attiva anche con l’icona in alto a destra.</span></span></button>
    <button class="item" data-reset><span class="i">🗑️</span><span class="tx"><b>Azzera i progressi</b><span>Ricomincia il corso da capo</span></span></button></div>
   <div class="row end" style="margin-top:12px"><button class="btn pri x" data-x>Fatto</button></div>`);
   s.addEventListener('click',e=>{if(e.target.closest('[data-x]')){closeSheet();route();return}
     const f=e.target.closest('[data-fs]');if(f){SET.fs=+f.dataset.fs;applySettings();$$('[data-fs]',s).forEach(b=>b.setAttribute('aria-pressed',b===f))}
     const no=e.target.closest('[data-no]');if(no){SET.notation=no.dataset.no;applySettings();$$('[data-no]',s).forEach(b=>b.setAttribute('aria-pressed',b===no))}
     const t=e.target.closest('[data-t]');if(t){const k=t.dataset.t;SET[k]=!SET[k];applySettings();t.setAttribute('aria-pressed',SET[k]);t.querySelector('.tx span').textContent=SET[k]?'Attivo':'Spento'}
-    if(e.target.closest('[data-reset]')&&confirm('Sicuro? Tutti i progressi e le competenze verranno cancellati.')){Object.assign(PROG,{done:{},ex:{},skills:{},videos:{},last:''});save();store.set('sim',[]);store.set('simtask',null);closeSheet();go('#/');route()}})}
+    if(e.target.closest('[data-reset]')&&confirm('Sicuro? Tutti i progressi e le competenze verranno cancellati.')){Object.assign(PROG,{done:{},ex:{},skills:{},videos:{},mods:{},last:''});save();store.set('sim',[]);store.set('simtask',null);closeSheet();go('#/');route()}})}
 
 /* ================= ROUTER ================= */
 function go(h){if(location.hash===h)route();else location.hash=h}
