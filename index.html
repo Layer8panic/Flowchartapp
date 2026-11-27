@@ -1609,7 +1609,7 @@ function doPrint(prog,info,fn){
     let fs=Math.round(8*mm);g.font=`800 ${fs}px ${font}`;
     let t=info.es;while(g.measureText(t).width>hw-60&&fs>30){fs-=2;g.font=`800 ${fs}px ${font}`}
     g.fillText(t,hx+30,hy+Math.round(12*mm));
-    const row=[['Alunno: ',info.cog+' '+info.nom],['Classe: ',info.cls],['Data: ',new Date().toLocaleDateString('it-IT')]];
+    const row=[['Alunno/a: ',info.cog+' '+info.nom],['Classe: ',info.cls],['Data: ',new Date().toLocaleDateString('it-IT')]];
     let x=hx+30;const ry=hy+Math.round(21*mm),f2=Math.round(4.6*mm);
     row.forEach(([a,b])=>{g.font=`400 ${f2}px ${font}`;g.fillText(a,x,ry);x+=g.measureText(a).width;g.font=`700 ${f2}px ${font}`;g.fillText(b,x,ry);x+=g.measureText(b).width+Math.round(10*mm)});
     /* diagramma: il più grande possibile dentro la pagina, al massimo 1,8 volte la grandezza naturale */
