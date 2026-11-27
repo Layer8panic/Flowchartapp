@@ -157,6 +157,15 @@ body.hc .fb{border:2px solid #000;color:#000}
 .chartwrap.fit svg{max-width:100%;height:auto}
 body.lim .chartwrap{max-height:72vh}
 svg.chart{display:inline-block;font-family:inherit}
+#printArea{display:none}
+@media print{
+  @page{size:A4;margin:12mm}
+  body.printing>*:not(#printArea){display:none!important}
+  body.printing{background:#fff!important;padding:0!important;margin:0!important}
+  body.printing #printArea{display:block;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #printArea .ph{display:flex;justify-content:space-between;align-items:baseline;font-size:13pt;color:#000;border-bottom:1px solid #888;padding-bottom:5px;margin-bottom:10px}
+  #printArea .pc{text-align:center}
+}
 svg .ln,svg .ar{stroke:#46505A;stroke-width:2;fill:none}
 svg .ah{fill:#46505A}
 svg .blk path,svg .blk rect,svg .blk polygon{stroke-width:2.2}
@@ -1545,8 +1554,25 @@ function exercise(id){const ex=EXS.find(e=>e.id===id);if(!ex)return go('#/lab');
   const sb=$('[data-sol]');sb&&sb.addEventListener('click',()=>{const c=$('#exChart');c.hidden=false;c.innerHTML=`<div class="ph">Soluzione</div><div class="chartwrap">${renderChart(ensureIds(clone(ex.sol)),{draw:true}).html}</div>`;c.scrollIntoView({behavior:'smooth'})});
   tutorRun(ex)}
 
+/* stampa solo il diagramma: il nome scelto diventa il nome del file PDF */
+function printChart(prog){
+  if(!prog||!prog.length){alert('Il diagramma è vuoto: costruisci prima l’algoritmo.');return}
+  let nm=prompt('Che nome vuoi dare al file PDF?\n(per esempio Pizza1_Rossi)',store.get('printname',''));
+  if(nm===null)return;
+  nm=nm.trim().replace(/[\\/:*?"<>|]+/g,'').replace(/\s+/g,'_')||'Diagramma';
+  store.set('printname',nm);
+  const old=document.title;document.title=nm;
+  let pa=document.getElementById('printArea');if(pa)pa.remove();
+  pa=document.createElement('div');pa.id='printArea';
+  const ch=renderChart(prog,{aria:'Diagramma di flusso '+nm});
+  const fitW=ch.W/ch.H>186/240;
+  pa.innerHTML=`<div class="ph"><b>${esc(nm)}</b><span>${new Date().toLocaleDateString('it-IT')}</span></div><div class="pc">${ch.html.replace(/ width="\d+" height="\d+"/,` style="${fitW?'width:100%;height:auto':'height:240mm;width:auto'}"`)}</div>`;
+  document.body.appendChild(pa);document.body.classList.add('printing');
+  let back=false;const done=()=>{if(back)return;back=true;document.title=old;document.body.classList.remove('printing');window.removeEventListener('afterprint',done)};
+  window.addEventListener('afterprint',done);
+  setTimeout(()=>{window.print();setTimeout(done,1500)},60)}
 function sim(){const task=store.get('simtask',null);let prog=ensureIds(store.get('sim',[])||[]);
-  main.innerHTML=`<div class="row" style="justify-content:space-between"><h2 style="margin:0">Simulatore</h2><div class="row"><button class="btn sm" data-ex>📂 Esempi</button><button class="btn sm" data-new>🗒️ Nuovo</button></div></div>
+  main.innerHTML=`<div class="row" style="justify-content:space-between"><h2 style="margin:0">Simulatore</h2><div class="row"><button class="btn sm" data-ex>📂 Esempi</button><button class="btn sm" data-print>🖨️ Stampa</button><button class="btn sm" data-new>🗒️ Nuovo</button></div></div>
    <p class="small muted" style="margin:6px 0 12px">Tocca <b>+</b> sulle frecce per aggiungere un blocco. Tocca un blocco per modificarlo, spostarlo o eliminarlo. Poi premi ▶ Esegui.</p>
    ${task?`<div class="callout" data-task><b>📝 ${esc(task.title)}</b><br>${task.text}<div style="margin-top:6px"><button class="btn sm ghost" data-closetask>Nascondi</button></div></div>`:''}
    <section class="card" data-run></section>
@@ -1555,6 +1581,7 @@ function sim(){const task=store.get('simtask',null);let prog=ensureIds(store.get
    <p>• Testo tra virgolette: <code>"Ciao"</code> · Unire testo e valori: <code>"Area: " &amp; area</code><br>• Uguale: <code>=</code> oppure <code>==</code> · Diverso: <code>!=</code> · E: <code>and</code> · O: <code>or</code><br>• Radice: <code>Sqrt(x)</code> · Potenza: <code>x ^ 2</code> · Resto: <code>x mod 2</code> (o <code>%</code>)<br>• Decimali con il punto: <code>2.5</code></p></div></details>`;
   const pse=()=>{$('[data-pseudo]').textContent='Inizio\n'+pseudo(prog,1)+'Fine'};
   const run=mountRunner($('[data-run]'),{prog,editable:true,onChange:p=>{prog=p;store.set('sim',p);pse()}});pse();
+  $('[data-print]').addEventListener('click',()=>printChart(prog));
   $('[data-new]').addEventListener('click',()=>{if(prog.length&&!confirm('Vuoi cancellare il diagramma e ricominciare da capo?'))return;prog=[];store.set('sim',prog);store.set('simtask',null);sim()});
   const ct=$('[data-closetask]');ct&&ct.addEventListener('click',()=>{store.set('simtask',null);$('[data-task]').remove()});
   $('[data-ex]').addEventListener('click',()=>{const L=[['primo','Ciao!','Il programma più corto'],['ciao','Ciao, nome','Input di testo e Output'],['tre','Somma di due numeri','Sequenza'],['media','Ammesso o non ammesso','Il rombo'],['conta','Conta fino a 20','Il ciclo']];
