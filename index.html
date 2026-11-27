@@ -1557,7 +1557,7 @@ function exercise(id){const ex=EXS.find(e=>e.id===id);if(!ex)return go('#/lab');
 /* stampa solo il diagramma: il nome scelto diventa il nome del file PDF */
 function printChart(prog){
   if(!prog||!prog.length){alert('Il diagramma è vuoto: costruisci prima l’algoritmo.');return}
-  let nm=prompt('Che nome vuoi dare al file PDF?\n(per esempio Pizza1_Rossi)',store.get('printname',''));
+  let nm=prompt('Salva il file come NomeEsercizio_Cognome_Nome\n(per esempio Pizza1_Rossi_Mario)',store.get('printname',''));
   if(nm===null)return;
   nm=nm.trim().replace(/[\\/:*?"<>|]+/g,'').replace(/\s+/g,'_')||'Diagramma';
   store.set('printname',nm);
