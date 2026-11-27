@@ -159,12 +159,16 @@ body.lim .chartwrap{max-height:72vh}
 svg.chart{display:inline-block;font-family:inherit}
 #printArea{display:none}
 @media print{
-  @page{size:A4;margin:12mm}
+  @page{size:A4 portrait;margin:12mm}
   body.printing>*:not(#printArea){display:none!important}
   body.printing{background:#fff!important;padding:0!important;margin:0!important}
-  body.printing #printArea{display:block;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  #printArea .ph{display:flex;justify-content:space-between;align-items:baseline;font-size:13pt;color:#000;border-bottom:1px solid #888;padding-bottom:5px;margin-bottom:10px}
-  #printArea .pc{text-align:center}
+  body.printing #printArea{display:block;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  #printArea .pa-h{border:1.5px solid #333;border-radius:8px;padding:8px 14px;margin-bottom:6mm;break-inside:avoid}
+  #printArea .pa-t{font-size:18pt;font-weight:800;text-transform:none}
+  #printArea .pa-m{display:flex;flex-wrap:wrap;gap:6mm;font-size:12pt;margin-top:3px;text-transform:none}
+  #printArea .pa-c{text-align:center;break-inside:avoid;page-break-inside:avoid}
+  #printArea .pa-c svg{display:inline-block}
+  #printArea .pa-f{text-align:center;font-size:8pt;color:#666;margin-top:4mm}
 }
 svg .ln,svg .ar{stroke:#46505A;stroke-width:2;fill:none}
 svg .ah{fill:#46505A}
@@ -1554,23 +1558,41 @@ function exercise(id){const ex=EXS.find(e=>e.id===id);if(!ex)return go('#/lab');
   const sb=$('[data-sol]');sb&&sb.addEventListener('click',()=>{const c=$('#exChart');c.hidden=false;c.innerHTML=`<div class="ph">Soluzione</div><div class="chartwrap">${renderChart(ensureIds(clone(ex.sol)),{draw:true}).html}</div>`;c.scrollIntoView({behavior:'smooth'})});
   tutorRun(ex)}
 
-/* stampa solo il diagramma: il nome scelto diventa il nome del file PDF */
+/* stampa solo il diagramma: una maschera chiede esercizio, cognome, nome e classe; il PDF esce su una pagina e prende il nome Esercizio_Cognome_Nome */
+function printClean(t){return String(t).replace(/[\\/:*?"<>|]+/g,'').trim().replace(/\s+/g,'_').replace(/_+/g,'_').replace(/^_+|_+$/g,'')}
 function printChart(prog){
   if(!prog||!prog.length){alert('Il diagramma è vuoto: costruisci prima l’algoritmo.');return}
-  let nm=prompt('Salva il file come NomeEsercizio_Cognome_Nome\n(per esempio Pizza1_Rossi_Mario)',store.get('printname',''));
-  if(nm===null)return;
-  nm=nm.trim().replace(/[\\/:*?"<>|]+/g,'').replace(/\s+/g,'_')||'Diagramma';
-  store.set('printname',nm);
-  const old=document.title;document.title=nm;
+  const P=Object.assign({es:'',cog:'',nom:'',cls:''},store.get('printinfo',{}));
+  const F=(id,lab,ph)=>`<div class="fld"><label for="pr_${id}">${lab}</label><input id="pr_${id}" data-p="${id}" value="${esc(P[id]||'')}" placeholder="${ph}" autocomplete="off" style="font-family:inherit"></div>`;
+  const s=sheet(`<h3>🖨️ Stampa il diagramma</h3><p class="small muted" style="margin:0 0 4px">Inserisci Nome esercizio, Cognome e Nome (per esempio Somma_Rossi_Mario).</p>
+    <form data-pf novalidate>${F('es','Nome esercizio','Somma')}${F('cog','Cognome','Rossi')}${F('nom','Nome','Mario')}${F('cls','Classe','3A')}
+    <p class="small" data-fn style="margin:6px 0"></p><p class="small" data-perr style="color:var(--ko);font-weight:600;margin:0"></p>
+    <div class="row end" style="margin-top:10px"><button type="button" class="btn x" data-x>Annulla</button><button type="submit" class="btn pri">🖨️ Stampa</button></div></form>`);
+  const v=k=>s.querySelector(`[data-p="${k}"]`).value.trim();
+  const fname=()=>[v('es'),v('cog'),v('nom')].map(printClean).filter(Boolean).join('_');
+  const upd=()=>{s.querySelector('[data-fn]').innerHTML='Nome del file: <b>'+esc(fname()||'…')+'.pdf</b>'};
+  s.addEventListener('input',()=>{upd();s.querySelector('[data-perr]').textContent=''});upd();
+  s.addEventListener('click',e=>{if(e.target.closest('[data-x]'))closeSheet()});
+  s.querySelector('[data-pf]').addEventListener('submit',e=>{e.preventDefault();
+    const miss=[['es','il nome dell’esercizio'],['cog','il cognome'],['nom','il nome'],['cls','la classe']].filter(([k])=>!v(k));
+    if(miss.length){s.querySelector('[data-perr]').textContent='Manca '+miss.map(m=>m[1]).join(', ')+'.';s.querySelector(`[data-p="${miss[0][0]}"]`).focus();return}
+    const info={es:v('es'),cog:v('cog'),nom:v('nom'),cls:v('cls')};store.set('printinfo',info);closeSheet();doPrint(prog,info,fname())})}
+function doPrint(prog,info,fn){
+  const old=document.title;document.title=fn;
   let pa=document.getElementById('printArea');if(pa)pa.remove();
   pa=document.createElement('div');pa.id='printArea';
-  const ch=renderChart(prog,{aria:'Diagramma di flusso '+nm});
-  const fitW=ch.W/ch.H>186/240;
-  pa.innerHTML=`<div class="ph"><b>${esc(nm)}</b><span>${new Date().toLocaleDateString('it-IT')}</span></div><div class="pc">${ch.html.replace(/ width="\d+" height="\d+"/,` style="${fitW?'width:100%;height:auto':'height:240mm;width:auto'}"`)}</div>`;
+  const ch=renderChart(prog,{aria:'Diagramma di flusso: '+info.es});
+  /* A4 con margini di 12 mm: 186 x 273 mm, meno l'intestazione. Si ingrandisce fino a 1,8 volte, senza mai uscire dalla pagina */
+  const pxmm=0.2646,maxW=186,maxH=232,wmm=ch.W*pxmm,hmm=ch.H*pxmm;
+  const k=Math.min(maxW/wmm,maxH/hmm,1.8);
+  const svg=ch.html.replace(/ width="\d+" height="\d+"/,` style="width:${(wmm*k).toFixed(1)}mm;height:${(hmm*k).toFixed(1)}mm"`);
+  pa.innerHTML=`<div class="pa-h"><div class="pa-t">${esc(info.es)}</div>
+    <div class="pa-m"><span>Alunno: <b>${esc(info.cog)} ${esc(info.nom)}</b></span><span>Classe: <b>${esc(info.cls)}</b></span><span>Data: <b>${new Date().toLocaleDateString('it-IT')}</b></span></div></div>
+    <div class="pa-c">${svg}</div><div class="pa-f">${esc(fn)}.pdf · Flowchart Lab</div>`;
   document.body.appendChild(pa);document.body.classList.add('printing');
   let back=false;const done=()=>{if(back)return;back=true;document.title=old;document.body.classList.remove('printing');window.removeEventListener('afterprint',done)};
   window.addEventListener('afterprint',done);
-  setTimeout(()=>{window.print();setTimeout(done,1500)},60)}
+  setTimeout(()=>{window.print();setTimeout(done,1500)},80)}
 function sim(){const task=store.get('simtask',null);let prog=ensureIds(store.get('sim',[])||[]);
   main.innerHTML=`<div class="row" style="justify-content:space-between"><h2 style="margin:0">Simulatore</h2><div class="row"><button class="btn sm" data-ex>📂 Esempi</button><button class="btn sm" data-print>🖨️ Stampa</button><button class="btn sm" data-new>🗒️ Nuovo</button></div></div>
    <p class="small muted" style="margin:6px 0 12px">Tocca <b>+</b> sulle frecce per aggiungere un blocco. Tocca un blocco per modificarlo, spostarlo o eliminarlo. Poi premi ▶ Esegui.</p>
