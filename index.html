@@ -157,19 +157,6 @@ body.hc .fb{border:2px solid #000;color:#000}
 .chartwrap.fit svg{max-width:100%;height:auto}
 body.lim .chartwrap{max-height:72vh}
 svg.chart{display:inline-block;font-family:inherit}
-#printArea{display:none}
-@media print{
-  @page{size:A4 portrait;margin:12mm}
-  body.printing>*:not(#printArea){display:none!important}
-  body.printing{background:#fff!important;padding:0!important;margin:0!important}
-  body.printing #printArea{display:block;color:#000;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  #printArea .pa-h{border:1.5px solid #333;border-radius:8px;padding:8px 14px;margin-bottom:6mm;break-inside:avoid}
-  #printArea .pa-t{font-size:18pt;font-weight:800;text-transform:none}
-  #printArea .pa-m{display:flex;flex-wrap:wrap;gap:6mm;font-size:12pt;margin-top:3px;text-transform:none}
-  #printArea .pa-c{text-align:center;break-inside:avoid;page-break-inside:avoid}
-  #printArea .pa-c svg{display:inline-block}
-  #printArea .pa-f{text-align:center;font-size:8pt;color:#666;margin-top:4mm}
-}
 svg .ln,svg .ar{stroke:#46505A;stroke-width:2;fill:none}
 svg .ah{fill:#46505A}
 svg .blk path,svg .blk rect,svg .blk polygon{stroke-width:2.2}
@@ -1577,22 +1564,68 @@ function printChart(prog){
     const miss=[['es','il nome dell’esercizio'],['cog','il cognome'],['nom','il nome'],['cls','la classe']].filter(([k])=>!v(k));
     if(miss.length){s.querySelector('[data-perr]').textContent='Manca '+miss.map(m=>m[1]).join(', ')+'.';s.querySelector(`[data-p="${miss[0][0]}"]`).focus();return}
     const info={es:v('es'),cog:v('cog'),nom:v('nom'),cls:v('cls')};store.set('printinfo',info);closeSheet();doPrint(prog,info,fname())})}
+/* crea il PDF direttamente (senza finestra di stampa): una pagina A4 con intestazione e diagramma, poi lo scarica */
+function pdfSvgText(prog){
+  const ch=renderChart(prog,{aria:'Diagramma di flusso'});
+  const R=getComputedStyle(document.documentElement),V=(k,d)=>(R.getPropertyValue(k)||'').trim()||d;
+  const css=`.ln,.ar{stroke:#46505A;stroke-width:2;fill:none}.ah{fill:#46505A}.blk path,.blk rect,.blk polygon{stroke-width:2.2}
+.k-term>*:first-child{fill:${V('--t-f','#ECDDF8')};stroke:${V('--t-s','#5B3A82')}}.k-in>*:first-child{fill:${V('--in-f','#CFE4FF')};stroke:${V('--in-s','#1D3E73')}}
+.k-out>*:first-child{fill:${V('--out-f','#CDEFD2')};stroke:${V('--out-s','#1E5B2A')}}.k-asg>*:first-child,.k-dec>*:first-child{fill:${V('--as-f','#FFF6BE')};stroke:${V('--as-s','#5A4E12')}}
+.k-if>*:first-child{fill:${V('--if-f','#FFD0D0')};stroke:${V('--if-s','#6B2323')}}.k-loop>*:first-child{fill:${V('--lp-f','#FFE1B5')};stroke:${V('--lp-s','#6A4210')}}
+text{font-family:${getComputedStyle(document.body).fontFamily.replace(/"/g,"'")}}.bt{font-size:14px;fill:#1E2933;dominant-baseline:central;text-anchor:middle}
+.io{font-size:10px;font-weight:800;fill:#1D3E73}.lbl{font-size:12px;fill:#5A6672;font-weight:700}`;
+  const svg=ch.html.replace(/^<svg /,'<svg xmlns="http://www.w3.org/2000/svg" ').replace(/<defs>/,`<defs><style>${css}</style>`);
+  return{svg,W:ch.W,H:ch.H}}
+function pdfFromJpeg(jpg,w,h,title){
+  const enc=new TextEncoder(),parts=[],offs=[];let len=0;
+  const add=x=>{const b=typeof x==='string'?enc.encode(x):x;parts.push(b);len+=b.length};
+  const obj=(n,body)=>{offs[n]=len;add(`${n} 0 obj\n`);body();add('\nendobj\n')};
+  const pdfStr=t=>'('+String(t).replace(/[^\x20-\x7e]/g,'').replace(/([\\()])/g,'\\$1')+')';
+  const PW=595.28,PH=841.89,cont=`q ${PW} 0 0 ${PH} 0 0 cm /Im0 Do Q`;
+  add('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n');
+  obj(1,()=>add('<< /Type /Catalog /Pages 2 0 R >>'));
+  obj(2,()=>add('<< /Type /Pages /Kids [3 0 R] /Count 1 >>'));
+  obj(3,()=>add(`<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ${PW} ${PH}] /Resources << /XObject << /Im0 5 0 R >> >> /Contents 4 0 R >>`));
+  obj(4,()=>add(`<< /Length ${cont.length} >>\nstream\n${cont}\nendstream`));
+  obj(5,()=>{add(`<< /Type /XObject /Subtype /Image /Width ${w} /Height ${h} /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ${jpg.length} >>\nstream\n`);add(jpg);add('\nendstream')});
+  obj(6,()=>add(`<< /Title ${pdfStr(title)} /Producer (Flowchart Lab) >>`));
+  const x=len;let t=`xref\n0 7\n0000000000 65535 f \n`;for(let i=1;i<=6;i++)t+=String(offs[i]).padStart(10,'0')+' 00000 n \n';
+  add(t+`trailer\n<< /Size 7 /Root 1 0 R /Info 6 0 R >>\nstartxref\n${x}\n%%EOF`);
+  return new Blob(parts,{type:'application/pdf'})}
 function doPrint(prog,info,fn){
-  const old=document.title;document.title=fn;
-  let pa=document.getElementById('printArea');if(pa)pa.remove();
-  pa=document.createElement('div');pa.id='printArea';
-  const ch=renderChart(prog,{aria:'Diagramma di flusso: '+info.es});
-  /* A4 con margini di 12 mm: 186 x 273 mm, meno l'intestazione. Si ingrandisce fino a 1,8 volte, senza mai uscire dalla pagina */
-  const pxmm=0.2646,maxW=186,maxH=232,wmm=ch.W*pxmm,hmm=ch.H*pxmm;
-  const k=Math.min(maxW/wmm,maxH/hmm,1.8);
-  const svg=ch.html.replace(/ width="\d+" height="\d+"/,` style="width:${(wmm*k).toFixed(1)}mm;height:${(hmm*k).toFixed(1)}mm"`);
-  pa.innerHTML=`<div class="pa-h"><div class="pa-t">${esc(info.es)}</div>
-    <div class="pa-m"><span>Alunno: <b>${esc(info.cog)} ${esc(info.nom)}</b></span><span>Classe: <b>${esc(info.cls)}</b></span><span>Data: <b>${new Date().toLocaleDateString('it-IT')}</b></span></div></div>
-    <div class="pa-c">${svg}</div><div class="pa-f">${esc(fn)}.pdf · Flowchart Lab</div>`;
-  document.body.appendChild(pa);document.body.classList.add('printing');
-  let back=false;const done=()=>{if(back)return;back=true;document.title=old;document.body.classList.remove('printing');window.removeEventListener('afterprint',done)};
-  window.addEventListener('afterprint',done);
-  setTimeout(()=>{window.print();setTimeout(done,1500)},80)}
+  const {svg,W,H}=pdfSvgText(prog);
+  const img=new Image();
+  img.onload=()=>{
+    /* A4 a 200 dpi */
+    const CW=1654,CH=2339,mm=CW/210,M=Math.round(12*mm);
+    const c=document.createElement('canvas');c.width=CW;c.height=CH;const g=c.getContext('2d');
+    g.fillStyle='#fff';g.fillRect(0,0,CW,CH);
+    const font=getComputedStyle(document.body).fontFamily;
+    /* intestazione */
+    const hx=M,hy=M,hw=CW-2*M,hh=Math.round(26*mm);
+    g.strokeStyle='#333';g.lineWidth=3;
+    if(g.roundRect){g.beginPath();g.roundRect(hx,hy,hw,hh,18);g.stroke()}else g.strokeRect(hx,hy,hw,hh);
+    g.fillStyle='#000';g.textBaseline='alphabetic';
+    let fs=Math.round(8*mm);g.font=`800 ${fs}px ${font}`;
+    let t=info.es;while(g.measureText(t).width>hw-60&&fs>30){fs-=2;g.font=`800 ${fs}px ${font}`}
+    g.fillText(t,hx+30,hy+Math.round(12*mm));
+    const row=[['Alunno: ',info.cog+' '+info.nom],['Classe: ',info.cls],['Data: ',new Date().toLocaleDateString('it-IT')]];
+    let x=hx+30;const ry=hy+Math.round(21*mm),f2=Math.round(4.6*mm);
+    row.forEach(([a,b])=>{g.font=`400 ${f2}px ${font}`;g.fillText(a,x,ry);x+=g.measureText(a).width;g.font=`700 ${f2}px ${font}`;g.fillText(b,x,ry);x+=g.measureText(b).width+Math.round(10*mm)});
+    /* diagramma: il più grande possibile dentro la pagina, al massimo 1,8 volte la grandezza naturale */
+    const top=hy+hh+Math.round(8*mm),bw=CW-2*M,bh=CH-M-top,nat=CW/793.7;
+    const k=Math.min(bw/W,bh/H,1.8*nat);const dw=W*k,dh=H*k;
+    g.drawImage(img,(CW-dw)/2,top,dw,dh);
+    c.toBlob(b=>{b.arrayBuffer().then(buf=>{
+      const pdf=pdfFromJpeg(new Uint8Array(buf),CW,CH,fn);
+      const a=document.createElement('a');a.href=URL.createObjectURL(pdf);a.download=fn+'.pdf';
+      document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove()},4000);
+      toastPdf('PDF salvato: '+fn+'.pdf')})},'image/jpeg',0.92)};
+  img.onerror=()=>alert('Non riesco a creare il PDF in questo browser. Prova con Chrome o Safari aggiornati.');
+  img.src='data:image/svg+xml;charset=utf-8,'+encodeURIComponent(svg)}
+function toastPdf(msg){const t=document.createElement('div');t.textContent=msg;t.setAttribute('role','status');
+  t.style.cssText='position:fixed;left:50%;bottom:96px;transform:translateX(-50%);background:#1E2933;color:#fff;padding:10px 16px;border-radius:12px;font-weight:700;z-index:9999;box-shadow:0 6px 20px rgba(0,0,0,.25)';
+  document.body.appendChild(t);setTimeout(()=>t.remove(),3500)}
 function sim(){const task=store.get('simtask',null);let prog=ensureIds(store.get('sim',[])||[]);
   main.innerHTML=`<div class="row" style="justify-content:space-between"><h2 style="margin:0">Simulatore</h2><div class="row"><button class="btn sm" data-ex>📂 Esempi</button><button class="btn sm" data-print>📄 Salva in PDF</button><button class="btn sm" data-new>🗒️ Nuovo</button></div></div>
    <p class="small muted" style="margin:6px 0 12px">Tocca <b>+</b> sulle frecce per aggiungere un blocco. Tocca un blocco per modificarlo, spostarlo o eliminarlo. Poi premi ▶ Esegui.</p>
