@@ -1558,18 +1558,18 @@ function exercise(id){const ex=EXS.find(e=>e.id===id);if(!ex)return go('#/lab');
   const sb=$('[data-sol]');sb&&sb.addEventListener('click',()=>{const c=$('#exChart');c.hidden=false;c.innerHTML=`<div class="ph">Soluzione</div><div class="chartwrap">${renderChart(ensureIds(clone(ex.sol)),{draw:true}).html}</div>`;c.scrollIntoView({behavior:'smooth'})});
   tutorRun(ex)}
 
-/* stampa solo il diagramma: una maschera chiede esercizio, cognome, nome e classe; il PDF esce su una pagina e prende il nome Esercizio_Cognome_Nome */
+/* salva in PDF solo il diagramma: una maschera chiede esercizio, cognome, nome e classe; il PDF esce su una pagina e prende il nome Esercizio_Cognome_Nome_Classe */
 function printClean(t){return String(t).replace(/[\\/:*?"<>|]+/g,'').trim().replace(/\s+/g,'_').replace(/_+/g,'_').replace(/^_+|_+$/g,'')}
 function printChart(prog){
   if(!prog||!prog.length){alert('Il diagramma è vuoto: costruisci prima l’algoritmo.');return}
   const P=Object.assign({es:'',cog:'',nom:'',cls:''},store.get('printinfo',{}));
   const F=(id,lab,ph)=>`<div class="fld"><label for="pr_${id}">${lab}</label><input id="pr_${id}" data-p="${id}" value="${esc(P[id]||'')}" placeholder="${ph}" autocomplete="off" style="font-family:inherit"></div>`;
-  const s=sheet(`<h3>🖨️ Stampa il diagramma</h3><p class="small muted" style="margin:0 0 4px">Inserisci Nome esercizio, Cognome e Nome (per esempio Somma_Rossi_Mario).</p>
+  const s=sheet(`<h3>📄 Salva il diagramma in PDF</h3><p class="small muted" style="margin:0 0 4px">Inserisci Nome esercizio, Cognome, Nome e Classe (per esempio Somma_Rossi_Mario_3A).</p>
     <form data-pf novalidate>${F('es','Nome esercizio','Somma')}${F('cog','Cognome','Rossi')}${F('nom','Nome','Mario')}${F('cls','Classe','3A')}
     <p class="small" data-fn style="margin:6px 0"></p><p class="small" data-perr style="color:var(--ko);font-weight:600;margin:0"></p>
-    <div class="row end" style="margin-top:10px"><button type="button" class="btn x" data-x>Annulla</button><button type="submit" class="btn pri">🖨️ Stampa</button></div></form>`);
+    <div class="row end" style="margin-top:10px"><button type="button" class="btn x" data-x>Annulla</button><button type="submit" class="btn pri">📄 Salva in PDF</button></div></form>`);
   const v=k=>s.querySelector(`[data-p="${k}"]`).value.trim();
-  const fname=()=>[v('es'),v('cog'),v('nom')].map(printClean).filter(Boolean).join('_');
+  const fname=()=>[v('es'),v('cog'),v('nom'),v('cls')].map(printClean).filter(Boolean).join('_');
   const upd=()=>{s.querySelector('[data-fn]').innerHTML='Nome del file: <b>'+esc(fname()||'…')+'.pdf</b>'};
   s.addEventListener('input',()=>{upd();s.querySelector('[data-perr]').textContent=''});upd();
   s.addEventListener('click',e=>{if(e.target.closest('[data-x]'))closeSheet()});
@@ -1594,7 +1594,7 @@ function doPrint(prog,info,fn){
   window.addEventListener('afterprint',done);
   setTimeout(()=>{window.print();setTimeout(done,1500)},80)}
 function sim(){const task=store.get('simtask',null);let prog=ensureIds(store.get('sim',[])||[]);
-  main.innerHTML=`<div class="row" style="justify-content:space-between"><h2 style="margin:0">Simulatore</h2><div class="row"><button class="btn sm" data-ex>📂 Esempi</button><button class="btn sm" data-print>🖨️ Stampa</button><button class="btn sm" data-new>🗒️ Nuovo</button></div></div>
+  main.innerHTML=`<div class="row" style="justify-content:space-between"><h2 style="margin:0">Simulatore</h2><div class="row"><button class="btn sm" data-ex>📂 Esempi</button><button class="btn sm" data-print>📄 Salva in PDF</button><button class="btn sm" data-new>🗒️ Nuovo</button></div></div>
    <p class="small muted" style="margin:6px 0 12px">Tocca <b>+</b> sulle frecce per aggiungere un blocco. Tocca un blocco per modificarlo, spostarlo o eliminarlo. Poi premi ▶ Esegui.</p>
    ${task?`<div class="callout" data-task><b>📝 ${esc(task.title)}</b><br>${task.text}<div style="margin-top:6px"><button class="btn sm ghost" data-closetask>Nascondi</button></div></div>`:''}
    <section class="card" data-run></section>
